@@ -28,6 +28,12 @@ export const mainNavigation: NavItem[] = [
     icon: '📝',
     description: 'All articles & posts'
   },
+  {
+    name: 'Photos',
+    href: '/photos',
+    icon: '📷',
+    description: 'Photo Gallery'
+  },
 ];
 
 // Quick actions

@@ -173,11 +173,8 @@ async function processImage(localPath, year, month, slug) {
     // 轉換為 WebP
     console.log(`  📸 處理中: ${path.basename(localPath)} → ${webpName}`)
 
-    // 智能壓縮：大圖用較低品質
-    const quality = originalSize > 2 * 1024 * 1024 ? 75 : 85
-
-    const webpBuffer = await sharp(imageBuffer)
-      .webp({ quality })
+    const webpBuffer = await sharp(imageBuffer, { keepExif: true })
+      .webp({ quality: 100 })
       .resize({ width: 2000, withoutEnlargement: true }) // 限制最大寬度
       .toBuffer()
 
