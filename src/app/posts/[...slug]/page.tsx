@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Section, SectionContent } from '@/components/ui/section'
 import { formatDate } from '@/lib/markdown'
+import { Newsletter } from '@/components/Newsletter'
 
 export async function generateStaticParams() {
   const posts = await getAllPosts()
@@ -159,7 +160,7 @@ export default async function PostPage({
                     />
                   </div>
                 )}
-                <div 
+                <div
                   className="article-content prose prose-lg max-w-none
                     prose-headings:font-bold prose-headings:text-foreground
                     prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
@@ -176,6 +177,9 @@ export default async function PostPage({
                     prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2"
                   dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
+
+                {/* Newsletter subscription */}
+                <Newsletter variant="compact" />
               </CardContent>
             </Card>
           </div>

@@ -8,6 +8,7 @@ import { TypingText } from '@/components/ui/typing-text';
 import { LevelSkillCard, CollapsibleSkillCard } from '@/components/ui/skill-card';
 import { generateStructuredData } from '@/lib/seo';
 import { Download, Mail } from 'lucide-react';
+import { Newsletter } from '@/components/Newsletter';
 
 export default function Home() {
   const structuredData = generateStructuredData('person', {
@@ -308,6 +309,15 @@ export default function Home() {
                 />
               ))}
             </div>
+          </div>
+        </SectionContent>
+      </Section>
+
+      {/* Newsletter Section */}
+      <Section className="py-16">
+        <SectionContent>
+          <div className="max-w-2xl mx-auto">
+            <Newsletter />
           </div>
         </SectionContent>
       </Section>
