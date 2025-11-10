@@ -80,7 +80,7 @@ export default function PostCard({
               ? "aspect-[5/4]"
               : "aspect-square"
           )}
-          href={`/posts/${post.slug}`}
+          href={`/blog/${post.slug}`}
         >
           {imageUrl ? (
             <Image
@@ -133,7 +133,7 @@ export default function PostCard({
             {post.category}
           </Badge>
           
-          <Link href={`/posts/${post.slug}`}>
+          <Link href={`/blog/${post.slug}`}>
             <h2
               className={cn(
                 fontSize === "large"
@@ -155,7 +155,7 @@ export default function PostCard({
         <CardContent className="pb-3">
           {/* Excerpt */}
           {post.excerpt && !minimal && (
-            <Link href={`/posts/${post.slug}`}>
+            <Link href={`/blog/${post.slug}`}>
               <p className="line-clamp-3 text-sm text-muted-foreground hover:text-foreground transition-colors">
                 {post.excerpt}
               </p>

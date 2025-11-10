@@ -106,7 +106,7 @@ export default function ProjectsPage() {
                 description: "Specialized in modern frontend frameworks and technologies, committed to creating beautiful and functional user interfaces. Experienced in responsive design, performance optimization, and user experience design.",
                 skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML5", "CSS3", "JavaScript"],
                 projects: [
-                  { name: "Personal Website Project", url: "/posts" },
+                  { name: "Personal Website Project", url: "/blog" },
                   { name: "Price Testing Tool", url: "https://price-test-smalltool.vercel.app/" }
                 ],
                 gradient: ""
@@ -126,7 +126,7 @@ export default function ProjectsPage() {
                 description: "Experienced in server-side development and API design, familiar with database design and system architecture planning. Focused on building stable and scalable backend services.",
                 skills: ["Node.js", "Python", "REST API", "GraphQL", "PostgreSQL", "MongoDB", "Redis"],
                 projects: [
-                  { name: "MDX Blog with R2 CDN", url: "/posts" },
+                  { name: "MDX Blog with R2 CDN", url: "/blog" },
                   { name: "RAG Knowledge Agent", url: "#" }
                 ],
                 gradient: ""
@@ -167,7 +167,7 @@ export default function ProjectsPage() {
                 skills: ["Git", "GitHub Actions", "Docker", "Vercel", "AWS", "Linux", "VS Code"],
                 projects: [
                   { name: "Automated Deployment Pipeline", url: "https://github.com/Waynting" },
-                  { name: "Development Environment Setup", url: "/posts" }
+                  { name: "Development Environment Setup", url: "/blog" }
                 ],
                 gradient: ""
               }}
@@ -207,7 +207,7 @@ export default function ProjectsPage() {
                 skills: ["User Research", "Prototyping", "Interface Design", "Interaction Design", "Design Systems", "Accessibility", "Responsive Design"],
                 projects: [
                   { name: "Design System Construction", url: "/projects" },
-                  { name: "UX Case Studies", url: "/posts" }
+                  { name: "UX Case Studies", url: "/blog" }
                 ],
                 gradient: ""
               }}
@@ -365,7 +365,7 @@ export default function ProjectsPage() {
                   </a>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/posts">
+                  <Link href="/blog">
                     Read My Blog
                   </Link>
                 </Button>

@@ -3,12 +3,8 @@
 import Script from 'next/script'
 
 export function Analytics() {
-  const GA_ID = process.env.NEXT_PUBLIC_GA_ID
-
-  // 如果沒有設定 GA ID，不渲染任何內容
-  if (!GA_ID) {
-    return null
-  }
+  // 優先使用環境變數，如果沒有則使用預設值
+  const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-E3R4L3Z9SR'
 
   return (
     <>

@@ -21,7 +21,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Content Categories</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/posts" className="text-sm opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                <Link href="/blog" className="text-sm opacity-80 hover:opacity-100 transition-all duration-200" style={{
                   color: 'var(--foreground)'
                 }}>
                   所有文章

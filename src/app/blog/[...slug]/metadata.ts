@@ -11,7 +11,7 @@ export async function generatePostMetadata(slug: string): Promise<Metadata> {
     }
   }
 
-  const url = `${siteConfig.url}/posts/${post.slug}`
+  const url = `${siteConfig.url}/blog/${post.slug}`
   const coverImage = post.featuredImage?.startsWith('http')
     ? post.featuredImage
     : post.featuredImage

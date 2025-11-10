@@ -24,7 +24,7 @@ export const mainNavigation: NavItem[] = [
   },
   {
     name: 'All Articles',
-    href: '/posts',
+    href: '/blog',
     icon: '📝',
     description: 'All articles & posts'
   },

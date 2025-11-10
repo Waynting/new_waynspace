@@ -80,7 +80,7 @@ export default async function PostPage({
             {/* Navigation */}
             <div className="mb-8">
               <Button asChild variant="ghost" className="pl-0">
-                <Link href="/posts" className="flex items-center gap-2">
+                <Link href="/blog" className="flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
@@ -191,7 +191,7 @@ export default async function PostPage({
         <SectionContent>
           <div className="max-w-4xl mx-auto text-center">
             <Button asChild size="lg">
-              <Link href="/posts" className="flex items-center gap-2">
+              <Link href="/blog" className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                 </svg>
