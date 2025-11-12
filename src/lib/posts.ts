@@ -159,14 +159,14 @@ export async function getAllPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   // slug 格式可能是 "YYYY/MM/文章标题" 或 "文章标题"
   // 先尝试完整路径
-  // 先尝试 .mdx，再尝试 .md
-  let filePath = path.join(postsDirectory, `${slug}.mdx`)
+  // 先尝试 .md，再尝试 .mdx
+  let filePath = path.join(postsDirectory, `${slug}.md`)
   
   try {
     await fs.access(filePath)
   } catch {
-    // 尝试 .md
-    filePath = path.join(postsDirectory, `${slug}.md`)
+    // 尝试 .mdx
+    filePath = path.join(postsDirectory, `${slug}.mdx`)
     try {
       await fs.access(filePath)
     } catch {
@@ -183,6 +183,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     }
     
     filePath = path.join(postsDirectory, matchingFile)
+    }
   }
 
   try {
@@ -190,7 +191,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const { data, content } = matter(fileContents)
     
     // 从路径提取年份和月份
-    const relativePath = path.relative(postsDirectory, filePath).replace(/\.mdx$/, '')
+    const relativePath = path.relative(postsDirectory, filePath).replace(/\.(md|mdx)$/, '')
     const pathParts = relativePath.split(path.sep)
     const year = pathParts[0]
     const month = pathParts[1]
@@ -287,7 +288,7 @@ export async function getAllYears(): Promise<string[]> {
 
 // 获取指定年份的所有月份
 export async function getMonthsByYear(year: string): Promise<string[]> {
-  const files = await globby([`${year}/**/*.mdx`], { cwd: postsDirectory })
+  const files = await globby([`${year}/**/*.{md,mdx}`], { cwd: postsDirectory })
   const months = new Set<string>()
   
   files.forEach(file => {
@@ -302,7 +303,7 @@ export async function getMonthsByYear(year: string): Promise<string[]> {
 
 // 获取指定年份和月份的文章
 export async function getPostsByYearMonth(year: string, month: string): Promise<Post[]> {
-  const files = await globby([`${year}/${month}/*.mdx`], { cwd: postsDirectory })
+  const files = await globby([`${year}/${month}/*.{md,mdx}`], { cwd: postsDirectory })
   
   const posts = await Promise.all(
     files.map(async (file) => {
