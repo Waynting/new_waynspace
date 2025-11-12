@@ -35,6 +35,35 @@ export interface PostMetadata {
 
 const postsDirectory = path.join(process.cwd(), 'content')
 
+// 分类名称到slug的映射表（用于保持SEO友好的URL）
+const categorySlugMap: Record<string, string> = {
+  'ntu-life': 'ntu-life',
+  '台大資管生活': 'ntu-life',
+  'science-class-journal': 'science-class-journal',
+  '科學班生活': 'science-class-journal',
+  'personal-journal': 'personal-journal',
+  '生活日誌': 'personal-journal',
+  'photography-notes': 'photography-notes',
+  '攝影筆記': 'photography-notes',
+  'city-walk': 'city-walk',
+  '城市漫步': 'city-walk',
+  'reading-notes': 'reading-notes',
+  '讀書筆記與心得': 'reading-notes',
+  'tech-notes': 'tech-notes',
+  '技術筆記': 'tech-notes',
+}
+
+// 分类名称标准化映射（将英文分类名映射到中文显示名）
+const categoryNameMap: Record<string, string> = {
+  'ntu-life': '台大資管生活',
+  'science-class-journal': '科學班生活',
+  'personal-journal': '生活日誌',
+  'photography-notes': '攝影筆記',
+  'city-walk': '城市漫步',
+  'reading-notes': '讀書筆記與心得',
+  'tech-notes': '技術筆記',
+}
+
 // 从 Markdown 内容中提取第一张图片 URL
 function extractFirstImage(content: string): string | null {
   // 匹配 Markdown 图片语法：![](url) 或 [![](url)](link)
@@ -49,20 +78,27 @@ export async function getAllCategories(): Promise<Category[]> {
   const categoryMap = new Map<string, number>()
   
   posts.forEach(post => {
-    const category = post.category || 'Uncategorized'
-    categoryMap.set(category, (categoryMap.get(category) || 0) + 1)
+    // 标准化分类名称：如果分类名是英文，映射到中文显示名
+    const rawCategory = post.category || 'Uncategorized'
+    const normalizedCategory = categoryNameMap[rawCategory] || rawCategory
+    categoryMap.set(normalizedCategory, (categoryMap.get(normalizedCategory) || 0) + 1)
   })
   
-  return Array.from(categoryMap.entries()).map(([name, count], index) => ({
-    id: index + 1,
-    name,
-    slug: name.toLowerCase().replace(/\s+/g, '-'),
-    count,
-  }))
+  return Array.from(categoryMap.entries()).map(([name, count], index) => {
+    // 优先使用映射表中的slug，如果没有则使用默认生成规则
+    const slug = categorySlugMap[name] || name.toLowerCase().replace(/\s+/g, '-')
+    
+    return {
+      id: index + 1,
+      name,
+      slug,
+      count,
+    }
+  })
 }
 
 export async function getAllPosts(): Promise<Post[]> {
-  const files = await globby(['**/*.mdx'], { cwd: postsDirectory })
+  const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
   
   const posts = await Promise.all(
     files.map(async (file) => {
@@ -75,12 +111,13 @@ export async function getAllPosts(): Promise<Post[]> {
       const year = pathParts[0]
       const month = pathParts[1]
       
-      // 獲取第一個分類作為主要分類
-      const mainCategory = Array.isArray(data.categories) && data.categories.length > 0
+      // 獲取第一個分類作為主要分類，并标准化分类名称
+      const rawCategory = Array.isArray(data.categories) && data.categories.length > 0
         ? data.categories[0]
         : 'Uncategorized'
+      const mainCategory = categoryNameMap[rawCategory] || rawCategory
 
-      const slug = file.replace(/\.mdx$/, '').replace(/\\/g, '/')
+      const slug = file.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 
@@ -122,16 +159,22 @@ export async function getAllPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   // slug 格式可能是 "YYYY/MM/文章标题" 或 "文章标题"
   // 先尝试完整路径
+  // 先尝试 .mdx，再尝试 .md
   let filePath = path.join(postsDirectory, `${slug}.mdx`)
   
   try {
     await fs.access(filePath)
   } catch {
-    // 如果完整路径不存在，尝试在所有子目录中搜索
-    const files = await globby(['**/*.mdx'], { cwd: postsDirectory })
+    // 尝试 .md
+    filePath = path.join(postsDirectory, `${slug}.md`)
+    try {
+      await fs.access(filePath)
+    } catch {
+      // 如果完整路径不存在，尝试在所有子目录中搜索
+      const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
     const matchingFile = files.find(f => {
-      const fileSlug = f.replace(/\.mdx$/, '').replace(/\\/g, '/')
-      const fileName = path.basename(f, '.mdx')
+      const fileSlug = f.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
+      const fileName = path.basename(f, path.extname(f))
       return fileSlug === slug || fileName === slug
     })
     
@@ -152,9 +195,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const year = pathParts[0]
     const month = pathParts[1]
     
-    const mainCategory = Array.isArray(data.categories) && data.categories.length > 0
+    const rawCategory = Array.isArray(data.categories) && data.categories.length > 0
       ? data.categories[0]
       : 'Uncategorized'
+    const mainCategory = categoryNameMap[rawCategory] || rawCategory
 
     const excerpt = extractExcerpt(content)
     const readTime = calculateReadTime(content)
@@ -228,7 +272,7 @@ export function groupPostsByTime(posts: Post[]): Record<string, Record<string, P
 
 // 获取所有年份
 export async function getAllYears(): Promise<string[]> {
-  const files = await globby(['**/*.mdx'], { cwd: postsDirectory })
+  const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
   const years = new Set<string>()
   
   files.forEach(file => {
@@ -266,11 +310,12 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
       const fileContents = await fs.readFile(filePath, 'utf8')
       const { data, content } = matter(fileContents)
       
-      const mainCategory = Array.isArray(data.categories) && data.categories.length > 0
+      const rawCategory = Array.isArray(data.categories) && data.categories.length > 0
         ? data.categories[0]
         : 'Uncategorized'
+      const mainCategory = categoryNameMap[rawCategory] || rawCategory
 
-      const slug = file.replace(/\.mdx$/, '').replace(/\\/g, '/')
+      const slug = file.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 

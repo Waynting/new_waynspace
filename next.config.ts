@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { getAllPosts } from './src/lib/posts';
+import { getAllPosts, getAllCategories } from './src/lib/posts';
 
 const nextConfig: NextConfig = {
   images: {
@@ -57,6 +57,21 @@ const nextConfig: NextConfig = {
       source: '/posts',
       destination: '/blog',
       permanent: true,
+    });
+
+    // 添加分類頁面的重定向（從舊的 URL 格式重定向到新的格式）
+    const categories = await getAllCategories();
+    categories.forEach(category => {
+      // 如果分類名稱和 slug 不同，添加重定向
+      // 例如：/blog/category/台大資管生活 -> /blog/category/ntu-life
+      const categoryNameSlug = category.name.toLowerCase().replace(/\s+/g, '-');
+      if (category.slug !== categoryNameSlug && category.slug !== 'uncategorized') {
+        redirects.push({
+          source: `/blog/category/${encodeURIComponent(category.name)}`,
+          destination: `/blog/category/${category.slug}`,
+          permanent: true,
+        });
+      }
     });
 
     return redirects;

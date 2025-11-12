@@ -16,12 +16,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // 分類頁面
-  const categoryEntries: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${siteConfig.url}/blog/category/${encodeURIComponent(category.name)}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.6,
-  }))
+  const categoryEntries: MetadataRoute.Sitemap = categories
+    .filter(cat => cat.slug !== 'uncategorized')
+    .map((category) => ({
+      url: `${siteConfig.url}/blog/category/${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    }))
 
   // 年份歸檔頁面
   const yearEntries: MetadataRoute.Sitemap = years.map((year) => ({

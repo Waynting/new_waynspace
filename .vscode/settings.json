@@ -1,0 +1,26 @@
+{
+  // 將 .mdx 文件關聯為 Markdown，以便使用 Markdown 預覽功能
+  "files.associations": {
+    "*.mdx": "markdown"
+  },
+  
+  // Markdown 預覽設置
+  "markdown.preview.breaks": true,
+  "markdown.preview.linkify": true,
+  "markdown.preview.typographer": true,
+  
+  // 啟用側邊預覽
+  "markdown.preview.openMarkdownLinks": "inEditor",
+  
+  // 自動更新預覽
+  "markdown.preview.scrollPreviewWithEditor": true,
+  "markdown.preview.scrollEditorWithPreview": true,
+  
+  // 文件編碼
+  "files.encoding": "utf8",
+  
+  // 自動保存
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000
+}
+
