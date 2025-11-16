@@ -26,6 +26,17 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('browser');
   const [showAll, setShowAll] = useState(false);
 
+  // 計算最新的三篇文章（不受篩選影響）
+  const latestPosts = useMemo(() => {
+    return [...posts]
+      .sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 3);
+  }, [posts]);
+
   // 根據選擇的分類和時間篩選文章
   const filteredPosts = useMemo(() => {
     let filtered = posts;
@@ -74,6 +85,39 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
 
   return (
     <>
+      {/* Latest Posts Section - 在所有视图模式下显示 */}
+      {latestPosts.length > 0 && (
+        <Section className="py-6 sm:py-8 md:py-10 bg-muted/30">
+          <SectionContent className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
+              最新文章
+            </h2>
+            {/* 手机版：只显示1篇 */}
+            <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:hidden">
+              {latestPosts.slice(0, 1).map((post) => (
+                <PostCard
+                  key={post.slug}
+                  post={post}
+                  aspect="landscape"
+                  fontSize="normal"
+                />
+              ))}
+            </div>
+            {/* 桌面版：显示3篇 */}
+            <div className="hidden sm:grid gap-4 sm:gap-5 md:gap-6 grid-cols-3">
+              {latestPosts.map((post) => (
+                <PostCard
+                  key={post.slug}
+                  post={post}
+                  aspect="landscape"
+                  fontSize="normal"
+                />
+              ))}
+            </div>
+          </SectionContent>
+        </Section>
+      )}
+
       {/* File Browser View - 默认视图 */}
       {viewMode === 'browser' ? (
         <FileBrowserView posts={posts} categories={categories} />
