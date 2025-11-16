@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // 读取配置
-const BASEURL = process.env.R2_BASE_URL || 'https://img.waynspace.com'
+const BASEURL = process.env.R2_BASE_URL || 'https://your-cdn-domain.com'
 const PREFIX = process.env.R2_PREFIX || 'blog'
 const CONTENT_DIR = path.resolve(__dirname, '../content')
 
@@ -27,8 +27,8 @@ console.log(`   Base URL: ${BASEURL}`)
 console.log(`   Prefix: ${PREFIX}`)
 console.log(`   Content 目录: ${CONTENT_DIR}\n`)
 
-// 查找所有 .mdx 文件
-const files = await globby(['**/*.mdx'], { cwd: CONTENT_DIR })
+// 查找所有 .md 和 .mdx 文件
+const files = await globby(['**/*.{md,mdx}'], { cwd: CONTENT_DIR })
 
 console.log(`📝 找到 ${files.length} 篇文章，开始处理...\n`)
 
@@ -42,11 +42,11 @@ for (const file of files) {
   let hasChanges = false
   
   // 从文件路径提取年份和月份
-  // 例如: 2025/05/2025-im-week.mdx -> 2025, 05, 2025-im-week
-  const pathParts = file.replace(/\.mdx$/, '').split(path.sep)
+  // 例如: 2025/05/2025-im-week.md -> 2025, 05, 2025-im-week
+  const pathParts = file.replace(/\.(md|mdx)$/, '').split(path.sep)
   const year = pathParts[0]
   const month = pathParts[1]
-  const articleSlug = path.basename(file, '.mdx')
+  const articleSlug = path.basename(file, path.extname(file))
   
   if (!year || !month) {
     console.log(`⚠️  跳过无效路径: ${file}`)
@@ -67,11 +67,11 @@ for (const file of files) {
   ]
   
   // 处理已经是绝对路径但扩展名不是 .webp 的图片
-  // 匹配格式 1: ![](https://img.waynspace.com/blog/2024/02/文章标题/xxx.jpg)
-  // 匹配格式 2: ![](https://img.waynspace.com/文章标题/xxx.jpg) - 缺少年月和前缀
+  // 匹配格式 1: ![](https://your-cdn-domain.com/blog/2024/02/文章标题/xxx.jpg)
+  // 匹配格式 2: ![](https://your-cdn-domain.com/文章标题/xxx.jpg) - 缺少年月和前缀
   content = content.replace(/!\[([^\]]*)\]\((https?:\/\/[^)]+\/)([^/]+)\/(\d{4})\/(\d{2})\/([^/)]+)\/([^/)]+)\.(jpg|jpeg|png)\)/gi, (match, alt, baseUrl, prefix, fileYear, fileMonth, articleTitle, fileName, ext) => {
-    // 只处理我们自己的域名
-    if (!baseUrl.includes('img.waynspace.com') && !baseUrl.includes('waynspace.com')) {
+    // 只处理配置的 CDN 域名
+    if (!baseUrl.includes(BASEURL.replace('https://', '').replace('http://', ''))) {
       return match
     }
     
@@ -96,8 +96,9 @@ for (const file of files) {
     return `![${alt}](${r2Url})`
   })
   
-  // 处理缺少年月和前缀的绝对路径: ![](https://img.waynspace.com/文章标题/xxx.webp) - 已经是.webp但路径不对
-  content = content.replace(/!\[([^\]]*)\]\((https?:\/\/img\.waynspace\.com\/)([^/)]+)\/([^/)]+)\.webp\)/gi, (match, alt, baseUrl, articleTitle, fileName) => {
+  // 处理缺少年月和前缀的绝对路径: ![](https://your-cdn-domain.com/文章标题/xxx.webp) - 已经是.webp但路径不对
+  const cdnDomain = BASEURL.replace('https://', '').replace('http://', '')
+  content = content.replace(new RegExp(`!\\[([^\\]]*)\\]\\((https?:\\/\\/${cdnDomain.replace(/\./g, '\\.')}\\/)([^/)]+)\\/([^/)]+)\\.webp\\)`, 'gi'), (match, alt, baseUrl, articleTitle, fileName) => {
     // URL 解码文件名
     try {
       fileName = decodeURIComponent(fileName)
@@ -116,8 +117,8 @@ for (const file of files) {
     return `![${alt}](${r2Url})`
   })
   
-  // 处理缺少年月和前缀的绝对路径: ![](https://img.waynspace.com/文章标题/xxx.jpg)
-  content = content.replace(/!\[([^\]]*)\]\((https?:\/\/img\.waynspace\.com\/)([^/)]+)\/([^/)]+)\.(jpg|jpeg|png)\)/gi, (match, alt, baseUrl, articleTitle, fileName, ext) => {
+  // 处理缺少年月和前缀的绝对路径: ![](https://your-cdn-domain.com/文章标题/xxx.jpg)
+  content = content.replace(new RegExp(`!\\[([^\\]]*)\\]\\((https?:\\/\\/${cdnDomain.replace(/\./g, '\\.')}\\/)([^/)]+)\\/([^/)]+)\\.(jpg|jpeg|png)\\)`, 'gi'), (match, alt, baseUrl, articleTitle, fileName, ext) => {
     // URL 解码文件名
     try {
       fileName = decodeURIComponent(fileName)

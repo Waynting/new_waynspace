@@ -15,7 +15,7 @@ dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const BASEURL = process.env.R2_BASE_URL || 'https://img.waynspace.com'
+const BASEURL = process.env.R2_BASE_URL || 'https://your-cdn-domain.com'
 const PREFIX = process.env.R2_PREFIX || 'blog'
 const BUCKET = process.env.R2_BUCKET || 'blog-post'
 const RCLONE_REMOTE = process.env.RCLONE_REMOTE || 'r2'
@@ -24,7 +24,7 @@ const CONTENT_DIR = path.resolve(__dirname, '../content')
 console.log('🔍 验证 content/ 中的图片路径与 R2 上的实际文件...\n')
 
 // 从 content 文件中提取所有图片 URL
-const files = await globby(['**/*.mdx'], { cwd: CONTENT_DIR })
+const files = await globby(['**/*.{md,mdx}'], { cwd: CONTENT_DIR })
 let totalImages = 0
 let foundImages = 0
 let missingImages = 0

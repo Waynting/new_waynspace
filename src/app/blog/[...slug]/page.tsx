@@ -178,18 +178,6 @@ export default async function PostPage({
           <div className="max-w-4xl mx-auto">
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="p-8 lg:p-12">
-                {coverImageUrl && (
-                  <div className="mb-8">
-                    <Image
-                      src={coverImageUrl}
-                      alt={post.title}
-                      width={1200}
-                      height={600}
-                      className="w-full h-auto rounded-lg"
-                      priority
-                    />
-                  </div>
-                )}
                 <div
                   className="article-content prose prose-lg max-w-none
                     prose-headings:font-bold prose-headings:text-foreground

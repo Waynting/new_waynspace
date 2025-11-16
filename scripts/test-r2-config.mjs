@@ -16,8 +16,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // 读取配置
-const BUCKET = process.env.R2_BUCKET || 'waynspace'
-const BASEURL = process.env.R2_BASE_URL || 'https://img.waynspace.com'
+const BUCKET = process.env.R2_BUCKET || 'your-bucket-name'
+const BASEURL = process.env.R2_BASE_URL || 'https://your-cdn-domain.com'
 const PREFIX = process.env.R2_PREFIX || 'blog'
 const RCLONE_REMOTE = process.env.RCLONE_REMOTE || 'r2'
 

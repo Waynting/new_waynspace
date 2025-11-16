@@ -14,10 +14,10 @@ const __dirname = path.dirname(__filename)
 // R2 配置：优先使用环境变量，如果没有则使用默认值
 const ACCOUNT_ID = process.env.CF_ACCOUNT_ID
 const ENDPOINT = ACCOUNT_ID ? `https://${ACCOUNT_ID}.r2.cloudflarestorage.com` : ''
-const BUCKET = process.env.R2_BUCKET || 'waynspace'
+const BUCKET = process.env.R2_BUCKET || 'your-bucket-name'
 // R2_BASE_URL 是图片的公开访问 URL（可以是自定义域名或 R2 的公共访问端点）
 // 不是 S3 API endpoint，而是用来替换 Markdown 中相对路径的完整 URL
-const BASEURL = process.env.R2_BASE_URL || 'https://img.waynspace.com'
+const BASEURL = process.env.R2_BASE_URL || 'https://your-cdn-domain.com'
 const PREFIX = process.env.R2_PREFIX || 'blog'
 // rclone 远程名称（需要在 rclone 中配置，或使用环境变量指定）
 const RCLONE_REMOTE = process.env.RCLONE_REMOTE || 'r2'

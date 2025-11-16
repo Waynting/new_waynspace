@@ -9,13 +9,14 @@
  * 4. 替換 MDX 中的路徑為 CDN URL
  *
  * 使用方式：
- * - 文章中使用：![描述](file:///Users/waynliu/Pictures/photo.jpg)
- * - 或使用絕對路徑：![描述](/Users/waynliu/Pictures/photo.jpg)
- * - 執行 npm run build 時自動處理
+ * - 文章中使用：![描述](file:///path/to/your/image.jpg)
+ * - 或使用絕對路徑：![描述](/absolute/path/to/image.jpg)
+ * - 或使用相對路徑：![描述](./images/image.jpg)
+ * - 執行 npm run images:process 處理圖片
  */
 
 import sharp from 'sharp'
-import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, HeadObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { globby } from 'globby'
 import fs from 'fs/promises'
 import path from 'path'
@@ -33,8 +34,8 @@ const __dirname = path.dirname(__filename)
 // 配置
 const CONTENT_DIR = path.resolve(__dirname, '../content')
 const CACHE_DIR = path.resolve(__dirname, '../.image-cache')
-const R2_BASE_URL = process.env.R2_BASE_URL || 'https://img.waynspace.com'
-const R2_BUCKET = process.env.R2_BUCKET || 'blog-post'
+const R2_BASE_URL = process.env.R2_BASE_URL || 'https://your-cdn-domain.com'
+const R2_BUCKET = process.env.R2_BUCKET || 'your-bucket-name'
 const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY
@@ -157,12 +158,36 @@ async function processImage(localPath, year, month, slug) {
     }
 
     // 生成檔案名稱
+    // 清理文件名：移除或替換空格和特殊字符，避免 URL 問題
     const originalName = path.parse(localPath).name
-    const webpName = `${originalName}.webp`
+    // 將空格替換為連字號，移除其他可能有問題的字符
+    const cleanName = originalName
+      .replace(/\s+/g, '-')  // 將所有空格（包括多個連續空格）替換為連字號
+      .replace(/[^\w\u4e00-\u9fa5\-_\.]/g, '-')  // 移除特殊字符，保留中文、英文、數字、連字號、底線、點
+      .replace(/-+/g, '-')  // 將多個連續的連字號合併為一個
+      .replace(/^-|-$/g, '')  // 移除開頭和結尾的連字號
+    
+    const webpName = `${cleanName}.webp`
     const r2Key = `${year}/${month}/${slug}/${webpName}`
     const cdnUrl = `${R2_BASE_URL}/${r2Key}`
 
-    // 檢查 R2 是否已存在
+    // 檢查是否有舊的文件名（包含空格）需要刪除
+    const oldWebpName = `${originalName}.webp`
+    const oldR2Key = `${year}/${month}/${slug}/${oldWebpName}`
+    if (oldR2Key !== r2Key && await checkR2FileExists(oldR2Key)) {
+      console.log(`  🗑️  刪除舊文件: ${oldWebpName}`)
+      try {
+        await s3Client.send(new DeleteObjectCommand({
+          Bucket: R2_BUCKET,
+          Key: oldR2Key,
+        }))
+        console.log(`  ✓ 已刪除舊文件`)
+      } catch (error) {
+        console.log(`  ⚠️  刪除舊文件失敗: ${error.message}`)
+      }
+    }
+
+    // 檢查 R2 是否已存在（使用新文件名）
     if (await checkR2FileExists(r2Key)) {
       console.log(`  ✓ 已存在於 R2: ${webpName}`)
       await saveCachedImage(hash, { cdnUrl, r2Key, originalSize, compressedSize: 0 })
@@ -210,12 +235,30 @@ async function processImage(localPath, year, month, slug) {
 }
 
 /**
- * 解析本地圖片路徑（支援 file:// 和絕對路徑）
+ * 解析本地圖片路徑（支援 file://、絕對路徑和相對路徑）
  */
-function parseLocalPath(imagePath) {
+function parseLocalPath(imagePath, articleDir) {
   // 移除 file:// 前綴
   if (imagePath.startsWith('file://')) {
-    return imagePath.replace('file://', '')
+    let filePath = imagePath.replace('file://', '')
+    
+    // 處理 macOS/Unix 路徑：如果路徑以 Users/ 或 home/ 等開頭但缺少開頭的 /
+    // 這通常發生在 file:// 後直接跟路徑的情況
+    if (!path.isAbsolute(filePath)) {
+      // 檢查是否看起來像是絕對路徑（在 macOS 上以 Users/ 開頭）
+      if (filePath.startsWith('Users/') || filePath.startsWith('home/') || filePath.startsWith('/Users/') || filePath.startsWith('/home/')) {
+        // 如果缺少開頭的 /，添加它
+        if (!filePath.startsWith('/')) {
+          filePath = '/' + filePath
+        }
+      } else {
+        // 否則相對於項目根目錄
+        const projectRoot = path.resolve(__dirname, '..')
+        filePath = path.resolve(projectRoot, filePath)
+      }
+    }
+    
+    return filePath
   }
 
   // 絕對路徑直接返回
@@ -223,11 +266,30 @@ function parseLocalPath(imagePath) {
     return imagePath
   }
 
+  // 相對路徑：相對於文章所在目錄
+  // 例如: ./assets/image.png 或 assets/image.png
+  // 排除 HTTP/HTTPS URL
+  if (!imagePath.startsWith('http://') && !imagePath.startsWith('https://')) {
+    // 移除 ./ 前綴（如果有的話）
+    const cleanPath = imagePath.replace(/^\.\//, '')
+    // URL 解碼（處理 %20 等編碼）
+    let decodedPath
+    try {
+      decodedPath = decodeURIComponent(cleanPath)
+    } catch (e) {
+      // 如果解碼失敗，使用原始路徑
+      decodedPath = cleanPath
+    }
+    // 構建完整路徑
+    const fullPath = path.resolve(articleDir, decodedPath)
+    return fullPath
+  }
+
   return null
 }
 
 /**
- * 處理單個 MDX 檔案
+ * 處理單個 Markdown 檔案
  */
 async function processMdxFile(mdxPath) {
   try {
@@ -247,7 +309,11 @@ async function processMdxFile(mdxPath) {
       return // 跳過不符合格式的檔案
     }
 
+    // 文章所在目錄（用於解析相對路徑）
+    const articleDir = path.dirname(mdxPath)
+
     console.log(`\n📝 處理文章: ${year}/${month}/${slug}`)
+    console.log(`   文章目錄: ${articleDir}`)
 
     // 找到所有本地圖片引用
     const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g
@@ -256,7 +322,11 @@ async function processMdxFile(mdxPath) {
     const localImages = matches
       .map(match => ({ alt: match[1], path: match[2], fullMatch: match[0] }))
       .filter(img => {
-        const localPath = parseLocalPath(img.path)
+        // 跳過已經是 HTTP/HTTPS 的 URL
+        if (img.path.startsWith('http://') || img.path.startsWith('https://')) {
+          return false
+        }
+        const localPath = parseLocalPath(img.path, articleDir)
         return localPath !== null
       })
 
@@ -276,11 +346,12 @@ async function processMdxFile(mdxPath) {
 
     const tasks = localImages.map(img =>
       limit(async () => {
-        const localPath = parseLocalPath(img.path)
+        const localPath = parseLocalPath(img.path, articleDir)
 
         // 檢查檔案是否存在
         if (!await exists(localPath)) {
           console.log(`  ⚠️  檔案不存在，跳過: ${localPath}`)
+          console.log(`     原始路徑: ${img.path}`)
           return null
         }
 
@@ -306,7 +377,7 @@ async function processMdxFile(mdxPath) {
 
     // 檢查並更新 frontmatter 中的 coverImage
     if (frontmatter.coverImage) {
-      const coverLocalPath = parseLocalPath(frontmatter.coverImage)
+      const coverLocalPath = parseLocalPath(frontmatter.coverImage, articleDir)
       if (coverLocalPath && await exists(coverLocalPath)) {
         console.log(`  🖼️  處理封面圖...`)
         const coverCdnUrl = await processImage(coverLocalPath, year, month, slug)
@@ -316,11 +387,11 @@ async function processMdxFile(mdxPath) {
       }
     }
 
-    // 寫回 MDX 檔案
+    // 寫回 Markdown 檔案
     const updatedMdx = matter.stringify(updatedContent, updatedFrontmatter)
     await fs.writeFile(mdxPath, updatedMdx)
 
-    console.log(`  💾 已更新 MDX 檔案`)
+    console.log(`  💾 已更新 Markdown 檔案`)
 
   } catch (error) {
     console.error(`❌ 處理檔案失敗: ${mdxPath}`)
@@ -343,17 +414,17 @@ async function main() {
   // 確保快取目錄存在
   await ensureDir(CACHE_DIR)
 
-  // 找到所有 MDX 檔案
-  const mdxFiles = await globby(['**/*.mdx'], {
+  // 找到所有 MD 和 MDX 檔案
+  const mdxFiles = await globby(['**/*.{md,mdx}'], {
     cwd: CONTENT_DIR,
     absolute: true,
   })
 
   stats.totalFiles = mdxFiles.length
-  console.log(`找到 ${mdxFiles.length} 個 MDX 檔案\n`)
+  console.log(`找到 ${mdxFiles.length} 個 Markdown 檔案\n`)
 
   if (mdxFiles.length === 0) {
-    console.log('⚠️  沒有找到任何 MDX 檔案')
+    console.log('⚠️  沒有找到任何 Markdown 檔案')
     return
   }
 
