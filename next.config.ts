@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { getAllPosts, getAllCategories } from './src/lib/posts';
+import { getAllPosts, getAllCategories, getAllYears } from './src/lib/posts';
 
 const nextConfig: NextConfig = {
   images: {
@@ -72,6 +72,23 @@ const nextConfig: NextConfig = {
           permanent: true,
         });
       }
+      
+      // 添加 /posts/category/:slug 到 /blog/category/:slug 的重定向
+      redirects.push({
+        source: `/posts/category/${category.slug}`,
+        destination: `/blog/category/${category.slug}`,
+        permanent: true,
+      });
+    });
+
+    // 添加年份歸檔頁面的重定向：/posts/:year -> /blog/:year
+    const years = await getAllYears();
+    years.forEach(year => {
+      redirects.push({
+        source: `/posts/${year}`,
+        destination: `/blog/${year}`,
+        permanent: true,
+      });
     });
 
     return redirects;
