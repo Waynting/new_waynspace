@@ -4,12 +4,12 @@ date: 2025-11-16T00:00:00.000Z
 tags:
   - daily-notes
 categories:
-  - ntu-life
+  - "tech-notes"
 slug: blog-build-record
 coverImage: >-
   https://img.waynspace.com/2025/11/blog-build-record/image.webp
 author:
-  name: Wayne Liu
+  name: Wayn Liu
   email: wayntingliu@gmail.com
 seo:
   metaDescription: '部落格建置轉換心得，從 wix, blogger, wordpress 到現在的 Next.js 加上 Cloudflare'

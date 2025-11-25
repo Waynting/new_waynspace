@@ -8,7 +8,7 @@ categories:
 slug: signal
 coverImage: 'https://img.waynspace.com/2025/11/signal/575298373_17847267138598054_3616706357568092189_n.webp'
 author:
-  name: Wayne Liu
+  name: Wayn Liu
   email: wayntingliu@gmail.com
 seo:
   metaDescription: 考試考了這麼多次才發現這個信號
