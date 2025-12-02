@@ -303,7 +303,14 @@ async function processMdxFile(mdxPath) {
 
     const year = pathParts[0]
     const month = pathParts[1]
-    const slug = path.parse(pathParts[pathParts.length - 1]).name
+    let slug = path.parse(pathParts[pathParts.length - 1]).name
+    
+    // 清理 slug 中的空格和特殊字符，避免 URL 問題
+    slug = slug
+      .replace(/\s+/g, '-')  // 將所有空格（包括多個連續空格）替換為連字號
+      .replace(/[^\w\u4e00-\u9fa5\-_\.]/g, '-')  // 移除特殊字符，保留中文、英文、數字、連字號、底線、點
+      .replace(/-+/g, '-')  // 將多個連續的連字號合併為一個
+      .replace(/^-|-$/g, '')  // 移除開頭和結尾的連字號
 
     if (!year || !month || year.length !== 4 || month.length !== 2) {
       return // 跳過不符合格式的檔案
