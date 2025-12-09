@@ -28,7 +28,7 @@ const siteConfig = {
   description: 'Wayne的個人網站 - 記錄攝影作品、程式專案、生活日誌與學習心得',
   url: 'https://waynspace.com',
   ogImage: 'https://waynspace.com/images/og-image.jpg',
-  creator: 'Wayne Liu',
+  creator: 'Wei-Ting Liu',
   keywords: [
     'Wayne',
     'Waynspace',

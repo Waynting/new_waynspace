@@ -174,7 +174,7 @@ categories:
 slug: "my-new-post"
 coverImage: "https://img.waynspace.com/2025/01/my-new-post/cover.webp"
 author:
-  name: "Wayne Liu"
+  name: "Wei-Ting Liu"
   email: "wayntingliu@gmail.com"
 seo:
   metaDescription: "這篇文章的描述（用於 SEO）"
@@ -565,7 +565,7 @@ MIT License
 
 ## 作者
 
-**Wayne Liu（劉維廷）**
+**Wei-Ting Liu（劉維廷）**
 
 - 🌐 網站：[waynspace.com](https://waynspace.com)
 - 📧 Email：wayntingliu@gmail.com

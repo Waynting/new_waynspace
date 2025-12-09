@@ -8,7 +8,7 @@ categories:
 slug: signal
 coverImage: 'https://img.waynspace.com/2025/11/a-lucky-one/IMG_20251125_201819.webp'
 author:
-  name: Wayn Liu
+  name: Wei-Ting Liu
   email: wayntingliu@gmail.com
 seo:
   metaDescription: 幸運的是我有個無憂無慮的「生活」

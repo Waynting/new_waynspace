@@ -2,11 +2,11 @@ import { Metadata } from 'next'
 
 export const siteConfig = {
   name: 'Waynspace',
-  title: 'Waynspace - Wayne Liu 的個人網站',
+  title: 'Waynspace - Wei-Ting Liu 的個人網站',
   description: '分享生活、攝影、技術與閱讀的個人部落格。記錄台大資管生活、科學班回憶、城市漫步與讀書心得。',
   url: 'https://waynspace.com',
   author: {
-    name: 'Wayne Liu',
+    name: 'Wei-Ting Liu',
     email: 'wayntingliu@gmail.com',
     instagram: '@waiting_941208',
   },
@@ -22,7 +22,7 @@ export const siteConfig = {
     '技術筆記',
     '讀書心得',
     '生活日誌',
-    'Wayne Liu',
+    'Wei-Ting Liu',
     '劉維廷',
   ],
 }

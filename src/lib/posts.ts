@@ -134,7 +134,7 @@ export async function getAllPosts(): Promise<Post[]> {
         category: mainCategory,
         tags: Array.isArray(data.tags) ? data.tags : [],
         author: {
-          name: data.author?.name || 'Wayn Liu',
+          name: data.author?.name || 'Wei-Ting Liu',
           email: data.author?.email || 'wayntingliu@gmail.com',
           avatar: data.author?.avatar,
         },
@@ -220,7 +220,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       category: mainCategory,
       tags: Array.isArray(data.tags) ? data.tags : [],
       author: {
-        name: data.author?.name || 'Wayn Liu',
+        name: data.author?.name || 'Wei-Ting Liu',
         email: data.author?.email || 'wayntingliu@gmail.com',
         avatar: data.author?.avatar,
       },
@@ -333,7 +333,7 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
         category: mainCategory,
         tags: Array.isArray(data.tags) ? data.tags : [],
         author: {
-          name: data.author?.name || 'Wayn Liu',
+          name: data.author?.name || 'Wei-Ting Liu',
           email: data.author?.email || 'wayntingliu@gmail.com',
           avatar: data.author?.avatar,
         },

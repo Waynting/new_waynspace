@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Section, SectionContent } from '@/components/ui/section'
 import { formatDate } from '@/lib/markdown'
-import { Newsletter } from '@/components/Newsletter'
 
 export async function generateStaticParams() {
   const posts = await getAllPosts()
@@ -175,8 +174,6 @@ export default async function PostPage({
                   dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
 
-                {/* Newsletter subscription */}
-                <Newsletter variant="compact" />
               </CardContent>
             </Card>
           </div>

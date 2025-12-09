@@ -8,7 +8,6 @@ import { TypingText } from '@/components/ui/typing-text';
 import { LevelSkillCard, CollapsibleSkillCard } from '@/components/ui/skill-card';
 import { generateStructuredData } from '@/lib/seo';
 import { Download, Mail } from 'lucide-react';
-import { Newsletter } from '@/components/Newsletter';
 
 export default function Home() {
   const structuredData = generateStructuredData('person', {
@@ -75,7 +74,7 @@ export default function Home() {
                 <div className="bg-background rounded-full h-full w-full overflow-hidden shadow-2xl">
                   <Image 
                     src="/LIU_0457.jpg" 
-                    alt="Wayn Liu profile photo"
+                    alt="Wei-Ting Liu profile photo"
                     width={224}
                     height={224}
                     className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-500"
@@ -313,14 +312,6 @@ export default function Home() {
         </SectionContent>
       </Section>
 
-      {/* Newsletter Section */}
-      <Section className="py-16">
-        <SectionContent>
-          <div className="max-w-2xl mx-auto">
-            <Newsletter />
-          </div>
-        </SectionContent>
-      </Section>
 
       {/* Call to Action Section */}
       <Section className="py-16" id="contact">
