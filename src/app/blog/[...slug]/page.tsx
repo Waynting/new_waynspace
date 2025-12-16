@@ -78,7 +78,7 @@ export default async function PostPage({
   return (
     <>
       {/* Article Section */}
-      <Section className="bg-background py-8 md:py-12">
+      <Section className="bg-background py-8 md:py-4 pb-4 md:pb-6">
         <SectionContent>
           <div className="max-w-4xl mx-auto">
             {/* Navigation */}
@@ -94,7 +94,7 @@ export default async function PostPage({
             </div>
 
             {/* Article Header */}
-            <header className="mb-12">
+            <header className="mb-6">
               {/* Categories and Tags */}
               <div className="flex items-center gap-4 mb-6">
                 <span className="px-4 py-2 bg-primary/10 text-primary text-sm font-medium rounded-full border border-primary/20">
@@ -155,7 +155,7 @@ export default async function PostPage({
       </Section>
 
       {/* Article Content Section */}
-      <Section className="bg-card/30 py-0 pb-12">
+      <Section className="bg-card/30 pt-4 md:pt-6 pb-12">
         <SectionContent>
           <div className="max-w-4xl mx-auto">
             <Card className="bg-card/80 backdrop-blur-sm">

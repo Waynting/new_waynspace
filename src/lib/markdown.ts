@@ -1,6 +1,7 @@
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
+import rehypeRaw from 'rehype-raw';
 import rehypeStringify from 'rehype-stringify';
 import matter from 'gray-matter';
 
@@ -12,17 +13,17 @@ export async function markdownToHtml(markdown: string) {
     '<img src="$1" alt="" />'
   );
 
-  // 预处理：确保水平分隔线 `---` 正确渲染为 <hr> 标签
-  // 匹配独立一行的 `---`（前后都有空行或位于开头/结尾），替换为 HTML <hr> 标签
-  // 注意：frontmatter 中的 `---` 已经在 parseMarkdownFile 中被移除，所以这里不会影响
+  // 预处理：将独立一行的 `---` 替换为 HTML <hr> 标签
+  // 匹配模式：独立一行的 `---`，前后可以有空格
   processedMarkdown = processedMarkdown.replace(
-    /(^|\n\n)---(\n\n|\n|$)/gm,
+    /(^|\n)\s*---\s*(\n|$)/gm,
     '$1<hr>$2'
   );
 
   const result = await remark()
     .use(remarkGfm) // GitHub Flavored Markdown
     .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 rehype (HTML AST)
+    .use(rehypeRaw) // 允许在 Markdown 中使用原始 HTML（保留 <hr> 等标签）
     .use(rehypeStringify, { allowDangerousHtml: true }) // 转换为 HTML 字符串
     .process(processedMarkdown);
 
