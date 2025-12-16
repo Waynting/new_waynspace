@@ -119,8 +119,8 @@ export async function getAllPosts(): Promise<Post[]> {
 
       // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
       const articleSlug = data.slug || path.basename(file, path.extname(file))
-      // 构建完整的 slug：YYYY/MM/articleSlug
-      const slug = `${year}/${month}/${articleSlug}`
+      // slug 只使用 articleSlug，不包含日期路径
+      const slug = articleSlug
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 
@@ -150,6 +150,8 @@ export async function getAllPosts(): Promise<Post[]> {
         },
         featuredImage: coverImage,
         coverImage,
+        // 保存文件路径信息用于构建图片路径
+        filePath: file.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/'),
       }
     })
   )
@@ -196,12 +198,11 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
             const year = pathParts[0]
             const month = pathParts[1]
             
-            // 构建完整的 slug：YYYY/MM/articleSlug
+            // 只使用 articleSlug 匹配
             const articleSlug = data.slug || path.basename(file, path.extname(file))
-            const fullSlug = `${year}/${month}/${articleSlug}`
             
-            // 检查是否匹配
-            if (fullSlug === slug || articleSlug === slug) {
+            // 检查是否匹配（只匹配 articleSlug）
+            if (articleSlug === slug) {
               matchingFile = file
               break
             }
@@ -237,8 +238,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
     // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
     const articleSlug = data.slug || path.basename(relativePath, path.extname(relativePath))
-    // 构建完整的 slug：YYYY/MM/articleSlug
-    const slug = `${year}/${month}/${articleSlug}`
+    // slug 只使用 articleSlug，不包含日期路径
+    const slug = articleSlug
 
     const excerpt = extractExcerpt(content)
     const readTime = calculateReadTime(content)
@@ -251,6 +252,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
     return {
       slug,
+      // 保存文件路径信息用于构建图片路径
+      filePath: relativePath,
       title: data.title || '',
       excerpt,
       content: htmlContent,
@@ -357,8 +360,8 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
 
       // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
       const articleSlug = data.slug || path.basename(file, path.extname(file))
-      // 构建完整的 slug：YYYY/MM/articleSlug
-      const slug = `${year}/${month}/${articleSlug}`
+      // slug 只使用 articleSlug，不包含日期路径
+      const slug = articleSlug
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 
@@ -388,6 +391,8 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
         },
         featuredImage: coverImage,
         coverImage,
+        // 保存文件路径信息用于构建图片路径
+        filePath: file.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/'),
       }
     })
   )

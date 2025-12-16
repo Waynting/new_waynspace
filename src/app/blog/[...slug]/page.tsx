@@ -10,7 +10,7 @@ import { formatDate } from '@/lib/markdown'
 export async function generateStaticParams() {
   const posts = await getAllPosts()
   return posts.map((post) => ({
-    slug: post.slug.split('/'), // Next.js catch-all 路由需要陣列格式
+    slug: [post.slug], // slug 现在只是 articleSlug，不需要 split
   }))
 }
 
@@ -21,7 +21,7 @@ export default async function PostPage({
 }) {
   // 解包 params Promise
   const { slug: slugArray } = await params
-  // 將陣列組合回完整路徑，并对每个部分进行 URL 解码
+  // slug 现在只是 articleSlug，不需要组合路径
   const slug = Array.isArray(slugArray)
     ? slugArray.map(part => decodeURIComponent(part)).join('/')
     : decodeURIComponent(slugArray)
@@ -31,10 +31,14 @@ export default async function PostPage({
     notFound()
   }
 
-  // 提取文章标题部分（用于构建图片路径）
-  const slugParts = post.slug.split('/')
-  const articleSlug = slugParts.length > 2 ? slugParts[2] : slugParts[slugParts.length - 1]
-  const yearMonth = slugParts.length >= 2 ? `${slugParts[0]}/${slugParts[1]}` : ''
+  // 从文件路径提取年份和月份用于构建图片路径
+  // post.slug 现在只是 articleSlug，需要从文件路径提取年份和月份
+  const filePath = (post as any).filePath || ''
+  const pathParts = filePath.split('/')
+  const year = pathParts[0] || ''
+  const month = pathParts[1] || ''
+  const yearMonth = year && month ? `${year}/${month}` : ''
+  const articleSlug = post.slug
 
   // 處理圖片路徑（因為 content 已經是 HTML）
   let processedContent = post.content || ''

@@ -49,9 +49,13 @@ export default function PostCard({
   };
 
   // 構建圖片 URL
-  const slugParts = post.slug.split('/')
-  const yearMonth = slugParts.length >= 2 ? `${slugParts[0]}/${slugParts[1]}` : ''
-  const articleSlug = slugParts.length > 2 ? slugParts[2] : slugParts[slugParts.length - 1]
+  // post.slug 现在只是 articleSlug，需要从文件路径提取年份和月份
+  const filePath = (post as any).filePath || ''
+  const pathParts = filePath.split('/')
+  const year = pathParts[0] || ''
+  const month = pathParts[1] || ''
+  const yearMonth = year && month ? `${year}/${month}` : ''
+  const articleSlug = post.slug
 
   const imageUrl = post.featuredImage?.startsWith('http')
     ? post.featuredImage
@@ -163,10 +167,10 @@ export default function PostCard({
           )}
         </CardContent>
 
-        <CardFooter className="pt-0">
+        <CardFooter className="pt-0 overflow-hidden">
           {/* Meta information */}
-          <div className="flex items-center space-x-3 text-muted-foreground text-sm">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-muted-foreground text-sm min-w-0 w-full">
+            <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
               {post.author.avatar && (
                 <div className="relative h-5 w-5 flex-shrink-0">
                   <Image
@@ -178,17 +182,17 @@ export default function PostCard({
                   />
                 </div>
               )}
-              <span className="truncate">{post.author.name}</span>
+              <span className="truncate whitespace-nowrap">{post.author.name}</span>
             </div>
-            <span className="text-xs">•</span>
+            <span className="text-xs flex-shrink-0">•</span>
             <time 
-              className="truncate" 
+              className="truncate whitespace-nowrap flex-shrink-0" 
               dateTime={post.date || ''}
             >
               {formatDate(post.date)}
             </time>
-            <span className="text-xs">•</span>
-            <span className="truncate">{post.readTime}</span>
+            <span className="text-xs flex-shrink-0">•</span>
+            <span className="truncate whitespace-nowrap flex-shrink-0">{post.readTime}</span>
           </div>
         </CardFooter>
       </div>
