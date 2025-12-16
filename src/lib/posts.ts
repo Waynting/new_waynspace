@@ -117,7 +117,10 @@ export async function getAllPosts(): Promise<Post[]> {
         : 'Uncategorized'
       const mainCategory = categoryNameMap[rawCategory] || rawCategory
 
-      const slug = file.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
+      // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
+      const articleSlug = data.slug || path.basename(file, path.extname(file))
+      // 构建完整的 slug：YYYY/MM/articleSlug
+      const slug = `${year}/${month}/${articleSlug}`
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 
@@ -157,8 +160,8 @@ export async function getAllPosts(): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  // slug 格式可能是 "YYYY/MM/文章标题" 或 "文章标题"
-  // 先尝试完整路径
+  // slug 格式可能是 "YYYY/MM/articleSlug" 或 "articleSlug"
+  // 先尝试完整路径（向后兼容）
   // 先尝试 .md，再尝试 .mdx
   let filePath = path.join(postsDirectory, `${slug}.md`)
   
@@ -172,17 +175,48 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     } catch {
       // 如果完整路径不存在，尝试在所有子目录中搜索
       const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
-    const matchingFile = files.find(f => {
-      const fileSlug = f.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
-      const fileName = path.basename(f, path.extname(f))
-      return fileSlug === slug || fileName === slug
-    })
-    
-    if (!matchingFile) {
-      return null
-    }
-    
-    filePath = path.join(postsDirectory, matchingFile)
+      
+      // 首先尝试通过文件路径匹配
+      let matchingFile = files.find(f => {
+        const fileSlug = f.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
+        const fileName = path.basename(f, path.extname(f))
+        return fileSlug === slug || fileName === slug
+      })
+      
+      // 如果还没找到，尝试通过 frontmatter 中的 slug 匹配
+      if (!matchingFile) {
+        for (const file of files) {
+          const filePathToCheck = path.join(postsDirectory, file)
+          try {
+            const fileContents = await fs.readFile(filePathToCheck, 'utf8')
+            const { data } = matter(fileContents)
+            
+            // 从路径提取年份和月份
+            const pathParts = file.split(path.sep)
+            const year = pathParts[0]
+            const month = pathParts[1]
+            
+            // 构建完整的 slug：YYYY/MM/articleSlug
+            const articleSlug = data.slug || path.basename(file, path.extname(file))
+            const fullSlug = `${year}/${month}/${articleSlug}`
+            
+            // 检查是否匹配
+            if (fullSlug === slug || articleSlug === slug) {
+              matchingFile = file
+              break
+            }
+          } catch {
+            // 忽略读取错误，继续搜索
+            continue
+          }
+        }
+      }
+      
+      if (!matchingFile) {
+        return null
+      }
+      
+      filePath = path.join(postsDirectory, matchingFile)
     }
   }
 
@@ -201,6 +235,11 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       : 'Uncategorized'
     const mainCategory = categoryNameMap[rawCategory] || rawCategory
 
+    // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
+    const articleSlug = data.slug || path.basename(relativePath, path.extname(relativePath))
+    // 构建完整的 slug：YYYY/MM/articleSlug
+    const slug = `${year}/${month}/${articleSlug}`
+
     const excerpt = extractExcerpt(content)
     const readTime = calculateReadTime(content)
 
@@ -211,7 +250,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const coverImage = data.coverImage || data.cover || data.featuredImage || extractFirstImage(content)
 
     return {
-      slug: relativePath.replace(/\\/g, '/'),
+      slug,
       title: data.title || '',
       excerpt,
       content: htmlContent,
@@ -316,7 +355,10 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
         : 'Uncategorized'
       const mainCategory = categoryNameMap[rawCategory] || rawCategory
 
-      const slug = file.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
+      // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
+      const articleSlug = data.slug || path.basename(file, path.extname(file))
+      // 构建完整的 slug：YYYY/MM/articleSlug
+      const slug = `${year}/${month}/${articleSlug}`
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 

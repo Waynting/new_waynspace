@@ -5,7 +5,7 @@ tags:
   - daily-notes
 categories:
   - personal-journal
-slug: signal
+slug: a-lucky-one
 coverImage: 'https://img.waynspace.com/2025/11/a-lucky-one/IMG_20251125_201819.webp'
 author:
   name: Wei-Ting Liu
