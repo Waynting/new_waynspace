@@ -28,6 +28,17 @@ export async function generatePostMetadata(slug: string): Promise<Metadata> {
         url: siteConfig.url,
       },
     ],
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt || post.seo.metaDescription,

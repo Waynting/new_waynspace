@@ -119,8 +119,8 @@ export async function getAllPosts(): Promise<Post[]> {
 
       // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
       const articleSlug = data.slug || path.basename(file, path.extname(file))
-      // slug 只使用 articleSlug，不包含日期路径
-      const slug = articleSlug
+      // slug 使用完整路径格式 YYYY/MM/articleSlug，包含日期路径以便重定向和路由匹配
+      const slug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 
@@ -198,11 +198,12 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
             const year = pathParts[0]
             const month = pathParts[1]
             
-            // 只使用 articleSlug 匹配
+            // 构建完整路径格式的 slug
             const articleSlug = data.slug || path.basename(file, path.extname(file))
+            const fullSlug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
             
-            // 检查是否匹配（只匹配 articleSlug）
-            if (articleSlug === slug) {
+            // 检查是否匹配（支持完整路径或只匹配 articleSlug，向后兼容）
+            if (fullSlug === slug || articleSlug === slug) {
               matchingFile = file
               break
             }
@@ -238,8 +239,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
     // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
     const articleSlug = data.slug || path.basename(relativePath, path.extname(relativePath))
-    // slug 只使用 articleSlug，不包含日期路径
-    const slug = articleSlug
+    // slug 使用完整路径格式 YYYY/MM/articleSlug，包含日期路径以便重定向和路由匹配
+    const slug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
 
     const excerpt = extractExcerpt(content)
     const readTime = calculateReadTime(content)
@@ -360,8 +361,8 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
 
       // 优先使用 frontmatter 中的 slug，如果没有则使用文件名（不含扩展名）
       const articleSlug = data.slug || path.basename(file, path.extname(file))
-      // slug 只使用 articleSlug，不包含日期路径
-      const slug = articleSlug
+      // slug 使用完整路径格式 YYYY/MM/articleSlug，包含日期路径以便重定向和路由匹配
+      const slug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
       const excerpt = extractExcerpt(content)
       const readTime = calculateReadTime(content)
 

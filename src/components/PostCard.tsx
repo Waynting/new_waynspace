@@ -49,13 +49,12 @@ export default function PostCard({
   };
 
   // 構建圖片 URL
-  // post.slug 现在只是 articleSlug，需要从文件路径提取年份和月份
-  const filePath = (post as any).filePath || ''
-  const pathParts = filePath.split('/')
-  const year = pathParts[0] || ''
-  const month = pathParts[1] || ''
+  // post.slug 現在是完整路徑格式 YYYY/MM/articleSlug
+  const slugParts = post.slug.split('/')
+  const year = slugParts[0] || ''
+  const month = slugParts[1] || ''
   const yearMonth = year && month ? `${year}/${month}` : ''
-  const articleSlug = post.slug
+  const articleSlug = slugParts.length >= 3 ? slugParts.slice(2).join('/') : post.slug
 
   const imageUrl = post.featuredImage?.startsWith('http')
     ? post.featuredImage
