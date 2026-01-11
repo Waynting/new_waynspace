@@ -97,15 +97,15 @@ export function FlipCard({ frontContent, backContent, className }: FlipCardProps
           />
           
           {/* Modal Content */}
-          <Card className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl">
-            <CardHeader className="relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-              <div className="relative flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">
+          <Card className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-500 ease-out">
+            <CardHeader className="relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-8 py-6">
+              <div className="relative flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="text-3xl shrink-0">
                     {frontContent.icon}
                   </div>
-                  <div>
-                    <CardTitle className="text-xl text-black dark:text-white">{frontContent.title}</CardTitle>
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="text-xl text-black dark:text-white mb-1">{frontContent.title}</CardTitle>
                     <p className="text-sm text-black dark:text-white">{frontContent.subtitle}</p>
                   </div>
                 </div>
@@ -113,14 +113,14 @@ export function FlipCard({ frontContent, backContent, className }: FlipCardProps
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsOpen(false)}
-                  className="shrink-0"
+                  className="shrink-0 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
             
-            <CardContent className="space-y-6 bg-white dark:bg-gray-900">
+            <CardContent className="space-y-6 bg-white dark:bg-gray-900 px-8 py-6">
               {/* Description */}
               <div>
                 <p className="text-sm leading-relaxed text-black dark:text-white">
