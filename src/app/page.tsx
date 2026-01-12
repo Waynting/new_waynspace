@@ -1,15 +1,13 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Section, SectionHeader, SectionTitle, SectionDescription, SectionContent } from '@/components/ui/section';
-import { Badge } from '@/components/ui/badge';
+import { Section, SectionContent, SectionHeader, SectionTitle } from '@/components/ui/section';
 import { TypingText } from '@/components/ui/typing-text';
-import { LevelSkillCard, CollapsibleSkillCard } from '@/components/ui/skill-card';
 import { generateStructuredData } from '@/lib/seo';
-import { Download, Mail } from 'lucide-react';
+import { getAllPosts } from '@/lib/posts';
+import PostCard from '@/components/PostCard';
 
-export default function Home() {
+export default async function Home() {
   const structuredData = generateStructuredData('person', {
     sameAs: [
       'https://github.com/Waynting',
@@ -22,35 +20,9 @@ export default function Home() {
     }
   });
 
-  // 使用分層技能展示（方案一）
-  const skillsWithLevel = {
-    "Frontend Development": [
-      { name: "React", level: "advanced" as const },
-      { name: "Next.js", level: "advanced" as const },
-      { name: "TypeScript", level: "advanced" as const },
-      { name: "JavaScript", level: "expert" as const },
-      { name: "HTML5", level: "expert" as const },
-      { name: "CSS3", level: "expert" as const },
-      { name: "Tailwind CSS", level: "advanced" as const },
-      { name: "shadcn/ui", level: "intermediate" as const },
-    ],
-    "Backend & Data": [
-      { name: "Node.js", level: "intermediate" as const },
-      { name: "Python", level: "intermediate" as const },
-      { name: "REST API", level: "advanced" as const },
-      { name: "GraphQL", level: "intermediate" as const },
-      { name: "SQL", level: "intermediate" as const },
-      { name: "PostgreSQL", level: "beginner" as const },
-    ],
-  };
-
-  // 使用可折疊展示（方案二）
-  const allSkills = {
-    "Programming Languages": ["JavaScript", "TypeScript", "Python", "C++", "HTML5", "CSS3", "SQL"],
-    "Frameworks & Libraries": ["React", "Next.js (App Router)", "Node.js", "Express.js", "Tailwind CSS", "shadcn/ui", "React Query", "SWR"],
-    "Tools & Technologies": ["Git", "GitHub", "Vercel", "Docker", "VS Code", "Figma", "Linux", "WordPress Headless"],
-    "AI & Data": ["OpenAI API", "RAG Systems", "Embedding Models", "Prompt Engineering", "Data Analysis", "CUPED", "A/B Testing"],
-  };
+  // 獲取最新的三篇文章
+  const allPosts = await getAllPosts();
+  const latestPosts = allPosts.slice(0, 3);
 
   return (
     <>
@@ -67,16 +39,16 @@ export default function Home() {
         
         <SectionContent className="relative z-10 text-center max-w-5xl mx-auto px-6 py-16">
           {/* Profile Image with glow effect */}
-          <div className="mb-14">
-            <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 mx-auto group">
+          <div className="mb-6">
+            <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto group">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
               <div className="relative border-3 border-border/50 rounded-full p-1.5 bg-background/80 backdrop-blur-sm">
                 <div className="bg-background rounded-full h-full w-full overflow-hidden shadow-2xl">
                   <Image 
                     src="/LIU_0457.jpg" 
                     alt="Wei-Ting Liu profile photo"
-                    width={224}
-                    height={224}
+                    width={288}
+                    height={288}
                     className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-500"
                     priority
                   />
@@ -97,49 +69,25 @@ export default function Home() {
             </span>
           </h1>
           
-          <div className="space-y-6 mb-14">
-            {/* Animated tagline */}
-            <p className="text-xl sm:text-2xl md:text-3xl font-medium text-foreground/90">
-              Building the Future, One Line at a Time
-            </p>
+          <div className="space-y-4 mb-12">
             <p className="text-lg sm:text-xl text-muted-foreground/80">
               Information Management Student at NTU
             </p>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-              Full-stack developer specializing in Next.js, TypeScript, and AI-enhanced experiences. 
-              Crafting performant, accessible, and delightful web applications.
-            </p>
           </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button asChild size="lg" className="w-full sm:w-auto group hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <Link href="/blog">
+
+          {/* My CV Website Link */}
+          <div className="mb-12">
+            <Button asChild size="lg" className="group hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+              <a href="https://waynting.github.io/" target="_blank" rel="noopener noreferrer">
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                 </svg>
-                Read My Articles
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto group hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <Link href="/camera-drift-ntu">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Camera Drift Project
-              </Link>
-            </Button>
-            <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto group hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <a href="/CV_WeiTing Liu.pdf" download="CV_WeiTing_Liu.pdf">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Download CV
+                My CV Website
               </a>
             </Button>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links - 聯絡方式 */}
           <div className="flex justify-center gap-6">
             <a href="https://github.com/Waynting" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-full border border-border/50 hover:border-foreground/20 bg-background/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 hover:scale-110">
               <svg className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -169,182 +117,40 @@ export default function Home() {
         </SectionContent>
       </Section>
 
-      {/* About Section */}
-      <Section className="py-16">
-        <SectionHeader className="mb-16">
-          <SectionTitle>About Me</SectionTitle>
-        </SectionHeader>
-        <SectionContent>
-          <div className="max-w-3xl mx-auto">
-            <Card>
-              <CardContent className="pt-6 space-y-4 text-muted-foreground">
-                <p className="text-lg">
-                  I&apos;m a B.S. student in Information Management and the Trans-disciplinary Bachelor Program at NTU.
-                  I approach problems at the intersection of software, data, and business.
-                </p>
-                <p>
-                  I specialize in full-stack development (Next.js/React/TypeScript) and apply AI/ML pragmatically (RAG, experimentation, pricing). 
-                  I also care about design—photography and UI/UX shape how I build fast, usable products.
-                </p>
-                <p className="text-sm italic">
-                  Open to internship opportunities in SWE, AI/ML, and product engineering.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </SectionContent>
-      </Section>
-
-      {/* Experience Section */}
-      <Section className="py-16">
-        <SectionHeader className="mb-16">
-          <SectionTitle>Experience</SectionTitle>
-        </SectionHeader>
-        <SectionContent>
-          <div className="space-y-6 max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>ABConvert — Startup Generalist Summer Intern</CardTitle>
-                    <CardDescription>Product/AI · Shopify A/B Testing SaaS</CardDescription>
-                  </div>
-                  <Badge variant="outline" className="ml-4">
-                    2025 – Present
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                <ul className="list-disc list-inside space-y-2">
-                  <li>Built an A/B <b>Price Testing Tool</b> (Next.js 15, TypeScript, Recharts) with dual-slider UI and CSV ingestion</li>
-                  <li>Shipped experimentation UI for pricing: A/B instrumentation, always-valid monitoring, CUPED variance reduction</li>
-                  <li>Authored spec for Experiment Design Wizard: proposes variants, sample sizes, monitoring boundaries based on goals</li>
-                  <li>Explored pricing analytics: elasticity modeling, uplift/heterogeneous treatment effects for targeting</li>
-                  <li>Built internal RAG knowledge agent to answer product/experimentation questions from company docs</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>Nojo apps — CTO</CardTitle>
-                    <CardDescription>Student schedule & activity-matching app</CardDescription>
-                  </div>
-                  <Badge variant="outline" className="ml-4">
-                    2025 – Present
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                <p>Led official website build and non-technical operations (branding, community, documentation). 
-                Contributed to product goals/roadmap.</p>
-              </CardContent>
-            </Card>
-          </div>
-        </SectionContent>
-      </Section>
-
-      {/* Education Section */}
-      <Section className="py-16">
-        <SectionHeader className="mb-16">
-          <SectionTitle>Education</SectionTitle>
-        </SectionHeader>
-        <SectionContent>
-          <div className="space-y-6 max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle>National Taiwan University</CardTitle>
-                <CardDescription>The Best University in Taiwan</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3 text-muted-foreground">
-                <div>
-                  <p className="font-medium text-foreground">B.B.A. in Information Management</p>
-                  <p className="text-sm">2024–2028 (expected) · Relevant coursework: Data Structures & Algorithms, Web Systems</p>
-                </div>
-                <div className="border-t pt-3">
-                  <p className="font-medium text-foreground">Double Major: Trans-disciplinary Bachelor Program</p>
-                  <p className="text-sm">2025–2028 (expected) · Focus: Product innovation, design thinking, real-world practice</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </SectionContent>
-      </Section>
-
-      {/* Skills Section */}
-      <Section className="py-16">
-        <SectionHeader className="mb-16">
-          <SectionTitle>Technical Skills</SectionTitle>
-          <SectionDescription>
-            Hover over skill badges to see proficiency levels
-          </SectionDescription>
-        </SectionHeader>
-        <SectionContent>
-          {/* 方案一：分層展示主要技能 */}
-          <div className="mb-12">
-            <h3 className="text-lg font-semibold mb-6 text-center">Core Competencies</h3>
-            <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-              {Object.entries(skillsWithLevel).map(([category, skills]) => (
-                <LevelSkillCard 
-                  key={category} 
-                  category={category} 
-                  skills={skills} 
+      {/* Latest Articles Section */}
+      {latestPosts.length > 0 && (
+        <Section className="py-16">
+          <SectionHeader className="mb-12">
+            <SectionTitle className="text-center">Latest Articles</SectionTitle>
+          </SectionHeader>
+          <SectionContent>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
+              {latestPosts.map((post) => (
+                <PostCard
+                  key={post.slug}
+                  post={{
+                    slug: post.slug,
+                    title: post.title,
+                    excerpt: post.excerpt,
+                    date: post.date,
+                    readTime: post.readTime,
+                    category: post.category,
+                    tags: post.tags,
+                    author: post.author,
+                    featuredImage: post.featuredImage || post.coverImage,
+                  }}
+                  preloadImage={true}
                 />
               ))}
             </div>
-          </div>
-
-          {/* 方案二：可折疊展示完整技能 */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6 text-center">All Skills & Technologies</h3>
-            <div className="grid gap-6 md:grid-cols-2 max-w-5xl mx-auto">
-              {Object.entries(allSkills).map(([category, skills]) => (
-                <CollapsibleSkillCard 
-                  key={category} 
-                  category={category} 
-                  skills={skills} 
-                />
-              ))}
+            <div className="text-center mt-8">
+              <Button asChild variant="outline" size="lg">
+                <Link href="/blog">View All Articles</Link>
+              </Button>
             </div>
-          </div>
-        </SectionContent>
-      </Section>
-
-
-      {/* Call to Action Section */}
-      <Section className="py-16" id="contact">
-        <SectionHeader className="mb-16 text-center">
-          <SectionTitle>Let&apos;s Connect</SectionTitle>
-          <SectionDescription>
-            I&apos;m available for internships in Summer 2026 (10-12 weeks, late June start)
-          </SectionDescription>
-        </SectionHeader>
-        <SectionContent>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="group">
-              <a href="mailto:wayntingliu@gmail.com">
-                <Mail className="mr-2 h-4 w-4" /> Get in Touch
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/projects">
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-                View My Projects
-              </Link>
-            </Button>
-            <Button asChild variant="secondary" size="lg">
-              <a href="/CV_WeiTing Liu.pdf" download="CV_WeiTing_Liu.pdf">
-                <Download className="mr-2 h-4 w-4" /> Download CV
-              </a>
-            </Button>
-          </div>
-        </SectionContent>
-      </Section>
-
+          </SectionContent>
+        </Section>
+      )}
     </>
   );
 }
