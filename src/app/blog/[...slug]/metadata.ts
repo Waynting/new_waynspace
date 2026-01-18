@@ -19,6 +19,7 @@ export async function generatePostMetadata(slug: string): Promise<Metadata> {
     : `${siteConfig.url}/blog-image.jpg`
 
   return {
+    metadataBase: new URL(siteConfig.url),
     title: post.title,
     description: post.excerpt || post.seo.metaDescription,
     keywords: [...post.tags, ...(post.seo.keywords || [])],
