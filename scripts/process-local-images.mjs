@@ -322,12 +322,12 @@ async function processMdxFile(mdxPath) {
     console.log(`\n📝 處理文章: ${year}/${month}/${slug}`)
     console.log(`   文章目錄: ${articleDir}`)
 
-    // 找到所有本地圖片引用
+    // 找到所有本地圖片引用（Markdown 格式）
     const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g
-    const matches = [...markdownContent.matchAll(imageRegex)]
+    const markdownMatches = [...markdownContent.matchAll(imageRegex)]
 
-    const localImages = matches
-      .map(match => ({ alt: match[1], path: match[2], fullMatch: match[0] }))
+    const markdownImages = markdownMatches
+      .map(match => ({ alt: match[1], path: match[2], fullMatch: match[0], type: 'markdown' }))
       .filter(img => {
         // 跳過已經是 HTTP/HTTPS 的 URL
         if (img.path.startsWith('http://') || img.path.startsWith('https://')) {
@@ -337,12 +337,43 @@ async function processMdxFile(mdxPath) {
         return localPath !== null
       })
 
+    // 找到所有 HTML 格式的圖片（<img src="..."> 和 <a href="...">）
+    const htmlImgRegex = /<img\s+[^>]*src=["']([^"']+)["'][^>]*>/gi
+    const htmlLinkRegex = /<a\s+[^>]*href=["']([^"']+)["'][^>]*>/gi
+    
+    const htmlImgMatches = [...markdownContent.matchAll(htmlImgRegex)]
+    const htmlLinkMatches = [...markdownContent.matchAll(htmlLinkRegex)]
+    
+    const htmlImages = [
+      ...htmlImgMatches.map(match => ({ 
+        path: match[1], 
+        fullMatch: match[0], 
+        type: 'html-img',
+        attribute: 'src'
+      })),
+      ...htmlLinkMatches.map(match => ({ 
+        path: match[1], 
+        fullMatch: match[0], 
+        type: 'html-link',
+        attribute: 'href'
+      }))
+    ].filter(img => {
+      // 跳過已經是 HTTP/HTTPS 的 URL
+      if (img.path.startsWith('http://') || img.path.startsWith('https://')) {
+        return false
+      }
+      const localPath = parseLocalPath(img.path, articleDir)
+      return localPath !== null
+    })
+
+    const localImages = [...markdownImages, ...htmlImages]
+
     if (localImages.length === 0) {
       console.log(`  ⏭️  沒有本地圖片，跳過`)
       return
     }
 
-    console.log(`  找到 ${localImages.length} 張本地圖片`)
+    console.log(`  找到 ${localImages.length} 張本地圖片（${markdownImages.length} 張 Markdown，${htmlImages.length} 張 HTML）`)
 
     // 處理每張圖片
     let updatedContent = markdownContent
@@ -366,7 +397,7 @@ async function processMdxFile(mdxPath) {
         const cdnUrl = await processImage(localPath, year, month, slug)
 
         if (cdnUrl) {
-          return { original: img.fullMatch, cdnUrl, alt: img.alt }
+          return { ...img, cdnUrl }
         }
         return null
       })
@@ -374,11 +405,27 @@ async function processMdxFile(mdxPath) {
 
     const results = await Promise.all(tasks)
 
-    // 替換 Markdown 中的路徑
+    // 替換 Markdown 和 HTML 中的路徑
     for (const result of results) {
       if (result) {
-        const newMarkdown = `![${result.alt}](${result.cdnUrl})`
-        updatedContent = updatedContent.replace(result.original, newMarkdown)
+        if (result.type === 'markdown') {
+          const newMarkdown = `![${result.alt}](${result.cdnUrl})`
+          updatedContent = updatedContent.replace(result.fullMatch, newMarkdown)
+        } else if (result.type === 'html-img') {
+          // 替換 <img src="..."> 中的 src 屬性
+          const newHtml = result.fullMatch.replace(
+            new RegExp(`(${result.attribute}=["'])${result.path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(["'])`, 'i'),
+            `$1${result.cdnUrl}$2`
+          )
+          updatedContent = updatedContent.replace(result.fullMatch, newHtml)
+        } else if (result.type === 'html-link') {
+          // 替換 <a href="..."> 中的 href 屬性
+          const newHtml = result.fullMatch.replace(
+            new RegExp(`(${result.attribute}=["'])${result.path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(["'])`, 'i'),
+            `$1${result.cdnUrl}$2`
+          )
+          updatedContent = updatedContent.replace(result.fullMatch, newHtml)
+        }
       }
     }
 
