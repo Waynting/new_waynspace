@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -7,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Section, SectionContent } from '@/components/ui/section'
 import { formatDate } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
+import { generatePostMetadata } from './metadata'
 
 export async function generateStaticParams() {
   const posts = await getAllPosts()
@@ -14,6 +16,19 @@ export async function generateStaticParams() {
     // slug 現在是完整路徑格式 YYYY/MM/articleSlug，需要分割成數組供 Next.js 路由使用
     slug: post.slug.split('/'),
   }))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>
+}): Promise<Metadata> {
+  const { slug: slugArray } = await params
+  const slug = Array.isArray(slugArray)
+    ? slugArray.map(part => decodeURIComponent(part)).join('/')
+    : decodeURIComponent(slugArray)
+  
+  return generatePostMetadata(slug)
 }
 
 // 獲取分類顏色配置
