@@ -25,6 +25,7 @@
 *.pem
 
 
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -34,6 +35,7 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
+waynspace-b6185a8a2191.json
 
 # vercel
 .vercel
@@ -71,3 +73,6 @@ Thumbs.db
 
 # Image processing cache
 .image-cache/
+
+# Newsletter tracking
+.newsletter-sent.json

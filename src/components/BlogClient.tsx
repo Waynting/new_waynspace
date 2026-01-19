@@ -6,7 +6,9 @@ import CategoryFilter from '@/components/CategoryFilter';
 import TimeFilter from '@/components/TimeFilter';
 import TimelineView from '@/components/TimelineView';
 import FileBrowserView from '@/components/FileBrowserView';
-import { Section, SectionContent } from '@/components/ui/section';
+import EmailSubscribe from '@/components/EmailSubscribe';
+import Link from 'next/link';
+import { Section, SectionContent, SectionHeader, SectionTitle } from '@/components/ui/section';
 import { Button } from '@/components/ui/button';
 import { Post, Category } from '@/types/blog';
 
@@ -92,9 +94,9 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
               最新文章
             </h2>
-            {/* 手机版：只显示1篇 */}
-            <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:hidden">
-              {latestPosts.slice(0, 1).map((post) => (
+            {/* 手机版：显示2列 */}
+            <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-2 sm:hidden">
+              {latestPosts.slice(0, 4).map((post) => (
                 <PostCard
                   key={post.slug}
                   post={post}
@@ -117,6 +119,23 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
           </SectionContent>
         </Section>
       )}
+
+      {/* Newsletter Section */}
+      <Section className="py-12 sm:py-16 bg-background">
+        <SectionContent>
+          <div className="max-w-2xl mx-auto text-center border border-white rounded-lg p-6 sm:p-8 bg-background/50 backdrop-blur-sm">
+            <SectionHeader className="mb-8">
+              <SectionTitle>訂閱電子報</SectionTitle>
+              <p className="text-muted-foreground mt-4">
+                接收最新文章通知，不錯過任何更新
+              </p>
+            </SectionHeader>
+            <div className="max-w-md mx-auto">
+              <EmailSubscribe />
+            </div>
+          </div>
+        </SectionContent>
+      </Section>
 
       {/* File Browser View - 默认视图 */}
       {viewMode === 'browser' ? (
@@ -171,7 +190,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-2 bg-background text-foreground border-border hover:bg-muted hover:border-primary/50"
                   >
                     <span className="mr-2">💻</span>
-                    檔案瀏覽器
+                    文章瀏覽器
                   </button>
                   <button
                     onClick={() => setViewMode('grid')}
@@ -225,7 +244,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               {viewMode === 'grid' && (
                 <>
                   {displayPosts.length > 0 ? (
-                    <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3">
                       {displayPosts.map((post) => (
                         <PostCard
                           key={post.slug}

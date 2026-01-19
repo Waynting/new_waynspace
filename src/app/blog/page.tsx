@@ -1,6 +1,7 @@
 import { getAllPosts, getAllCategories } from '@/lib/posts';
 import { Section, SectionHeader, SectionTitle, SectionDescription, SectionContent } from '@/components/ui/section';
 import BlogClient from '@/components/BlogClient';
+import WebsiteStats from '@/components/WebsiteStats';
 
 export const metadata = {
   title: 'All Articles',
@@ -34,11 +35,14 @@ export default async function PostsPage() {
           </SectionDescription>
 
           {/* 快速統計 */}
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm sm:text-base text-muted-foreground">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm sm:text-base text-muted-foreground mb-6">
             <span>共 {posts.length} 篇文章</span>
             <span className="hidden sm:inline">•</span>
             <span>{categoriesWithCount.length} 個分類</span>
           </div>
+
+          {/* 網站統計資訊 */}
+          <WebsiteStats />
         </SectionHeader>
       </Section>
 

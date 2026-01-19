@@ -6,6 +6,7 @@ import { TypingText } from '@/components/ui/typing-text';
 import { generateStructuredData } from '@/lib/seo';
 import { getAllPosts } from '@/lib/posts';
 import PostCard from '@/components/PostCard';
+import EmailSubscribe from '@/components/EmailSubscribe';
 
 export default async function Home() {
   const structuredData = generateStructuredData('person', {
@@ -124,7 +125,7 @@ export default async function Home() {
             <SectionTitle className="text-center">Latest Articles</SectionTitle>
           </SectionHeader>
           <SectionContent>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
+            <div className="grid gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
               {latestPosts.map((post) => (
                 <PostCard
                   key={post.slug}
@@ -151,6 +152,23 @@ export default async function Home() {
           </SectionContent>
         </Section>
       )}
+
+      {/* Newsletter Section */}
+      <Section className="py-16 bg-muted/30">
+        <SectionContent>
+          <div className="max-w-2xl mx-auto text-center border border-white rounded-lg p-8 bg-background/50 backdrop-blur-sm">
+            <SectionHeader className="mb-8">
+              <SectionTitle>訂閱電子報</SectionTitle>
+              <p className="text-muted-foreground mt-4">
+                接收最新文章通知，不錯過任何更新
+              </p>
+            </SectionHeader>
+            <div className="max-w-md mx-auto">
+              <EmailSubscribe />
+            </div>
+          </div>
+        </SectionContent>
+      </Section>
     </>
   );
 }

@@ -341,13 +341,15 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 2. 前往 [Vercel](https://vercel.com) 並導入專案
 3. 配置環境變數（選填）：
    ```
-   NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+   NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX  # Google Analytics（選填）
+   BUTTONDOWN_API_KEY=your_api_key  # 電子報服務（手動發送郵件）
    ```
 4. 部署完成！
 
 **注意事項：**
 - R2 圖片已經是公開 URL，不需要額外配置環境變數
 - Vercel 會自動偵測 Next.js 並使用正確的建置指令
+- 發送郵件通知請參考：[如何發送郵件通知](./docs/如何發送郵件通知.md)
 
 ### Zeabur 部署
 

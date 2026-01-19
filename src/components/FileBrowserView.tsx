@@ -178,7 +178,7 @@ export default function FileBrowserView({ posts, categories }: FileBrowserViewPr
           <div className="mb-4">
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground flex items-center gap-3">
               <span className="text-5xl">💻</span>
-              <span>檔案瀏覽器</span>
+              <span>文章瀏覽器</span>
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground mt-2">
               像操作本地資料夾一樣瀏覽文章
