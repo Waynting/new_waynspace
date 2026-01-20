@@ -37,8 +37,6 @@ export default async function PostsPage() {
           {/* 快速統計 */}
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm sm:text-base text-muted-foreground mb-6">
             <span>共 {posts.length} 篇文章</span>
-            <span className="hidden sm:inline">•</span>
-            <span>{categoriesWithCount.length} 個分類</span>
             <WebsiteStats />
           </div>
         </SectionHeader>

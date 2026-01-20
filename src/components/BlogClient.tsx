@@ -94,9 +94,9 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
               最新文章
             </h2>
-            {/* 手机版：显示2列 */}
-            <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-2 sm:hidden">
-              {latestPosts.slice(0, 4).map((post) => (
+            {/* 手机版：显示2篇，左右并排 */}
+            <div className="grid gap-3 grid-cols-2 sm:hidden">
+              {latestPosts.slice(0, 2).map((post) => (
                 <PostCard
                   key={post.slug}
                   post={post}
@@ -106,8 +106,8 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               ))}
             </div>
             {/* 桌面版：显示3篇 */}
-            <div className="hidden sm:grid gap-4 sm:gap-5 md:gap-6 grid-cols-3">
-              {latestPosts.map((post) => (
+            <div className="hidden sm:grid gap-6 grid-cols-3">
+              {latestPosts.slice(0, 3).map((post) => (
                 <PostCard
                   key={post.slug}
                   post={post}

@@ -125,23 +125,27 @@ export default async function Home() {
             <SectionTitle className="text-center">Latest Articles</SectionTitle>
           </SectionHeader>
           <SectionContent>
-            <div className="grid gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-              {latestPosts.map((post) => (
-                <PostCard
+            <div className="grid gap-3 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto px-4 sm:px-0">
+              {latestPosts.map((post, index) => (
+                <div
                   key={post.slug}
-                  post={{
-                    slug: post.slug,
-                    title: post.title,
-                    excerpt: post.excerpt,
-                    date: post.date,
-                    readTime: post.readTime,
-                    category: post.category,
-                    tags: post.tags,
-                    author: post.author,
-                    featuredImage: post.featuredImage || post.coverImage,
-                  }}
-                  preloadImage={true}
-                />
+                  className={index >= 2 ? "hidden lg:block" : ""}
+                >
+                  <PostCard
+                    post={{
+                      slug: post.slug,
+                      title: post.title,
+                      excerpt: post.excerpt,
+                      date: post.date,
+                      readTime: post.readTime,
+                      category: post.category,
+                      tags: post.tags,
+                      author: post.author,
+                      featuredImage: post.featuredImage || post.coverImage,
+                    }}
+                    preloadImage={true}
+                  />
+                </div>
               ))}
             </div>
             <div className="text-center mt-8">

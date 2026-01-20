@@ -141,10 +141,10 @@ export default function PostCard({
             <h2
               className={cn(
                 fontSize === "large"
-                  ? "text-2xl"
+                  ? "text-xl md:text-2xl"
                   : minimal
-                  ? "text-2xl"
-                  : "text-xl",
+                  ? "text-xl md:text-2xl"
+                  : "text-base md:text-xl",
                 fontWeight === "normal"
                   ? "line-clamp-2 font-medium tracking-normal"
                   : "font-semibold leading-tight tracking-tight",
