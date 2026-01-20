@@ -3,8 +3,8 @@ import { unstable_cache } from 'next/cache'
 import { getAllPosts } from '@/lib/posts'
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 
-// 緩存時間：1 小時（3600 秒）
-const CACHE_DURATION = 3600
+// 緩存時間：24 小時（86400 秒）
+const CACHE_DURATION = 86400
 
 interface StatsData {
   articleCount: number
@@ -40,17 +40,17 @@ async function fetchAnalyticsData(): Promise<{
       },
     })
 
-    // 獲取獨立訪客數（過去30天）
+    // 獲取獨立訪客數（累計，從網站開始至今）
     const [usersResponse] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
       metrics: [{ name: 'activeUsers' }],
     })
 
-    // 獲取頁面瀏覽數（過去30天）
+    // 獲取頁面瀏覽數（累計，從網站開始至今）
     const [pageViewsResponse] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
       metrics: [{ name: 'screenPageViews' }],
     })
 
@@ -126,12 +126,33 @@ export async function GET() {
     return response
   } catch (error) {
     console.error('Error fetching stats:', error)
-    return NextResponse.json(
-      {
-        error: 'Failed to fetch stats',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    
+    // 即使出錯，也嘗試返回部分數據（至少文章數量）
+    try {
+      const posts = await getAllPosts()
+      const articleCount = posts.length
+      const lastUpdate =
+        posts.length > 0
+          ? posts
+              .map((post) => new Date(post.date).getTime())
+              .sort((a, b) => b - a)[0]
+          : null
+
+      return NextResponse.json({
+        articleCount,
+        uniqueVisitors: null,
+        pageViews: null,
+        lastUpdate: lastUpdate ? new Date(lastUpdate).toISOString() : null,
+      })
+    } catch (fallbackError) {
+      // 如果連文章數據都無法獲取，返回錯誤
+      return NextResponse.json(
+        {
+          error: 'Failed to fetch stats',
+          details: error instanceof Error ? error.message : 'Unknown error',
+        },
+        { status: 500 }
+      )
+    }
   }
 }

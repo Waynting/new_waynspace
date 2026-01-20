@@ -39,10 +39,8 @@ export default async function PostsPage() {
             <span>共 {posts.length} 篇文章</span>
             <span className="hidden sm:inline">•</span>
             <span>{categoriesWithCount.length} 個分類</span>
+            <WebsiteStats />
           </div>
-
-          {/* 網站統計資訊 */}
-          <WebsiteStats />
         </SectionHeader>
       </Section>
 
