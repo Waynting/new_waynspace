@@ -47,8 +47,60 @@ try {
   process.exit(1)
 }
 
+/**
+ * 检查 R2 上是否已存在文件
+ */
+async function checkR2FileExists(rcloneRemote, bucket, r2Path) {
+  try {
+    await execa('rclone', [
+      'lsf',
+      `${rcloneRemote}:${bucket}/${r2Path}`,
+    ], { stdio: 'pipe', timeout: 5000 })
+    return true
+  } catch (error) {
+    // 文件不存在或路径不存在
+    return false
+  }
+}
+
+/**
+ * 检查目录中的所有文件是否都已存在于 R2
+ */
+async function checkAllFilesExist(localDir, rcloneRemote, bucket, r2Prefix) {
+  try {
+    // 获取本地目录中的所有文件
+    const files = await fs.readdir(localDir, { withFileTypes: true })
+    const imageFiles = files
+      .filter(file => file.isFile() && /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(file.name))
+      .map(file => file.name)
+
+    if (imageFiles.length === 0) {
+      return { allExist: false, existingFiles: 0, totalFiles: 0 }
+    }
+
+    // 检查每个文件是否已存在
+    let existingCount = 0
+    for (const fileName of imageFiles) {
+      const r2Path = `${r2Prefix}/${fileName}`
+      if (await checkR2FileExists(rcloneRemote, bucket, r2Path)) {
+        existingCount++
+      }
+    }
+
+    return {
+      allExist: existingCount === imageFiles.length,
+      existingFiles: existingCount,
+      totalFiles: imageFiles.length,
+    }
+  } catch (error) {
+    // 如果检查失败，返回 false 继续上传
+    return { allExist: false, existingFiles: 0, totalFiles: 0 }
+  }
+}
+
 let uploaded = 0
 let skipped = 0
+let skippedDuplicates = 0
 
 for (const md of posts) {
   const mdPath = path.join(POSTS_DIR, md)
@@ -66,17 +118,31 @@ for (const md of posts) {
     
     const r2Prefix = `${PREFIX}/${year}/${month}/${articleSlug}` // blog/2025/06/文章标题
 
-    console.log(`📤 上传 ${articleSlug}...`)
+    console.log(`📤 检查 ${articleSlug}...`)
+
+    // 检查是否所有文件都已存在
+    const checkResult = await checkAllFilesExist(dir, RCLONE_REMOTE, BUCKET, r2Prefix)
+    
+    if (checkResult.allExist && checkResult.totalFiles > 0) {
+      console.log(`  ⚡ 所有文件已存在，跳过上传 (${checkResult.existingFiles}/${checkResult.totalFiles})`)
+      skippedDuplicates++
+      skipped++
+      continue
+    } else if (checkResult.existingFiles > 0) {
+      console.log(`  ℹ️  部分文件已存在 (${checkResult.existingFiles}/${checkResult.totalFiles})，只上传新文件`)
+    }
     
     // 使用 rclone copy 上传文件（保持目录结构）
     // rclone copy 会将本地目录内容复制到远程，保持相对路径结构
+    // 使用 --ignore-existing 参数跳过已存在的文件（但 rclone copy 默认会检查，所以这里用 sync 或 copy 都可以）
     await execa('rclone', [
       'copy',
       dir,
       `${RCLONE_REMOTE}:${BUCKET}/${r2Prefix}`,
       '--progress',
       '--transfers', '10',
-      '--checkers', '20'
+      '--checkers', '20',
+      '--ignore-existing', // 跳过已存在的文件
     ], { stdio: 'inherit' })
 
     // 读取 markdown 文件并替换图片链接
@@ -104,4 +170,5 @@ for (const md of posts) {
 
 console.log(`\n✨ 处理完成！`)
 console.log(`   - 已上传: ${uploaded} 个文件夹`)
-console.log(`   - 已跳过: ${skipped} 篇文章`)
+console.log(`   - 已跳过（重复）: ${skippedDuplicates} 个文件夹`)
+console.log(`   - 已跳过（无图片）: ${skipped} 篇文章`)
