@@ -9,6 +9,8 @@ import { Section, SectionContent } from '@/components/ui/section'
 import { formatDate } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
 import { generatePostMetadata } from './metadata'
+import { generateStructuredData } from '@/lib/seo'
+import { siteConfig } from '@/config/seo'
 
 export async function generateStaticParams() {
   const posts = await getAllPosts()
@@ -106,8 +108,23 @@ export default async function PostPage({
     ? `https://img.waynspace.com/${post.slug}/${post.featuredImage}`
     : null
 
+  // 生成文章的结构化数据
+  const articleStructuredData = generateStructuredData('article', {
+    title: post.title,
+    description: post.excerpt || post.seo.metaDescription,
+    author: post.author.name,
+    publishedTime: post.date,
+    modifiedTime: post.modifiedDate || post.date,
+    url: `${siteConfig.url}/blog/${post.slug}`,
+    images: coverImageUrl ? [coverImageUrl] : [],
+  })
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleStructuredData) }}
+      />
       {/* Article Section */}
       <Section className="bg-background py-8 md:py-4 pb-4 md:pb-6">
         <SectionContent>

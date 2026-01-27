@@ -67,51 +67,14 @@
 }
 
 
-/* 台北黑體字型定義 */
-@font-face {
-  font-family: 'Taipei Sans TC';
-  font-weight: 100;
-  font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/max32002/TaipeiSansTCBeta@1.004/webfonts/TaipeiSansTCBeta-Thin.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Taipei Sans TC';
-  font-weight: 300;
-  font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/max32002/TaipeiSansTCBeta@1.004/webfonts/TaipeiSansTCBeta-Light.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Taipei Sans TC';
-  font-weight: 400;
-  font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/max32002/TaipeiSansTCBeta@1.004/webfonts/TaipeiSansTCBeta-Regular.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Taipei Sans TC';
-  font-weight: 500;
-  font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/max32002/TaipeiSansTCBeta@1.004/webfonts/TaipeiSansTCBeta-Medium.woff2') format('woff2');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Taipei Sans TC';
-  font-weight: 700;
-  font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/max32002/TaipeiSansTCBeta@1.004/webfonts/TaipeiSansTCBeta-Bold.woff2') format('woff2');
-  font-display: swap;
-}
+/* 台北黑體字型定義 - 已移除，因為 CDN 來源不存在 */
+/* 目前使用 Noto Sans TC 作為主要字型 */
+/* 如需使用台北黑體，請下載字型檔案並放在 public/fonts/ 目錄，然後更新以下 @font-face 規則 */
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: 'Taipei Sans TC', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 400;
 }
 

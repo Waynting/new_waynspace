@@ -23,6 +23,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* Web App Manifest */}
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="font-sans antialiased">
         <ThemeProvider>

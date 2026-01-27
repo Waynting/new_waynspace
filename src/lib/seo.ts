@@ -96,9 +96,10 @@ export function generateMetadata(config: SEOConfig = {}): Metadata {
       creator: `@${siteConfig.creator}`,
     },
     icons: {
-      icon: '/blog-image.jpg',
-      shortcut: '/blog-image.jpg',
-      apple: '/blog-image.jpg',
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+      ],
+      shortcut: '/favicon.ico',
     },
   }
 }
