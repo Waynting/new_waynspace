@@ -74,5 +74,8 @@ Thumbs.db
 # Image processing cache
 .image-cache/
 
+# Docs for writing blog posts
+docs/
+
 # Newsletter tracking
 .newsletter-sent.json
