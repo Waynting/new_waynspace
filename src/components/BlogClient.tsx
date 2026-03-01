@@ -1,15 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import PostCard from '@/components/PostCard';
-import CategoryFilter from '@/components/CategoryFilter';
-import TimeFilter from '@/components/TimeFilter';
-import TimelineView from '@/components/TimelineView';
-import FileBrowserView from '@/components/FileBrowserView';
-import EmailSubscribe from '@/components/EmailSubscribe';
 import Link from 'next/link';
-import { Section, SectionContent, SectionHeader, SectionTitle } from '@/components/ui/section';
-import { Button } from '@/components/ui/button';
 import { Post, Category } from '@/types/blog';
 
 interface BlogClientProps {
@@ -17,290 +9,154 @@ interface BlogClientProps {
   categories: (Category & { count: number })[];
 }
 
-type SortOrder = 'newest' | 'oldest';
-type ViewMode = 'grid' | 'timeline' | 'browser';
+function formatDate(dateStr: string): { month: string; day: string } {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return { month: '--', day: '--' };
+  return {
+    month: String(d.getMonth() + 1).padStart(2, '0'),
+    day: String(d.getDate()).padStart(2, '0'),
+  };
+}
+
+function getYear(dateStr: string): number {
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? 0 : d.getFullYear();
+}
 
 export default function BlogClient({ posts, categories }: BlogClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
-  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
-  const [viewMode, setViewMode] = useState<ViewMode>('browser');
-  const [showAll, setShowAll] = useState(false);
 
-  // 計算最新的三篇文章（不受篩選影響）
-  const latestPosts = useMemo(() => {
-    return [...posts]
-      .sort((a, b) => {
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
-        return dateB - dateA;
-      })
-      .slice(0, 3);
-  }, [posts]);
-
-  // 根據選擇的分類和時間篩選文章
   const filteredPosts = useMemo(() => {
     let filtered = posts;
-
-    // 分類篩選
     if (selectedCategory) {
-      const category = categories.find(cat => cat.slug === selectedCategory);
-      if (category) {
-        filtered = filtered.filter(post => post.category === category.name);
-      }
+      const cat = categories.find(c => c.slug === selectedCategory);
+      if (cat) filtered = filtered.filter(p => p.category === cat.name);
     }
+    return [...filtered].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+  }, [posts, selectedCategory, categories]);
 
-    // 時間篩選
-    if (selectedYear) {
-      filtered = filtered.filter(post => {
-        const date = new Date(post.date);
-        if (isNaN(date.getTime())) return false;
-        const postYear = date.getFullYear().toString();
-        
-        if (selectedMonth) {
-          const postMonth = (date.getMonth() + 1).toString().padStart(2, '0');
-          return postYear === selectedYear && postMonth === selectedMonth;
-        }
-        return postYear === selectedYear;
-      });
+  // Group by year
+  const byYear = useMemo(() => {
+    const map = new Map<number, Post[]>();
+    for (const post of filteredPosts) {
+      const yr = getYear(post.date);
+      if (!map.has(yr)) map.set(yr, []);
+      map.get(yr)!.push(post);
     }
-
-    // 按日期排序
-    return [...filtered].sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-    });
-  }, [posts, selectedCategory, selectedYear, selectedMonth, sortOrder, categories]);
-
-  // 顯示的文章數量（僅在網格視圖中使用）
-  const displayPosts = showAll ? filteredPosts : filteredPosts.slice(0, 6);
-
-  // 重置時間篩選當分類改變時
-  const handleCategoryChange = (category: string | null) => {
-    setSelectedCategory(category);
-    // 可選：重置時間篩選
-    // setSelectedYear(null);
-    // setSelectedMonth(null);
-  };
+    return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
+  }, [filteredPosts]);
 
   return (
-    <>
-      {/* Latest Posts Section - 在所有视图模式下显示 */}
-      {latestPosts.length > 0 && (
-        <Section className="py-6 sm:py-8 md:py-10 bg-muted/30">
-          <SectionContent className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
-              最新文章
-            </h2>
-            {/* 手机版：显示2篇，左右并排 */}
-            <div className="grid gap-3 grid-cols-2 sm:hidden">
-              {latestPosts.slice(0, 2).map((post) => (
-                <PostCard
-                  key={post.slug}
-                  post={post}
-                  aspect="landscape"
-                  fontSize="normal"
-                />
-              ))}
-            </div>
-            {/* 桌面版：显示3篇 */}
-            <div className="hidden sm:grid gap-6 grid-cols-3">
-              {latestPosts.slice(0, 3).map((post) => (
-                <PostCard
-                  key={post.slug}
-                  post={post}
-                  aspect="landscape"
-                  fontSize="normal"
-                />
-              ))}
-            </div>
-          </SectionContent>
-        </Section>
-      )}
+    <main className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 py-16 md:py-24 space-y-12">
 
-      {/* Newsletter Section */}
-      <Section className="py-12 sm:py-16 bg-background">
-        <SectionContent>
-          <div className="max-w-2xl mx-auto text-center border border-white rounded-lg p-6 sm:p-8 bg-background/50 backdrop-blur-sm">
-            <SectionHeader className="mb-8">
-              <SectionTitle>訂閱電子報</SectionTitle>
-              <p className="text-muted-foreground mt-4">
-                接收最新文章通知，不錯過任何更新
-              </p>
-            </SectionHeader>
-            <div className="max-w-md mx-auto">
-              <EmailSubscribe />
-            </div>
-          </div>
-        </SectionContent>
-      </Section>
+      {/* Page Header */}
+      <header>
+        <p className="text-xs text-muted-foreground font-medium tracking-[0.2em] uppercase mb-4">
+          Wei-Ting Liu
+        </p>
+        <div className="flex items-baseline gap-4">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Articles</h1>
+          <span className="text-sm text-muted-foreground font-light tabular-nums">
+            {filteredPosts.length}
+          </span>
+        </div>
+      </header>
 
-      {/* File Browser View - 默认视图 */}
-      {viewMode === 'browser' ? (
-        <FileBrowserView posts={posts} categories={categories} />
+      {/* Category Filter — minimal text tabs */}
+      <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Filter by category">
+        <button
+          onClick={() => setSelectedCategory(null)}
+          className={`text-sm transition-colors pb-0.5 ${
+            selectedCategory === null
+              ? 'text-foreground font-medium border-b border-foreground'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          All
+        </button>
+        {categories.map(cat => (
+          <button
+            key={cat.slug}
+            onClick={() => setSelectedCategory(cat.slug)}
+            className={`text-sm transition-colors pb-0.5 ${
+              selectedCategory === cat.slug
+                ? 'text-foreground font-medium border-b border-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {cat.name}
+            <span className="ml-1 text-xs text-muted-foreground/60 font-light tabular-nums">
+              {cat.count}
+            </span>
+          </button>
+        ))}
+      </nav>
+
+      {/* Article list grouped by year */}
+      {byYear.length === 0 ? (
+        <p className="text-sm text-muted-foreground py-12 text-center">暫無文章</p>
       ) : (
-        <>
-          {/* Category Filter Section */}
-          <Section className="py-6 sm:py-8 md:py-10 bg-muted/30">
-            <SectionContent className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <CategoryFilter
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onCategoryChange={handleCategoryChange}
-              />
-            </SectionContent>
-          </Section>
-
-          {/* Time Filter Section */}
-          <Section className="py-6 sm:py-8 md:py-10 bg-background border-b border-border">
-            <SectionContent className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <TimeFilter
-                posts={posts}
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                onYearChange={setSelectedYear}
-                onMonthChange={setSelectedMonth}
-              />
-            </SectionContent>
-          </Section>
-
-          {/* Posts Section */}
-          <Section className="py-6 sm:py-8 md:py-10">
-            <SectionContent className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              {/* Header with Title and View Toggle */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-                  {selectedCategory
-                    ? categories.find(cat => cat.slug === selectedCategory)?.name || '篩選結果'
-                    : '所有文章'
-                  }
-                  {(selectedCategory || selectedYear) && (
-                    <span className="text-base sm:text-lg font-normal text-muted-foreground ml-2 sm:ml-3">
-                      ({filteredPosts.length} 篇)
-                    </span>
-                  )}
-                </h2>
-
-                {/* View Mode Toggle */}
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setViewMode('browser')}
-                    className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-2 bg-background text-foreground border-border hover:bg-muted hover:border-primary/50"
-                  >
-                    <span className="mr-2">💻</span>
-                    文章瀏覽器
-                  </button>
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-2 ${
-                      viewMode === 'grid'
-                        ? 'bg-primary text-primary-foreground border-primary shadow-md'
-                        : 'bg-background text-foreground border-border hover:bg-muted hover:border-primary/50'
-                    }`}
-                  >
-                    <span className="mr-2">📋</span>
-                    網格視圖
-                  </button>
-                  <button
-                    onClick={() => setViewMode('timeline')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-2 ${
-                      viewMode === 'timeline'
-                        ? 'bg-primary text-primary-foreground border-primary shadow-md'
-                        : 'bg-background text-foreground border-border hover:bg-muted hover:border-primary/50'
-                    }`}
-                  >
-                    <span className="mr-2">📅</span>
-                    時間線視圖
-                  </button>
+        <div className="space-y-14">
+          {byYear.map(([year, yearPosts]) => (
+            <section key={year}>
+              {/* Year heading */}
+              <div className="flex items-baseline gap-3 mb-6 border-b border-border pb-3">
+                <span className="text-xs font-light tabular-nums text-muted-foreground w-5 shrink-0">
+                  {/* spacer to align with numbered sections on /about */}
+                </span>
+                <div className="flex items-baseline gap-3 w-full">
+                  <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
+                    {year}
+                  </h2>
+                  <span className="text-xs text-muted-foreground/50 font-light tabular-nums ml-auto">
+                    {yearPosts.length} 篇
+                  </span>
                 </div>
               </div>
 
-              {/* Sort Controls (僅在網格視圖顯示) */}
-              {viewMode === 'grid' && (
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-border">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
-                    <label htmlFor="sort-order" className="text-lg sm:text-xl font-semibold text-foreground whitespace-nowrap">
-                      排序方式
-                    </label>
-                    <select
-                      id="sort-order"
-                      value={sortOrder}
-                      onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-                      className="w-full sm:w-auto px-5 py-3 text-base sm:text-lg font-semibold bg-background border-2 border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all cursor-pointer hover:border-primary/50 shadow-sm"
+              {/* Article rows */}
+              <div className="space-y-0">
+                {yearPosts.map((post, i) => {
+                  const { month, day } = formatDate(post.date);
+                  return (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className={`group flex items-start gap-5 py-4 transition-colors hover:bg-muted/30 -mx-3 px-3 rounded-sm ${
+                        i < yearPosts.length - 1 ? 'border-b border-border/50' : ''
+                      }`}
                     >
-                      <option value="newest">📅 最新發布</option>
-                      <option value="oldest">📆 最舊發布</option>
-                    </select>
-                  </div>
-                  <span className="text-base sm:text-lg text-muted-foreground">
-                    共 {filteredPosts.length} 篇文章
-                  </span>
-                </div>
-              )}
-              
-              {/* Grid View */}
-              {viewMode === 'grid' && (
-                <>
-                  {displayPosts.length > 0 ? (
-                    <div className="grid gap-4 sm:gap-5 md:gap-6 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3">
-                      {displayPosts.map((post) => (
-                        <PostCard
-                          key={post.slug}
-                          post={post}
-                          aspect="landscape"
-                          fontSize="normal"
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12 sm:py-16">
-                      <div className="text-5xl sm:text-6xl mb-4">📝</div>
-                      <p className="text-base sm:text-lg text-muted-foreground">
-                        {selectedCategory || selectedYear ? '此篩選條件暫無文章' : 'No articles yet'}
-                      </p>
-                    </div>
-                  )}
+                      {/* Date */}
+                      <span className="text-xs text-muted-foreground font-light tabular-nums shrink-0 pt-0.5 w-9">
+                        {month}/{day}
+                      </span>
 
-                  {filteredPosts.length > 6 && !showAll && (
-                    <div className="text-center mt-6 sm:mt-8">
-                      <Button onClick={() => setShowAll(true)} size="lg" className="w-full sm:w-auto">
-                        查看更多文章 ({filteredPosts.length - 6} 篇)
-                      </Button>
-                    </div>
-                  )}
+                      {/* Title + excerpt */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-medium leading-snug group-hover:text-foreground text-foreground/90 line-clamp-2">
+                          {post.title}
+                        </h3>
+                        {post.excerpt && (
+                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-1">
+                            {post.excerpt}
+                          </p>
+                        )}
+                      </div>
 
-                  {showAll && filteredPosts.length > 6 && (
-                    <div className="text-center mt-6 sm:mt-8">
-                      <Button onClick={() => setShowAll(false)} variant="outline" size="lg" className="w-full sm:w-auto">
-                        收起文章
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Timeline View */}
-              {viewMode === 'timeline' && (
-                <>
-                  {filteredPosts.length > 0 ? (
-                    <TimelineView posts={filteredPosts} />
-                  ) : (
-                    <div className="text-center py-12 sm:py-16">
-                      <div className="text-5xl sm:text-6xl mb-4">📅</div>
-                      <p className="text-base sm:text-lg text-muted-foreground">
-                        {selectedCategory || selectedYear ? '此篩選條件暫無文章' : 'No articles yet'}
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
-            </SectionContent>
-          </Section>
-        </>
+                      {/* Category */}
+                      <span className="text-xs text-muted-foreground/60 font-light shrink-0 hidden sm:block pt-0.5 max-w-[7rem] text-right leading-snug">
+                        {post.category}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
       )}
-    </>
+    </main>
   );
 }
-
