@@ -12,14 +12,50 @@ import { cn } from '@/lib/utils';
 export default function Navigation() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuClosing, setIsMenuClosing] = useState(false);
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const menuCloseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Mobile menu: slide down from nav, slide up when closing
+  useEffect(() => {
+    if (isMenuOpen && !isMenuClosing) {
+      setIsPanelVisible(false);
+      const t = requestAnimationFrame(() => {
+        requestAnimationFrame(() => setIsPanelVisible(true));
+      });
+      return () => cancelAnimationFrame(t);
+    }
+  }, [isMenuOpen, isMenuClosing]);
+
+  const closeMobileMenu = () => {
+    if (isMenuClosing) return;
+    setIsMenuClosing(true);
+    setIsPanelVisible(false);
+    menuCloseTimeoutRef.current = setTimeout(() => {
+      setIsMenuOpen(false);
+      setIsMenuClosing(false);
+      if (menuCloseTimeoutRef.current) {
+        clearTimeout(menuCloseTimeoutRef.current);
+        menuCloseTimeoutRef.current = null;
+      }
+    }, 280);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (menuCloseTimeoutRef.current) {
+        clearTimeout(menuCloseTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -152,7 +188,7 @@ export default function Navigation() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => (isMenuOpen ? closeMobileMenu() : setIsMenuOpen(true))}
           className="lg:hidden"
           aria-expanded={isMenuOpen}
         >
@@ -169,16 +205,32 @@ export default function Navigation() {
         </Button>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      {mounted && isMenuOpen && createPortal(
+      {/* Mobile Navigation Menu - drops down from below nav */}
+      {mounted && (isMenuOpen || isMenuClosing) && createPortal(
         <>
-          <div 
-            className="lg:hidden fixed inset-0 z-[9998] bg-black/30"
-            onClick={() => setIsMenuOpen(false)}
+          {/* 深色背景：從 nav 下方蓋過整頁內容 */}
+          <div
+            className={cn(
+              'lg:hidden fixed top-20 left-0 right-0 bottom-0 z-[9998] bg-black/80 dark:bg-black/90',
+              'transition-opacity duration-300 ease-out',
+              isPanelVisible && !isMenuClosing ? 'opacity-100' : 'opacity-0'
+            )}
+            onClick={closeMobileMenu}
+            aria-hidden="true"
           />
-          
-          <div className="lg:hidden fixed top-16 right-3 h-[calc(100vh-4rem)] w-[240px] z-[9999] bg-white dark:bg-gray-900 border border-border shadow-2xl rounded-l-lg">
-            <div className="overflow-y-auto h-full px-1.5 py-4 space-y-2">
+
+          <div
+            className={cn(
+              'lg:hidden fixed top-20 left-0 right-0 z-[9999] bg-background border-b border-border shadow-lg',
+              'max-h-[calc(100vh-5rem)] overflow-y-auto',
+              'transition-transform duration-300 ease-out will-change-transform',
+              isPanelVisible && !isMenuClosing ? 'translate-y-0' : '-translate-y-full'
+            )}
+            role="dialog"
+            aria-modal="true"
+            aria-label="導覽選單"
+          >
+            <div className="px-4 py-4 space-y-1">
               {enhancedNavigation.map((item) => (
                 <div key={item.name} className="mb-2">
                   <div className="flex items-center justify-between">
@@ -186,7 +238,7 @@ export default function Navigation() {
                       href={item.href}
                       onClick={() => {
                         if (!item.children || item.children.length === 0) {
-                          setIsMenuOpen(false);
+                          closeMobileMenu();
                         }
                       }}
                       className={cn(
@@ -230,7 +282,7 @@ export default function Navigation() {
                           <Link
                             key={`mobile-${item.name}-${index}-${child.href}`}
                             href={child.href}
-                            onClick={() => setIsMenuOpen(false)}
+                            onClick={closeMobileMenu}
                             className="block px-1.5 py-2 text-sm transition-all duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-muted-foreground hover:text-foreground"
                           >
                             <span className="flex items-center justify-between">

@@ -17,10 +17,10 @@ export interface NavSection {
 // Main navigation menu
 export const mainNavigation: NavItem[] = [
   {
-    name: 'Projects',
-    href: '/projects',
+    name: 'About',
+    href: '/about',
     icon: '💼',
-    description: 'Portfolio & Projects'
+    description: 'About & Projects'
   },
   {
     name: 'All Articles',
