@@ -1,12 +1,24 @@
 ---
 title: 113-2 DSAP Hw3 D1
-date: 'Sun Apr 13 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-04-13T08:00:00+08:00
 tags:
-  - tech-memo
+  - tech-notes
+  - ntu
 categories:
   - tech-notes
 coverImage: 'https://img.waynspace.com/2025/04/113-2-dsap-hw3-d1/image2.webp'
 slug: 113-2-dsap-hw3-d1
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大113-2 DSAP作業三D1解題紀錄：Circular Linked Queue與Array Queue的實作過程、深複製與解構子的坑，以及最終AC的心得。
+  keywords:
+    - DSAP
+    - 台大
+    - 資料結構
+    - C++
+    - Linked Queue
 summary: >-
   HackMD好讀版點這裡 總結與回顧 This is my first time documenting the process of solving a
   homework problem.

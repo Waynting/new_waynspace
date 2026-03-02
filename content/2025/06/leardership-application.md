@@ -1,14 +1,23 @@
 ---
 title: 第十五屆領導學程申請紀錄
-date: 'Sun Jun 15 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-06-15T08:00:00+08:00
 tags:
-  - uni-life
-  - self-growth
+  - ntu
+  - reflection
 categories:
   - ntu-life
-coverImage: >-
-  https://img.waynspace.com/2025/06/leardership-application/IMG_20250613_091402.webp
+coverImage: 'https://img.waynspace.com/2025/06/leardership-application/IMG_20250613_091402.webp'
 slug: leardership-application
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大第十五屆領導學程申請紀錄：書審準備、面試抽題過程與心得，提供未來申請者參考。
+  keywords:
+    - 台大
+    - 領導學程
+    - 申請紀錄
+    - 面試
 summary: >-
   <figure> <figcaption> 當天在門口的白板 </figcaption> </figure> 自我介紹
   大家好，我是要升上資管二的劉威廷，剛申請上領導學程（我是第十五屆的）。   於此記錄下自己申請的過程，希望能幫助到未來要申請的人。

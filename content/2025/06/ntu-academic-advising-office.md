@@ -1,14 +1,23 @@
 ---
 title: 台大學習規劃辦公室 預約流程與心得
-date: 'Sat Jun 14 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-06-14T08:00:00+08:00
 tags:
-  - daily-notes
-  - self-growth
+  - ntu
+  - reflection
 categories:
   - ntu-life
-coverImage: >-
-  https://img.waynspace.com/2025/06/ntu-academic-advising-office/IMG_20250414_135059.webp
+coverImage: 'https://img.waynspace.com/2025/06/ntu-academic-advising-office/IMG_20250414_135059.webp'
 slug: ntu-academic-advising-office
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大學習規劃辦公室使用心得：預約流程、會談內容介紹，推薦給對學習方向感到迷茫的台大學生。
+  keywords:
+    - 台大
+    - 學習規劃辦公室
+    - 大學資源
+    - 生涯規劃
 summary: >-
   <figure> <figcaption> 辦公室本人 </figcaption> </figure> Medium版本點我
   是今年的四月去的（對已經過了一段時間了），來記錄一下這個校內資源。   正如其名，是讓你能規劃自己的學習路徑。

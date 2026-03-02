@@ -1,15 +1,24 @@
 ---
 title: 2025寒假香港遊記
-date: 'Wed Jun 11 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-06-11T08:00:00+08:00
 tags:
-  - city-walk
-  - daily-notes
+  - travel
   - street-photography
 categories:
-  - city-walk
-  - personal-journal
+  - travel
 coverImage: 'https://img.waynspace.com/2025/06/202502hongkong/IMG_20250214_155025.webp'
 slug: 202502hongkong
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 第一次獨自出國：2025 寒假四天香港旅行紀錄，走訪九龍城寨公園、怪獸大廈、叮叮車、荃灣等地，用鏡頭紀錄東方明珠。
+  keywords:
+    - 香港
+    - 旅遊
+    - 街拍
+    - 獨旅
+    - 怪獸大廈
 summary: >-
   Day 1 0211 其實今天超級短的，因為是晚上7.50的飛機   花蓮起飛，提早了45分鐘到香港，但從降落到真的進到航廈還有一段時間。  
   一下來就狂奔，希望能搭到公車。   最後有搭到，還差點沒搭上，我以為前面的人是排隊上車，但後來發現他們是要搭同一個位置的另一半車。

@@ -1,10 +1,25 @@
 ---
 title: Eternal Sunshine of the Spotless Mind（王牌冤家）觀後感
-date: 'Tue May 28 2024 08:00:00 GMT+0800 (Taiwan Standard Time)'
-tags: null
-categories: null
-coverImage: ''
+date: 2024-05-28T08:00:00+08:00
+tags:
+  - film
+  - reflection
+categories:
+  - film-review
+coverImage: 'https://img.waynspace.com/2024/05/eternal-sunshine-of-the-spotless-mind（王牌冤家）觀後感/下載.webp'
 slug: eternal-sunshine-of-the-spotless-mind（王牌冤家）觀後感
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 《王牌冤家》觀後感：遺忘錯誤真的會讓人更快樂嗎？愛上一個人是刻在靈魂深處的本能，就算刪除記憶也會再次愛上同一個人，時間才是真正的療癒之道。
+  keywords:
+    - 王牌冤家
+    - Eternal Sunshine of the Spotless Mind
+    - 電影評論
+    - 記憶
+    - 遺忘
+    - 金凱瑞
 summary: '以下有雷，並且很大部分的帶入的自己的想法與感受。 [](https://blogger.googleusercontent.'
 ---
 

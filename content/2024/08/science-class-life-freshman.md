@@ -1,12 +1,26 @@
 ---
 title: "科學班生活 -\_高一高二"
-date: 'Thu Aug 15 2024 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2024-08-15T08:00:00+08:00
 tags:
   - self-growth
+  - science-class
 categories:
   - science-class-journal
 coverImage: 'https://img.waynspace.com/2024/08/science-class-life-freshman/1120428-3.webp'
 slug: science-class-life-freshman
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 雄中科學班高一高二實錄：課堂自由度與吃老本風險、社團生活的取捨，以及科展研究從交差了事到真正收穫的完整心路歷程。
+  keywords:
+    - 科學班
+    - 高中生活
+    - 科展
+    - 社團
+    - 雄中科學班
+    - 課業
+    - 大學申請
 summary: >-
   高中課業 以未來的角度檢視過去，會發現課業難度並沒有超常的困難，純粹是當時的自己過於脆弱與沒自信。  
   但有領悟總是好事，相信上大學後的適應期會因為這樣的經歷而更加奮力趕上課程進度。

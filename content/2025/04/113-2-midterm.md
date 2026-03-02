@@ -1,12 +1,25 @@
 ---
 title: 每一個經驗，都是等待被串起的節點（期中考...）
-date: 'Tue Apr 15 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-04-15T08:00:00+08:00
 tags:
   - daily-notes
+  - weekly-review
 categories:
-  - personal-journal
+  - ntu-life
 coverImage: 'https://img.waynspace.com/2025/04/113-2-midterm/1744021961733.webp'
 slug: 113-2-midterm
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大大一下第八週（期中週）：三餐連吃的友情體驗、對科系選擇的思考、把學習比喻為鏈結串列節點的頓悟，以及舊iPhone當多巴胺排毒工具的實驗。
+  keywords:
+    - 台大
+    - 大一下
+    - 期中考
+    - 科系選擇
+    - 學習方法
+    - 多巴胺排毒
 summary: >-
   —— 大一下第八週，從吃飯、寫作業到未來選擇的碎碎念 三餐連吃 禮拜一的午餐、晚餐跟禮拜二的早餐都跟同一群人一起吃。
   很特殊的體驗，說實話挺開心的。大家在其他時間自行忙碌，然後在吃飯時聚在一起聊天休息放鬆。我覺得這樣比自己在宿舍看影片好多了，有感到真正的放鬆，而不是一直接收社群媒體的資訊刺激。

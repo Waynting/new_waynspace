@@ -1,13 +1,22 @@
 ---
 title: 科學班生活-資格考規則介紹與心得
-date: 'Tue Jul 01 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-07-01T08:00:00+08:00
 tags:
-  - self-growth
+  - science-class
 categories:
   - science-class-journal
-coverImage: >-
-  https://img.waynspace.com/2025/07/science-class-qualification-exam/1120617-10.webp
+coverImage: 'https://img.waynspace.com/2025/07/science-class-qualification-exam/1120617-10.webp'
 slug: science-class-qualification-exam
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 高中科學班資格考完整介紹：報考資格、科目規則、免試條件，以及過來人的備考心得與給學弟妹的建議。
+  keywords:
+    - 科學班
+    - 資格考
+    - 高中
+    - 備考
 summary: >-
   <figure> <figcaption> 這張照片很適合這個系列，感謝我同學的賣力演出 </figcaption> </figure>
   為了測驗科學班學生是熟練掌握高中範圍的內容，於是在科學班學生高二升高三的暑假，我們會進行一場名為「資格考」的測驗。 報考資格 1.

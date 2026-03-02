@@ -1,13 +1,26 @@
 ---
 title: 科學班生活 - 國三入學前
-date: 'Fri Jun 28 2024 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2024-06-28T08:00:00+08:00
 tags:
   - self-growth
+  - science-class
 categories:
   - science-class-journal
-coverImage: >-
-  https://img.waynspace.com/2024/06/science-class-life-beforein/IMG_20240628_201711_1-1.webp
+coverImage: 'https://img.waynspace.com/2024/06/science-class-life-beforein/IMG_20240628_201711_1-1.webp'
 slug: science-class-life-beforein
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 考上科學班前的完整歷程：從意外通過初試、面對「留雄中讀科學班 vs. 考建中」的兩難選擇，到疫情下的補習班生活，帶你了解入學科學班前需要知道的一切。
+  keywords:
+    - 科學班
+    - 入學準備
+    - 雄中
+    - 升學
+    - 補習班
+    - 疫情
+    - 科學班考試
 summary: 這篇文主要是我在入學前的歷程，其中包括認識到科學班、準備、疫情、補習班的內容。   雖然此刻還沒入學，但我自己覺得科學班生活從確定錄取後就算開始了。
 ---
 

@@ -1,13 +1,23 @@
 ---
 title: 網頁端照片整理工具
-date: 'Thu Jul 03 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-07-03T08:00:00+08:00
 tags:
-  - tech-memo
+  - tech-notes
 categories:
   - tech-notes
-coverImage: >-
-  https://img.waynspace.com/2025/07/photo-select-tool-note/螢幕擷取畫面-2025-07-03-225732.webp
+coverImage: 'https://img.waynspace.com/2025/07/photo-select-tool-note/螢幕擷取畫面-2025-07-03-225732.webp'
 slug: photo-select-tool-note
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 用 Vibe Coding 做出純前端照片整理工具的技術筆記：HTML/CSS/JS 程式架構解說，支援照片篩選、刪除還原與 ZIP 下載。
+  keywords:
+    - JavaScript
+    - 前端開發
+    - 照片工具
+    - Vibe Coding
+    - HTML
 summary: >-
   20250703（四） Github Repo：https://github.com/Waynting/photo-select-tool  
   小工具連結：https://waynspace.

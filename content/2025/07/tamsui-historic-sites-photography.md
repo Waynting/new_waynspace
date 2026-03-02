@@ -1,15 +1,24 @@
 ---
 title: 淡水遊記 20250626（四）
-date: 'Wed Jul 02 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-07-02T08:00:00+08:00
 tags:
   - city-walk
   - street-photography
 categories:
   - city-walk
-  - personal-journal
-coverImage: >-
-  https://img.waynspace.com/2025/07/tamsui-historic-sites-photography/LIU_9407.webp
+coverImage: 'https://img.waynspace.com/2025/07/tamsui-historic-sites-photography/LIU_9407.webp'
 slug: tamsui-historic-sites-photography
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 淡水說走就走的一天：走訪重建街、滬尾偕醫館、真理大學牛津學堂，帶著 85mm 鏡頭在炎夏中記錄老街與海邊日落。
+  keywords:
+    - 淡水
+    - 街拍
+    - 城市漫步
+    - 歷史古蹟
+    - 攝影
 summary: 無可救藥的說走就走大概會跟著我一輩子，一如既往的和陳柏宇一起吃午餐（暑假大家都回家了）。   然後聊到想出去走走，剛好提到淡水。
 ---
 

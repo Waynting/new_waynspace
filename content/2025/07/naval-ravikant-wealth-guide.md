@@ -1,13 +1,24 @@
 ---
 title: 納瓦爾寶典 The Almanack of Naval Ravikant
-date: 'Sun Jul 13 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-07-13T08:00:00+08:00
 tags:
-  - self-growth
+  - reading
+  - reflection
 categories:
   - reading-notes
-coverImage: >-
-  https://img.waynspace.com/2025/07/naval-ravikant-wealth-guide/IMG_20250713_104927.webp
+coverImage: 'https://img.waynspace.com/2025/07/naval-ravikant-wealth-guide/IMG_20250713_104927.webp'
 slug: naval-ravikant-wealth-guide
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 《納瓦爾寶典》閱讀筆記：從獨特知識、槓桿、判斷力到快樂與自由，四章核心理念的中文整理與個人反思。
+  keywords:
+    - 納瓦爾寶典
+    - Naval Ravikant
+    - 財富
+    - 獨特知識
+    - 讀書心得
 summary: >-
   <figure> <figcaption> 書本人 </figcaption> </figure> 英文版的書是免費的PDF：點我 or 網站分章節版本  
   博客來購買連結：點我 Ch1. 創造財富，拿回自主權 財富是一套可學習的技能 Naval 開宗明義地說：賺錢是一套技能，人人皆可學會。

@@ -1,13 +1,23 @@
 ---
 title: 2025 台大資管週
-date: 'Tue May 06 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-05-06T08:00:00+08:00
 tags:
   - daily-notes
+  - ntu
 categories:
   - ntu-life
-  - personal-journal
 coverImage: 'https://img.waynspace.com/2025/05/2025-im-week/1745998468705.webp'
 slug: 2025-im-week
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大資管週週記：擔任總召的甘苦談、冒雨取貨的故事，以及期中後心情低潮的調整與反思。
+  keywords:
+    - 台大資管
+    - 資管週
+    - 台大
+    - 大學生活
 summary: >-
   Date: 2025/4/28（一）~ 2025/5/2（五）
   非常久沒有記錄心情與生活了，生活自從期中考完後便開始混亂（甚至考試考了快一個月），考完後的禮拜就是台大資管週，所以也沒有好好的喘息一下。週記也因此停擺了兩週，部落格快一個月沒有發東西了，我想SEO會直線下降吧。

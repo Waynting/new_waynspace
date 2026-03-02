@@ -1,12 +1,25 @@
 ---
 title: 科學班生活 - 前言
-date: 'Fri Jun 14 2024 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2024-06-14T08:00:00+08:00
 tags:
   - self-growth
+  - science-class
 categories:
   - science-class-journal
 coverImage: 'https://img.waynspace.com/2024/06/science-class-life-preface/1120805-1.webp'
 slug: science-class-life-preface
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 113級雄中科學班畢業生的親身自述：以科學班前輩角度，分享真實的科學班生活與制度，為即將進入或考慮就讀科學班的同學提供第一手參考。
+  keywords:
+    - 科學班
+    - 雄中科學班
+    - 高中
+    - 台大資管
+    - 資優教育
+    - 科學班生活
 summary: >-
   自我介紹 我是劉威廷，畢業於113級雄中科學班，今年剛畢業並正取台大資管。   （但現在要大二了，下面的文字是當年寫的）  
   一路受到資優教育。國小資優班，國中數理資優班，高中是科學班。 可以說是不務正業的科學班學生，目前仍在思考怎麼考進來科學班的。  

@@ -1,14 +1,24 @@
 ---
 title: 台大113-2修課心得
-date: 'Sat Jun 21 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-06-21T08:00:00+08:00
 tags:
-  - uni-life
-  - self-growth
+  - ntu
+  - course-review
 categories:
   - ntu-life
-coverImage: >-
-  https://img.waynspace.com/2025/06/113-2-coursesreview/b6e113e087a514f38978a8c01ba3dda3.webp
+coverImage: 'https://img.waynspace.com/2025/06/113-2-coursesreview/b6e113e087a514f38978a8c01ba3dda3.webp'
 slug: 113-2-coursesreview
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大 113-2（大一下）修課心得：普通心理學、DSAP、太極拳、會計學、線性代數、總體經濟、建築導論、設計思考各課評分與建議。
+  keywords:
+    - 台大
+    - 修課心得
+    - 大一下
+    - DSAP
+    - 建築導論
 summary: >-
   既然成績都出來了，那就來寫這學期修過的課吧   Medium好讀版點我 普通心理學 此為 通識 A58\   授課老師：葉俊毅   上課時間：一 234  
   學分數：3   甜度：8.5/10   涼度：8/10   我的成績：A+ 【心得】 推。加分作業能直接前進一個等地，我原本84.

@@ -1,14 +1,24 @@
 ---
 title: 蘆洲小遊記 20250624（二）
-date: 'Mon Jun 30 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-06-30T08:00:00+08:00
 tags:
   - city-walk
   - street-photography
 categories:
   - city-walk
-  - personal-journal
 coverImage: 'https://img.waynspace.com/2025/06/luzhou-photowalk-20250624/LIU_9208.webp'
 slug: luzhou-photowalk-20250624
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 帶著 Nikon D750 + 85mm 鏡頭的蘆洲半日遊：從捷運站到布街，記錄忠義國小、蘆洲李宅、湧蓮寺廟口等在地風景。
+  keywords:
+    - 蘆洲
+    - 街拍
+    - 城市漫步
+    - 攝影
+    - 台北
 summary: >-
   With Nikon D750 + 85 f1.8 D    過去的三個多月癡迷在 50 f1.4 AI
   的大光圈散景和練習自動對焦上，但漸漸發現想要換個口味。   防潮箱中剛好有個我從未用過的85，所以便做為這次小小旅行的選擇。 啟程

@@ -1,13 +1,23 @@
 ---
 title: 科學班生活-大學修課
-date: 'Wed Jul 02 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-07-02T08:00:00+08:00
 tags:
-  - daily-notes
-  - self-growth
+  - science-class
 categories:
   - science-class-journal
 coverImage: 'https://img.waynspace.com/2025/07/science-class-life-unicourse/1121213-1.webp'
 slug: science-class-life-unicourse
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 高雄中學科學班高三到中山大學修課的心得：選課流程、微積分學習歷程，以及在大學課堂中的生活趣事。
+  keywords:
+    - 科學班
+    - 大學修課
+    - 微積分
+    - 中山大學
+    - 高中
 summary: 在通過資格考後，到了高三便能到合作的大學修課。   然後有一件還算不錯的事情，我們高三以後就不需要考段考了，所以這些時間都是在家公假。
 ---
 

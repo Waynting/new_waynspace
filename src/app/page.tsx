@@ -92,10 +92,11 @@ export default async function Home() {
             <Image
               src="/LIU_0457.jpg"
               alt="Wei-Ting Liu"
-              width={72}
-              height={72}
-              className="rounded-full object-cover w-16 h-16 sm:w-[72px] sm:h-[72px] shrink-0 mt-1"
+              width={120}
+              height={120}
+              className="rounded-md object-cover w-24 h-24 sm:w-28 sm:h-28 md:w-[120px] md:h-[120px] shrink-0 border border-border"
               priority
+              fetchPriority="high"
             />
           </div>
 

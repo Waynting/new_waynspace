@@ -1,15 +1,24 @@
 ---
 title: What I Learned from 'How to Start a Startup'
-date: 'Sun Jul 06 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-07-06T08:00:00+08:00
 tags:
-  - uni-life
-  - self-growth
+  - reading
+  - reflection
 categories:
-  - ntu-life
-  - tech-notes
-coverImage: >-
-  https://img.waynspace.com/2025/07/how-to-start-a-startup-notes/How-to-start-a-start_Photo.webp
+  - reading-notes
+coverImage: 'https://img.waynspace.com/2025/07/how-to-start-a-startup-notes/How-to-start-a-start_Photo.webp'
 slug: how-to-start-a-startup-notes
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: Stanford《How to Start a Startup》20堂課的閱讀心得：創業的本質、產品、團隊、募資與執行力，以及對暑假實習前的個人感悟。
+  keywords:
+    - 創業
+    - How to Start a Startup
+    - Stanford
+    - YCombinator
+    - 讀書心得
 summary: >-
   <figure> <figcaption> A kind of mess </figcaption> </figure>
   這個週末，我把被譽為「創業界聖經」的 Stanford 經典課程《How to Start a Startup》完整走過一輪。

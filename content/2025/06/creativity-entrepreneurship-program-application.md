@@ -1,14 +1,24 @@
 ---
 title: 第十八屆創新創業學程申請紀錄
-date: 'Fri Jun 27 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-06-27T08:00:00+08:00
 tags:
-  - uni-life
-  - self-growth
+  - ntu
+  - reflection
 categories:
   - ntu-life
-coverImage: >-
-  https://img.waynspace.com/2025/06/creativity-entrepreneurship-program-application/1dqJNmDFw87Pf4hTtbhwTEw.webp
+coverImage: 'https://img.waynspace.com/2025/06/creativity-entrepreneurship-program-application/1dqJNmDFw87Pf4hTtbhwTEw.webp'
 slug: creativity-entrepreneurship-program-application
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 台大第十八屆創新創業學程（創創學程）申請紀錄：書審撰寫、面試流程與錄取心得，附開源企劃書與簡報。
+  keywords:
+    - 台大
+    - 創創學程
+    - 創業
+    - 申請紀錄
+    - 面試
 summary: >-
   <figure> <figcaption> 一個奇妙的旅程 </figcaption> </figure> Medium好讀版點我
   什麼是創新創業學程（創創學程）

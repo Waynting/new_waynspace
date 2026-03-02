@@ -1,14 +1,25 @@
 ---
 title: 20250504 新兒童樂園-攝影日誌
-date: 'Fri May 16 2025 08:00:00 GMT+0800 (Taiwan Standard Time)'
+date: 2025-05-16T08:00:00+08:00
 tags:
+  - photography
   - street-photography
 categories:
-  - photography-notes
+  - city-walk
 coverImage: 'https://img.waynspace.com/2025/05/20250505photography/IMG_20250504_154427.webp'
 slug: 20250505photography
+author:
+  name: Wei-Ting Liu
+  email: wayntingliu@gmail.com
+seo:
+  metaDescription: 新兒童樂園攝影日誌：第一次正式幫朋友拍照，陰天下的色調挑戰，帶85mm鏡頭記錄樂園裡的輕鬆時光與河堤風景。
+  keywords:
+    - 攝影
+    - 新兒童樂園
+    - 街拍
+    - 台北
 summary: >-
-  前情提要 這是我第一次特地且正式地幫人拍照。很榮幸我的兩位朋友相當信任我的攝影技術，所以願意擔任我的模特兒（我甚至拿不出成品集給他們看…）。  
+  前情提要 這是我第一次特地且正式地幫人拍照。很榮幸我的兩位朋友相當信任我的攝影技術，所以願意擔任我的模特兒（我甚至拿不出成品集給他們看…）。
   於是在這天特別來到新兒童樂園拍照，說是如此，其實更像是敘舊，這是我們上台北念書後第一次見面，和熟悉的人出門真好。
 ---
 
