@@ -20,7 +20,6 @@ seo:
     - YCombinator
     - 讀書心得
 summary: >-
-  <figure> <figcaption> A kind of mess </figcaption> </figure>
   這個週末，我把被譽為「創業界聖經」的 Stanford 經典課程《How to Start a Startup》完整走過一輪。
 ---
 

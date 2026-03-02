@@ -2,7 +2,7 @@
 title: 科學班生活 - 前言
 date: 2024-06-14T08:00:00+08:00
 tags:
-  - self-growth
+  - reflection
   - science-class
 categories:
   - science-class-journal

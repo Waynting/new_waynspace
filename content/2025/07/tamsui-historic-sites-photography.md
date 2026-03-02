@@ -2,8 +2,8 @@
 title: 淡水遊記 20250626（四）
 date: 2025-07-02T08:00:00+08:00
 tags:
-  - city-walk
   - street-photography
+  - photography
 categories:
   - city-walk
 coverImage: 'https://img.waynspace.com/2025/07/tamsui-historic-sites-photography/LIU_9407.webp'

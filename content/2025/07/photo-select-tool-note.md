@@ -2,7 +2,8 @@
 title: 網頁端照片整理工具
 date: 2025-07-03T08:00:00+08:00
 tags:
-  - tech-notes
+  - photography
+  - workflow
 categories:
   - tech-notes
 coverImage: 'https://img.waynspace.com/2025/07/photo-select-tool-note/螢幕擷取畫面-2025-07-03-225732.webp'

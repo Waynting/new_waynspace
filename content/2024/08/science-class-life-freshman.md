@@ -2,7 +2,7 @@
 title: "科學班生活 -\_高一高二"
 date: 2024-08-15T08:00:00+08:00
 tags:
-  - self-growth
+  - reflection
   - science-class
 categories:
   - science-class-journal

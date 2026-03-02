@@ -2,7 +2,6 @@
 title: 113-2 DSAP Hw3 D1
 date: 2025-04-13T08:00:00+08:00
 tags:
-  - tech-notes
   - ntu
 categories:
   - tech-notes

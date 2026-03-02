@@ -76,6 +76,8 @@ Thumbs.db
 
 # Docs for writing blog posts
 docs/
+.cursor
+.vscode
 
 # Newsletter tracking
 .newsletter-sent.json

@@ -2,8 +2,8 @@
 title: 蘆洲小遊記 20250624（二）
 date: 2025-06-30T08:00:00+08:00
 tags:
-  - city-walk
   - street-photography
+  - photography
 categories:
   - city-walk
 coverImage: 'https://img.waynspace.com/2025/06/luzhou-photowalk-20250624/LIU_9208.webp'

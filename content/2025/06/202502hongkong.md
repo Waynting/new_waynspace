@@ -2,8 +2,8 @@
 title: 2025寒假香港遊記
 date: 2025-06-11T08:00:00+08:00
 tags:
-  - travel
   - street-photography
+  - photography
 categories:
   - travel
 coverImage: 'https://img.waynspace.com/2025/06/202502hongkong/IMG_20250214_155025.webp'
