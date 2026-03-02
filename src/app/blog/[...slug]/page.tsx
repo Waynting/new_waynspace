@@ -181,7 +181,7 @@ export default async function PostPage({
         </header>
 
         {/* Article Content */}
-        <article className="prose prose-base md:prose-lg max-w-none prose-invert dark:prose-invert
+        <article className="prose prose-base md:prose-lg max-w-none dark:prose-invert
           prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-foreground
           prose-h1:text-3xl prose-h1:mt-16 prose-h1:mb-8 prose-h1:leading-tight
           prose-h2:text-2xl prose-h2:mt-14 prose-h2:mb-6 prose-h2:leading-snug
