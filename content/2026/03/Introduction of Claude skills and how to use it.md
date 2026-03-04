@@ -26,6 +26,8 @@ summary: >-
 ---
 ![image.png](https://img.waynspace.com/2026/03/Introduction-of-Claude-skills-and-how-to-use-it/claude-skills-cover.webp)
 
+
+[Medium Post here](https://medium.com/@wliu5928/introduction-of-claude-skills-and-how-to-use-it-d35416b380dc)
 ## Outline
 
 1. Recap: My Journey with Claude Code
