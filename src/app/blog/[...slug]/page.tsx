@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { formatDate } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
+import ArticleContent from '@/components/ArticleContent'
 import { generatePostMetadata } from './metadata'
 import { generateStructuredData } from '@/lib/seo'
 import { siteConfig } from '@/config/seo'
@@ -181,35 +182,37 @@ export default async function PostPage({
         </header>
 
         {/* Article Content */}
-        <article className="prose prose-base md:prose-lg max-w-none dark:prose-invert
-          prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-foreground
-          prose-h1:text-3xl prose-h1:mt-16 prose-h1:mb-8 prose-h1:leading-tight
-          prose-h2:text-2xl prose-h2:mt-14 prose-h2:mb-6 prose-h2:leading-snug
-          prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-5 prose-h3:leading-snug
-          prose-h4:text-lg prose-h4:mt-10 prose-h4:mb-4
-          prose-p:leading-[1.85] prose-p:text-foreground prose-p:mb-8 prose-p:text-[15px] md:prose-p:text-base
-          prose-a:text-foreground prose-a:underline prose-a:decoration-muted-foreground/40 prose-a:underline-offset-4
-          hover:prose-a:decoration-foreground prose-a:transition-colors prose-a:font-normal
-          prose-strong:font-semibold prose-strong:text-foreground
-          prose-em:italic prose-em:text-foreground
-          prose-code:text-sm prose-code:bg-muted prose-code:text-foreground prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono
-          prose-code:before:content-[''] prose-code:after:content-['']
-          prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg
-          prose-pre:p-5 prose-pre:my-8 prose-pre:overflow-x-auto prose-pre:text-[14px] prose-pre:leading-relaxed prose-pre:text-foreground
-          prose-blockquote:border-l-4 prose-blockquote:border-muted-foreground/30 prose-blockquote:pl-6 prose-blockquote:pr-4
-          prose-blockquote:italic prose-blockquote:text-muted-foreground prose-blockquote:my-8 prose-blockquote:py-1
-          prose-img:rounded-lg prose-img:my-10 prose-img:shadow-sm prose-img:w-full
-          prose-ul:my-8 prose-ul:list-disc prose-ul:pl-7 prose-ul:space-y-3
-          prose-ol:my-8 prose-ol:list-decimal prose-ol:pl-7 prose-ol:space-y-3
-          prose-li:text-foreground prose-li:leading-[1.75] prose-li:my-2
-          prose-li>prose-p:my-2 prose-li>prose-p:leading-[1.75]
-          prose-table:my-10 prose-table:border-collapse prose-table:w-full prose-table:text-sm
-          prose-th:border prose-th:border-border prose-th:bg-muted/50 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-th:font-medium prose-th:text-foreground
-          prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-3 prose-td:text-foreground
-          prose-hr:my-14 prose-hr:border-border prose-hr:border-t-2
-          [&>p+p]:mt-8 [&_br+br]:block [&_br+br]:content-[''] [&_br+br]:mt-6
-          [&_*]:text-foreground"
-          dangerouslySetInnerHTML={{ __html: processedContent }}
+        <ArticleContent
+          html={processedContent}
+          className="prose prose-base md:prose-lg max-w-none dark:prose-invert
+            prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-foreground
+            prose-h1:text-3xl prose-h1:mt-16 prose-h1:mb-8 prose-h1:leading-tight
+            prose-h2:text-2xl prose-h2:mt-14 prose-h2:mb-6 prose-h2:leading-snug
+            prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-5 prose-h3:leading-snug
+            prose-h4:text-lg prose-h4:mt-10 prose-h4:mb-4
+            prose-p:leading-[1.85] prose-p:text-foreground prose-p:mb-6 prose-p:text-[15px] md:prose-p:text-base
+            prose-a:text-foreground prose-a:underline prose-a:decoration-muted-foreground/40 prose-a:underline-offset-4
+            hover:prose-a:decoration-foreground prose-a:transition-colors prose-a:font-normal
+            prose-strong:font-semibold prose-strong:text-foreground
+            prose-em:italic prose-em:text-foreground
+            prose-code:text-sm prose-code:bg-muted prose-code:text-foreground prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono
+            prose-code:before:content-[''] prose-code:after:content-['']
+            prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg
+            prose-pre:p-5 prose-pre:my-8 prose-pre:overflow-x-auto prose-pre:text-[14px] prose-pre:leading-relaxed prose-pre:text-foreground
+            prose-blockquote:border-l-4 prose-blockquote:border-muted-foreground/30 prose-blockquote:pl-6 prose-blockquote:pr-4
+            prose-blockquote:not-italic prose-blockquote:text-muted-foreground prose-blockquote:mt-2 prose-blockquote:mb-6 prose-blockquote:py-4
+            prose-img:rounded-lg prose-img:my-10 prose-img:shadow-sm prose-img:w-full
+            prose-ul:my-6 prose-ul:list-disc prose-ul:pl-7
+            prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-7
+            prose-li:text-foreground prose-li:leading-[1.75] prose-li:my-0
+            [&_li>p]:my-1 [&_li>p]:mb-1
+            [&_blockquote_p]:!my-0 [&_blockquote_p]:!mb-0
+            prose-table:my-10 prose-table:border-collapse prose-table:w-full prose-table:text-sm
+            prose-th:border prose-th:border-border prose-th:bg-muted/50 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-th:font-medium prose-th:text-foreground
+            prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-3 prose-td:text-foreground
+            prose-hr:my-14 prose-hr:border-border prose-hr:border-t-2
+            [&>p+p]:mt-6 [&_br+br]:block [&_br+br]:content-[''] [&_br+br]:mt-6
+            [&_*]:text-foreground"
         />
 
         {/* Footer Navigation */}

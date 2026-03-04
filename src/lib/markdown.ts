@@ -2,6 +2,7 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeRaw from 'rehype-raw';
+import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 import matter from 'gray-matter';
 
@@ -20,10 +21,12 @@ export async function markdownToHtml(markdown: string) {
     .use(remarkGfm) // GitHub Flavored Markdown（支援 `---` 作為水平分隔線）
     .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 rehype (HTML AST)
     .use(rehypeRaw) // 允许在 Markdown 中使用原始 HTML（保留 <img> 等标签）
+    .use(rehypeHighlight) // 語法高亮
     .use(rehypeStringify, { allowDangerousHtml: true }) // 转换为 HTML 字符串
     .process(processedMarkdown);
 
-  return result.toString();
+  // 移除 code 標籤內的尾端換行，避免單行程式碼區塊出現多餘空行
+  return result.toString().replace(/\n<\/code>/g, '</code>');
 }
 
 export function parseMarkdownFile(fileContent: string): { data: any; content: string } {
