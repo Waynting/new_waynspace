@@ -2,11 +2,10 @@
 title: Introduction of Claude Skills and How to Use It
 date: 2026-03-04T00:00:00.000Z
 tags:
-  - claude-code
-  - ai-tools
-  - skills
+  - workflow
+  - reflection
 categories:
-  - tech
+  - tech-notes
 slug: introduction-of-claude-skills
 coverImage: 'https://img.waynspace.com/2026/03/Introduction-of-Claude-skills-and-how-to-use-it/claude-skills-cover.webp'
 author:

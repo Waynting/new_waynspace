@@ -1,356 +1,75 @@
-# Scripts 說明
+# Scripts
 
-本目錄包含用於管理博客內容和圖片的腳本工具。
-
-**作者：** Wei-Ting Liu
+本目錄包含圖片處理與電子報相關腳本。完整寫作與發布流程請參考 [docs/writing-guide.md](../docs/writing-guide.md)。
 
 ---
 
-## 📋 腳本列表
+## images:process
 
-### `process-local-images.mjs` ⭐ **推薦使用**
-
-**功能**：自動處理本地圖片並上傳到 R2
-
-這是**最推薦**的圖片處理方式，會自動完成所有步驟：
-
-- ✅ 掃描所有 Markdown 文件中的本地圖片路徑
-- ✅ 支援 `file://`、絕對路徑和相對路徑（`./image.jpg`）
-- ✅ 自動轉換為 WebP 格式並壓縮
-- ✅ 自動上傳到 Cloudflare R2
-- ✅ 自動替換文章中的路徑為 CDN URL
-- ✅ 自動清理文件名和路徑中的空格
-- ✅ 支援快取機制，避免重複上傳
-
-**使用方式**：
 ```bash
 npm run images:process
 ```
 
-**使用範例**：
+自動處理本地圖片：掃描文章中的相對路徑圖片，轉換為 WebP，上傳到 R2，更新文章路徑，刪除本地檔案。支援快取避免重複上傳。
 
-1. **將圖片放在文章同目錄下**：
-   ```bash
-   content/2025/12/my-article/
-   ├── my-article.md
-   ├── photo1.jpg
-   └── photo2.png
-   ```
-
-2. **在文章中使用相對路徑**：
-   ```markdown
-   ![圖片說明](./photo1.jpg)
-   ![另一張圖](./photo2.png)
-   ```
-
-3. **執行腳本**：
-   ```bash
-   npm run images:process
-   ```
-
-4. **結果**：
-   - 圖片會自動上傳到 R2：`blog-post/2025/12/my-article/photo1.webp`
-   - 文章中的路徑會自動更新為：`https://img.waynspace.com/2025/12/my-article/photo1.webp`
-   - 本地圖片會被自動刪除
-
-**環境變數**：
-- `CF_ACCOUNT_ID` - Cloudflare Account ID（必填）
-- `R2_ACCESS_KEY_ID` - R2 API Access Key ID（必填）
-- `R2_SECRET_ACCESS_KEY` - R2 API Secret Access Key（必填）
-- `R2_BUCKET` - R2 Bucket 名稱（預設：`blog-post`）
-- `R2_BASE_URL` - CDN 基礎 URL（預設：`https://img.waynspace.com`）
-
-**注意事項**：
-- 腳本會自動清理文件名和路徑中的空格，避免 URL 問題
-- 如果圖片已存在於 R2（根據 hash），會跳過上傳
-- 處理完成後，本地圖片會被自動刪除
+需要環境變數：`CF_ACCOUNT_ID`、`R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`
 
 ---
 
-### `delete-r2-images.mjs`
+## images:verify
 
-**功能**：刪除 R2 上包含空格的文件
-
-用於清理因為文件名或路徑中包含空格而導致無法正確讀取的圖片。
-
-**使用方式**：
-```bash
-npm run images:delete-spaces
-```
-
-**功能說明**：
-- 掃描 R2 bucket 中的所有文件
-- 找出包含空格的文件
-- 顯示文件列表並詢問確認
-- 刪除包含空格的文件
-
-**環境變數**：
-- `CF_ACCOUNT_ID` - Cloudflare Account ID（必填）
-- `R2_ACCESS_KEY_ID` - R2 API Access Key ID（必填）
-- `R2_SECRET_ACCESS_KEY` - R2 API Secret Access Key（必填）
-- `R2_BUCKET` - R2 Bucket 名稱（預設：`blog-post`）
-
-**使用場景**：
-- 修正舊圖片路徑中的空格問題
-- 清理無法正確訪問的圖片
-
----
-
-### `update-content-images.mjs`
-
-**功能**：更新文章中的圖片路徑為 R2 URL
-
-適用於已經手動上傳圖片到 R2，需要批量更新文章中的圖片路徑的情況。
-
-**使用方式**：
-```bash
-npm run images:update
-```
-
-**功能說明**：
-- 掃描 `content/` 目錄下的所有 Markdown 文件
-- 將相對路徑（如 `images/photo.jpg`）替換為完整的 R2 URL
-- 自動將圖片路徑轉換為 `.webp` 格式
-
-**環境變數**：
-- `R2_BASE_URL` - CDN 基礎 URL（預設：`https://img.waynspace.com`）
-- `R2_PREFIX` - R2 路徑前綴（預設：`blog`）
-
-**注意**：此腳本不會上傳圖片，只會更新路徑。請確保圖片已經在 R2 上。
-
----
-
-### `verify-r2-images.mjs`
-
-**功能**：驗證文章中的圖片路徑是否正確
-
-檢查所有文章中的圖片 URL 是否對應到 R2 上的實際文件。
-
-**使用方式**：
 ```bash
 npm run images:verify
 ```
 
-**功能說明**：
-- 掃描所有文章中的圖片 URL
-- 檢查 R2 上是否存在對應的圖片
-- 顯示缺失的圖片列表
-
-**環境變數**：
-- `R2_BASE_URL` - CDN 基礎 URL（預設：`https://img.waynspace.com`）
-- `R2_PREFIX` - R2 路徑前綴（預設：`blog`）
-- `R2_BUCKET` - R2 Bucket 名稱（預設：`blog-post`）
-- `RCLONE_REMOTE` - rclone 遠端名稱（預設：`r2`）
-
-**使用場景**：
-- 部署前檢查圖片是否都已上傳
-- 排查圖片 404 錯誤
+驗證文章中的圖片 URL 是否對應到 R2 上的實際檔案，列出缺失的圖片。
 
 ---
 
-### `publish-images-to-r2.mjs` ⚠️ **舊版腳本**
+## images:delete-spaces
 
-**功能**：從 `source/_posts/` 上傳圖片到 R2（適用於舊的 Hexo 結構）
+```bash
+npm run images:delete-spaces
+```
 
-**注意**：此腳本適用於舊的目錄結構。如果你直接在 `content/` 下編輯，請使用 `process-local-images.mjs`。
+刪除 R2 上檔名包含空格的檔案。
 
-**使用方式**：
+---
+
+## images:update
+
+```bash
+npm run images:update
+```
+
+批量更新文章中的相對圖片路徑為 R2 CDN URL。僅更新路徑，不上傳圖片。
+
+---
+
+## images:publish（舊版）
+
 ```bash
 npm run images:publish
 ```
 
-**環境變數**：
-- `CF_ACCOUNT_ID` - Cloudflare Account ID
-- `R2_BUCKET` - R2 Bucket 名稱（預設：`blog-post`）
-- `R2_BASE_URL` - CDN 基礎 URL（預設：`https://img.waynspace.com`）
-- `R2_PREFIX` - R2 路徑前綴（預設：`blog`）
-- `RCLONE_REMOTE` - rclone 遠端名稱（預設：`r2`）
-
-**注意**：需要先配置 rclone：
-```bash
-rclone config
-```
+從 `source/_posts/` 上傳圖片到 R2，適用於舊的 Hexo 目錄結構。需要 rclone。一般情況請使用 `images:process`。
 
 ---
 
-### `test-r2-config.mjs`
+## test:r2
 
-**功能**：測試 R2 配置是否正確
-
-**使用方式**：
 ```bash
 npm run test:r2
 ```
 
-**功能說明**：
-- 檢查 rclone 是否已安裝
-- 檢查 rclone 遠端配置
-- 檢查能否訪問 R2 bucket
-- 檢查環境變數配置
-- 測試上傳功能
-
-**環境變數**：
-- `R2_BUCKET` - R2 Bucket 名稱（預設：`blog-post`）
-- `R2_BASE_URL` - CDN 基礎 URL（預設：`https://img.waynspace.com`）
-- `R2_PREFIX` - R2 路徑前綴（預設：`blog`）
-- `RCLONE_REMOTE` - rclone 遠端名稱（預設：`r2`）
+測試 R2 連線、rclone 配置、環境變數與上傳功能。
 
 ---
 
-## 🚀 推薦工作流程
+## newsletter:send
 
-### 日常寫作流程
-
-1. **創建文章**：
-   ```bash
-   # 在 content/2025/12/ 下創建文章
-   content/2025/12/my-article.md
-   ```
-
-2. **準備圖片**：
-   ```bash
-   # 將圖片放在文章同目錄下
-   content/2025/12/my-article/
-   ├── my-article.md
-   ├── photo1.jpg
-   └── photo2.png
-   ```
-
-3. **在文章中使用相對路徑**：
-   ```markdown
-   ![圖片說明](./photo1.jpg)
-   ![另一張圖](./photo2.png)
-   ```
-
-4. **執行自動處理**：
-   ```bash
-   npm run images:process
-   ```
-
-5. **結果**：
-   - ✅ 圖片自動上傳到 R2
-   - ✅ 路徑自動更新為 CDN URL
-   - ✅ 本地圖片自動刪除
-   - ✅ 文章可以直接提交到 Git
-
----
-
-## 🔧 配置
-
-所有腳本都使用環境變數進行配置。建議創建 `.env` 文件：
-
-```env
-# Cloudflare R2 配置
-CF_ACCOUNT_ID=your-account-id
-R2_BUCKET=blog-post
-R2_BASE_URL=https://img.waynspace.com
-
-# R2 API 憑證（用於直接上傳）
-R2_ACCESS_KEY_ID=your-access-key-id
-R2_SECRET_ACCESS_KEY=your-secret-access-key
-
-# rclone 遠端名稱（用於 rclone 上傳，可選）
-RCLONE_REMOTE=r2
-```
-
-**獲取 R2 API 憑證**：
-1. 前往 [Cloudflare Dashboard](https://dash.cloudflare.com/)
-2. 選擇 R2 > Manage R2 API Tokens
-3. 創建新的 API Token
-4. 複製 Access Key ID 和 Secret Access Key
-
----
-
-## 📝 完整範例
-
-### 場景：撰寫新文章並上傳圖片
-
-**1. 創建文章**：
 ```bash
-content/2025/12/my-new-article.md
+npm run newsletter:send -- --slug "YYYY/MM/slug"
 ```
 
-**2. 準備圖片**：
-```bash
-content/2025/12/my-new-article/
-├── my-new-article.md
-├── cover.jpg
-├── screenshot1.png
-└── screenshot2.png
-```
-
-**3. 編輯文章**：
-```markdown
----
-title: "我的新文章"
-date: 2025-12-01
-categories:
-  - 技術筆記
-author:
-  name: Wei-Ting Liu
-  email: wayntingliu@gmail.com
----
-
-這是文章內容。
-
-![封面](./cover.jpg)
-
-![截圖1](./screenshot1.png)
-
-![截圖2](./screenshot2.png)
-```
-
-**4. 執行處理**：
-```bash
-npm run images:process
-```
-
-**5. 結果**：
-- 圖片自動上傳到：`blog-post/2025/12/my-new-article/`
-- 路徑自動更新為：`https://img.waynspace.com/2025/12/my-new-article/cover.webp`
-- 本地圖片自動刪除
-- 文章可以直接提交
-
----
-
-## ❓ 常見問題
-
-### Q: 圖片上傳失敗？
-
-A: 檢查：
-1. `.env` 文件中的配置是否正確
-2. R2 API 憑證是否有效
-3. R2 bucket 是否已啟用 Public Access
-
-### Q: 圖片路徑沒有更新？
-
-A: 
-1. 確認圖片路徑格式是否正確（相對路徑：`./image.jpg`）
-2. 檢查腳本是否成功執行（查看輸出訊息）
-3. 確認文章檔案路徑是否正確（`content/YYYY/MM/`）
-
-### Q: 圖片顯示 404？
-
-A: 
-1. 執行 `npm run images:verify` 檢查圖片是否存在
-2. 確認 R2 bucket 已啟用 Public Access
-3. 檢查圖片 URL 格式是否正確
-
-### Q: 如何手動上傳單張圖片？
-
-A: 推薦使用 `npm run images:process`，它會自動處理所有圖片。如果需要手動上傳，可以使用 rclone：
-```bash
-rclone copy ~/Pictures/photo.jpg r2:blog-post/2025/12/my-article/ --progress
-```
-
----
-
-## 📚 更多資訊
-
-- 詳細使用說明請參考 `docs/圖片上傳指南.md`
-- 文章撰寫指南請參考 `docs/如何撰寫文章.md`
-- 博客經營指南請參考 `docs/經營.md`
-
----
-
-**記住**：使用 `npm run images:process` 是最簡單、最可靠的方式！
+發送電子報通知。詳細選項（自訂標題、內容、強制重送）請參考 [docs/writing-guide.md](../docs/writing-guide.md#發送電子報)。
