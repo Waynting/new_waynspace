@@ -145,7 +145,7 @@ ${content.substring(0, 500)}${content.length > 500 ? '...' : ''}
     }
 
     // 發送郵件
-    const response = await fetch('https://api.buttondown.com/v1/emails', {
+    const response = await fetch('https://api.buttondown.email/v1/emails', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${BUTTONDOWN_API_KEY}`,
@@ -154,7 +154,6 @@ ${content.substring(0, 500)}${content.length > 500 ? '...' : ''}
       body: JSON.stringify({
         subject: finalSubject,
         body: finalBody,
-        subscriber_email_addresses: [], // 空陣列表示發送給所有訂閱者
       }),
     })
 

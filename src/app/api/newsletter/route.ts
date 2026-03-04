@@ -8,9 +8,10 @@ import {
   getSentArticleInfo,
 } from '@/lib/newsletter-tracker'
 
-// 设置 API Key
+// 使用 Client 直接發送請求，繞過 package 的高階 API
+const client = new buttondown.Client()
 if (process.env.BUTTONDOWN_API_KEY) {
-  buttondown.setApiKey(process.env.BUTTONDOWN_API_KEY)
+  client.setApiKey(process.env.BUTTONDOWN_API_KEY)
 }
 
 /**
@@ -95,11 +96,12 @@ ${post.content.substring(0, 500)}${post.content.length > 500 ? '...' : ''}
 
     // 發送郵件給所有訂閱者
     try {
-      const result = (await buttondown.emails.create({
-        subject: finalSubject,
-        body: finalBody,
-        subscriber_email_addresses: [], // 空陣列表示發送給所有訂閱者
-      })) as unknown as { id?: string }
+      const result = await client.request<{ id?: string }>('POST', 'emails', {
+        payload: {
+          subject: finalSubject,
+          body: finalBody,
+        },
+      })
 
       const emailId = result?.id
 
