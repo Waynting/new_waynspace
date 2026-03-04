@@ -24,9 +24,6 @@ seo:
 summary: >-
   Returning to Claude Code during my internship at ABConvert, I rediscovered its powerful Skills system. This post covers what Skills are, how to install them from public repositories, practical usage in development workflows, and how to build your own custom skills to standardize AI-assisted development.
 ---
-
-# Introduction of Claude skills and how to use it
-
 ![image.png](https://img.waynspace.com/2026/03/Introduction-of-Claude-skills-and-how-to-use-it/claude-skills-cover.webp)
 
 ## Outline
