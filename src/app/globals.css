@@ -115,7 +115,7 @@ body {
 .article-content {
   line-height: 1.8;
   font-size: 1rem;
-  color: var(--foreground);
+  color: hsl(var(--foreground));
 }
 
 /* WordPress 標題樣式 */
@@ -129,7 +129,7 @@ body {
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-weight: 600;
-  color: var(--foreground);
+  color: hsl(var(--foreground));
   line-height: 1.3;
 }
 
@@ -141,13 +141,13 @@ body {
   font-weight: 700 !important;
   margin-top: 2.5rem !important;
   margin-bottom: 1.5rem !important;
-  color: var(--foreground) !important;
+  color: hsl(var(--foreground)) !important;
 }
 
 .article-content h2,
 .article-content .wp-block-heading h2 {
   font-size: 1.75rem;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 2px solid hsl(var(--border));
   padding-bottom: 0.5rem;
   margin-top: 2.5rem;
 }
@@ -167,9 +167,8 @@ body {
 /* 段落樣式 - 增加行距和段落間距 */
 .article-content p {
   margin-bottom: 2rem;
-  color: var(--foreground);
+  color: hsl(var(--foreground));
   line-height: 1.85;
-  opacity: 0.95;
 }
 
 /* 連續段落之間增加額外間距 */
@@ -186,13 +185,14 @@ body {
 
 /* 連結樣式 */
 .article-content a {
-  color: var(--primary);
+  color: hsl(var(--primary));
   text-decoration: underline;
   transition: color 0.2s ease;
 }
 
 .article-content a:hover {
-  color: var(--primary-hover);
+  color: hsl(var(--primary));
+  opacity: 0.8;
 }
 
 /* WordPress 圖片區塊樣式 */
@@ -218,8 +218,7 @@ body {
 .article-content .wp-element-caption,
 .article-content figcaption {
   font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.8;
+  color: hsl(var(--muted-foreground));
   text-align: center;
   margin-top: 0.5rem;
   font-style: italic;
@@ -247,14 +246,9 @@ body {
 /* WordPress 分隔線 */
 .article-content .wp-block-separator {
   border: none;
-  border-top: 2px solid var(--border);
+  border-top: 2px solid hsl(var(--border));
   margin: 2.5rem auto;
   width: 50%;
-  opacity: 0.8;
-}
-
-.article-content .wp-block-separator.has-alpha-channel-opacity {
-  opacity: 0.8;
 }
 
 /* 分隔線樣式 - 使用更具體的選擇器覆蓋 Tailwind prose */
@@ -294,8 +288,7 @@ body {
 .article-content .wp-block-list {
   margin: 1.5rem 0;
   padding-left: 2rem;
-  color: var(--foreground);
-  opacity: 0.95;
+  color: hsl(var(--foreground));
   list-style-position: outside; /* 确保 bullet points 显示在外侧 */
 }
 
@@ -314,7 +307,7 @@ body {
 
 .article-content li strong {
   font-weight: 600;
-  color: var(--foreground);
+  color: hsl(var(--foreground));
 }
 
 /* 引用區塊 */
@@ -351,19 +344,19 @@ body {
 
 /* 程式碼樣式 */
 .article-content code {
-  background-color: var(--secondary);
+  background-color: hsl(var(--secondary));
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.875rem;
-  color: var(--accent);
-  border: 1px solid var(--border);
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
 }
 
 .article-content pre {
-  background-color: var(--card);
-  border: 1px solid var(--border);
-  color: var(--foreground);
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
   padding: 1.5rem;
   border-radius: 0.5rem;
   overflow-x: auto;
@@ -382,7 +375,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;
-  background-color: var(--card);
+  background-color: hsl(var(--card));
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -390,15 +383,16 @@ body {
 
 .article-content th,
 .article-content td {
-  border: 1px solid var(--border);
+  border: 1px solid hsl(var(--border));
   padding: 0.75rem;
   text-align: left;
+  color: hsl(var(--foreground));
 }
 
 .article-content th {
-  background-color: var(--secondary);
+  background-color: hsl(var(--secondary));
   font-weight: 600;
-  color: var(--foreground);
+  color: hsl(var(--foreground));
 }
 
 /* WordPress 特有的佈局容器 */
