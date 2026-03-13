@@ -199,7 +199,7 @@ async function processImage(localPath, year, month, slug) {
     console.log(`  📸 處理中: ${path.basename(localPath)} → ${webpName}`)
 
     const webpBuffer = await sharp(imageBuffer, { keepExif: true })
-      .webp({ quality: 100 })
+      .webp({ quality: 80 })
       .resize({ width: 2000, withoutEnlargement: true }) // 限制最大寬度
       .toBuffer()
 

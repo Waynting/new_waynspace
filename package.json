@@ -12,6 +12,7 @@
     "images:update": "node scripts/update-content-images.mjs",
     "images:verify": "node scripts/verify-r2-images.mjs",
     "images:delete-spaces": "node scripts/delete-r2-images.mjs",
+    "photos:process": "node scripts/process-personal-photos.mjs",
     "test:r2": "node scripts/test-r2-config.mjs",
     "newsletter:send": "node scripts/send-newsletter.mjs"
   },

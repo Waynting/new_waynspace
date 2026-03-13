@@ -3,8 +3,8 @@ import PhotoGallery from '@/components/PhotoGallery';
 import { getPhotos } from '@/lib/photos';
 
 export const metadata: Metadata = {
-  title: 'Photos - Wei-Ting Liu',
-  description: 'Personal photography gallery by Wei-Ting Liu',
+  title: '攝影 - Wei-Ting Liu',
+  description: 'Wei-Ting Liu 的個人攝影作品集',
 };
 
 export const revalidate = 3600;
@@ -14,7 +14,6 @@ export default async function PhotosPage() {
 
   return (
     <>
-      {/* Editorial header — matches /about and /blog */}
       <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 py-16 md:py-20">
         <header>
           <p className="text-xs text-muted-foreground font-medium tracking-[0.2em] uppercase mb-4">
@@ -31,7 +30,6 @@ export default async function PhotosPage() {
         </header>
       </div>
 
-      {/* Gallery — full bleed with consistent horizontal padding */}
       <div className="px-4 sm:px-6 lg:px-8 pb-20">
         <PhotoGallery initialPhotos={photos} />
       </div>
