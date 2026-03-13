@@ -45,12 +45,17 @@ const categorySlugMap: Record<string, string> = {
   '生活日誌': 'personal-journal',
   'photography-notes': 'photography-notes',
   '攝影筆記': 'photography-notes',
-  'city-walk': 'city-walk',
-  '城市漫步': 'city-walk',
-  'reading-notes': 'reading-notes',
-  '讀書筆記與心得': 'reading-notes',
+  'city-walk': 'travel-notes',
+  '城市漫步': 'travel-notes',
+  'travel': 'travel-notes',
+  '行旅隨筆': 'travel-notes',
+  'reading-notes': 'notes',
+  '讀書筆記與心得': 'notes',
+  'film-review': 'notes',
+  '筆記與心得': 'notes',
   'tech-notes': 'tech-notes',
   '技術筆記': 'tech-notes',
+  '技術隨筆': 'tech-notes',
 }
 
 // 分类名称标准化映射（将英文分类名映射到中文显示名）
@@ -59,9 +64,11 @@ const categoryNameMap: Record<string, string> = {
   'science-class-journal': '科學班生活',
   'personal-journal': '生活日誌',
   'photography-notes': '攝影筆記',
-  'city-walk': '城市漫步',
-  'reading-notes': '讀書筆記與心得',
-  'tech-notes': '技術筆記',
+  'city-walk': '行旅隨筆',
+  'travel': '行旅隨筆',
+  'reading-notes': '筆記與心得',
+  'film-review': '筆記與心得',
+  'tech-notes': '技術隨筆',
 }
 
 // 从 Markdown 内容中提取第一张图片 URL

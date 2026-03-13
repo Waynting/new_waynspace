@@ -87,10 +87,10 @@ npm run build      # 生產環境建置
 | 台大資管生活 | `ntu-life` | 台大資管相關、課程心得 |
 | 生活日誌 | `personal-journal` | 日常生活記錄 |
 | 科學班生活 | `science-class-journal` | 科學班相關回憶 |
-| 技術筆記 | `tech-notes` | 技術相關文章 |
-| 城市漫步 | `city-walk` | 城市探索、攝影 |
+| 技術隨筆 | `tech-notes` | 技術相關文章 |
+| 行旅隨筆 | `travel-notes` | 城市探索、旅行 |
 | 攝影筆記 | `photography-notes` | 攝影作品與心得 |
-| 讀書筆記與心得 | `reading-notes` | 閱讀心得 |
+| 筆記與心得 | `notes` | 閱讀、觀影心得 |
 
 ---
 
