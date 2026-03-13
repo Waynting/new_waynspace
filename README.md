@@ -84,8 +84,8 @@ npm run build      # 生產環境建置
 
 | 分類 | 代碼 | 說明 |
 |------|------|------|
-| 台大資管生活 | `ntu-life` | 台大資管相關、課程心得 |
-| 生活日誌 | `personal-journal` | 日常生活記錄 |
+| 台大資管 | `ntu-life` | 台大資管相關、課程心得 |
+| 生活隨筆 | `personal-journal` | 日常生活記錄 |
 | 科學班生活 | `science-class-journal` | 科學班相關回憶 |
 | 技術隨筆 | `tech-notes` | 技術相關文章 |
 | 行旅隨筆 | `travel-notes` | 城市探索、旅行 |

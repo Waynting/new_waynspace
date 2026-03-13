@@ -39,10 +39,12 @@ const postsDirectory = path.join(process.cwd(), 'content')
 const categorySlugMap: Record<string, string> = {
   'ntu-life': 'ntu-life',
   '台大資管生活': 'ntu-life',
+  '台大資管': 'ntu-life',
   'science-class-journal': 'science-class-journal',
   '科學班生活': 'science-class-journal',
   'personal-journal': 'personal-journal',
   '生活日誌': 'personal-journal',
+  '生活隨筆': 'personal-journal',
   'photography-notes': 'photography-notes',
   '攝影筆記': 'photography-notes',
   'city-walk': 'travel-notes',
@@ -60,9 +62,9 @@ const categorySlugMap: Record<string, string> = {
 
 // 分类名称标准化映射（将英文分类名映射到中文显示名）
 const categoryNameMap: Record<string, string> = {
-  'ntu-life': '台大資管生活',
+  'ntu-life': '台大資管',
   'science-class-journal': '科學班生活',
-  'personal-journal': '生活日誌',
+  'personal-journal': '生活隨筆',
   'photography-notes': '攝影筆記',
   'city-walk': '行旅隨筆',
   'travel': '行旅隨筆',

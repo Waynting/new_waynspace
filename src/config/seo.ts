@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const siteConfig = {
   name: 'Waynspace',
   title: 'Waynspace - Wei-Ting Liu 的個人網站',
-  description: '分享生活、攝影、技術與閱讀的個人部落格。記錄台大資管生活、科學班回憶、行旅隨筆與筆記心得。',
+  description: '分享生活、攝影、技術與閱讀的個人部落格。記錄台大資管、科學班回憶、行旅隨筆與筆記心得。',
   url: 'https://waynspace.com',
   author: {
     name: 'Wei-Ting Liu',
@@ -21,7 +21,7 @@ export const siteConfig = {
     '攝影筆記',
     '技術隨筆',
     '筆記與心得',
-    '生活日誌',
+    '生活隨筆',
     'Wei-Ting Liu',
     '劉維廷',
   ],
