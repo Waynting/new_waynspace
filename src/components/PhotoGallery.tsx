@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { trackPhotoView } from '@/lib/analytics';
 
 interface Photo {
   url: string;
@@ -48,9 +49,11 @@ export default function PhotoGallery({ initialPhotos }: PhotoGalleryProps) {
 
   // Lightbox
   const openPhoto = useCallback((photo: Photo) => {
+    const idx = initialPhotos.findIndex(p => p.key === photo.key);
+    trackPhotoView(idx);
     setSelectedPhoto(photo);
     document.body.style.overflow = 'hidden';
-  }, []);
+  }, [initialPhotos]);
 
   const closePhoto = useCallback(() => {
     setSelectedPhoto(null);
@@ -107,6 +110,7 @@ export default function PhotoGallery({ initialPhotos }: PhotoGalleryProps) {
               alt={photo.name}
               width={800}
               height={600}
+              quality={75}
               className="w-full h-auto block"
               loading={index < 8 ? 'eager' : 'lazy'}
               priority={index < 4}
@@ -168,8 +172,9 @@ export default function PhotoGallery({ initialPhotos }: PhotoGalleryProps) {
               alt={selectedPhoto.name}
               width={1920}
               height={1080}
+              quality={85}
               className="max-w-full max-h-[90vh] object-contain"
-              unoptimized={selectedPhoto.url.startsWith('http')}
+              sizes="100vw"
               priority
             />
           </div>

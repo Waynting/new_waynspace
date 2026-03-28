@@ -20,10 +20,16 @@ export const mainNavigation: NavItem[] = [
     name: 'About',
     href: '/about',
     icon: '💼',
-    description: 'About & Projects'
+    description: 'About'
   },
   {
-    name: 'All Articles',
+    name: 'Projects',
+    href: '/projects',
+    icon: '🚀',
+    description: 'Side projects & products'
+  },
+  {
+    name: 'Articles',
     href: '/blog',
     icon: '📝',
     description: 'All articles & posts'

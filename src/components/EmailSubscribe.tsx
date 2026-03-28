@@ -2,8 +2,9 @@
 
 import { useState, FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
+import { trackNewsletterSubscribe } from '@/lib/analytics'
 
-export default function EmailSubscribe() {
+export default function EmailSubscribe({ location = 'home' }: { location?: string }) {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -25,6 +26,7 @@ export default function EmailSubscribe() {
       const data = await response.json()
 
       if (response.ok) {
+        trackNewsletterSubscribe(location)
         setMessage({ type: 'success', text: data.message || '訂閱成功！請檢查你的信箱確認訂閱。' })
         setEmail('')
       } else {

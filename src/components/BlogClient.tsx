@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Post, Category } from '@/types/blog';
+import { trackCategoryFilter } from '@/lib/analytics';
 
 interface BlogClientProps {
   posts: Post[];
@@ -67,7 +68,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
       {/* Category Filter — minimal text tabs */}
       <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Filter by category">
         <button
-          onClick={() => setSelectedCategory(null)}
+          onClick={() => { setSelectedCategory(null); trackCategoryFilter('All'); }}
           className={`text-sm transition-colors pb-0.5 ${
             selectedCategory === null
               ? 'text-foreground font-medium border-b border-foreground'
@@ -79,7 +80,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
         {categories.map(cat => (
           <button
             key={cat.slug}
-            onClick={() => setSelectedCategory(cat.slug)}
+            onClick={() => { setSelectedCategory(cat.slug); trackCategoryFilter(cat.name); }}
             className={`text-sm transition-colors pb-0.5 ${
               selectedCategory === cat.slug
                 ? 'text-foreground font-medium border-b border-foreground'

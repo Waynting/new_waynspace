@@ -3,8 +3,8 @@ import PhotoGallery from '@/components/PhotoGallery';
 import { getPhotos } from '@/lib/photos';
 
 export const metadata: Metadata = {
-  title: '攝影 - Wei-Ting Liu',
-  description: 'Wei-Ting Liu 的個人攝影作品集',
+  title: '攝影作品集',
+  description: '街頭攝影、城市漫步與日常隨拍。Wei-Ting Liu 的個人攝影作品集。',
 };
 
 export const revalidate = 3600;

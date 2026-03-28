@@ -3,8 +3,8 @@ import { getAllPosts, getAllCategories } from '@/lib/posts';
 import BlogClient from '@/components/BlogClient';
 
 export const metadata: Metadata = {
-  title: 'Articles - Wei-Ting Liu',
-  description: 'Articles, thoughts and learning notes',
+  title: '文章列表',
+  description: '分享生活隨筆、技術筆記、攝影心得、閱讀筆記與行旅隨筆。',
 };
 
 export default async function PostsPage() {

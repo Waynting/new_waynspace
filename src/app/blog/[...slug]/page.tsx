@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { formatDate } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
 import ArticleContent from '@/components/ArticleContent'
+import ArticleTracker from '@/components/ArticleTracker'
 import { generatePostMetadata } from './metadata'
 import { generateStructuredData } from '@/lib/seo'
 import { siteConfig } from '@/config/seo'
@@ -105,6 +106,17 @@ export default async function PostPage({
     ? `https://img.waynspace.com/${post.slug}/${post.featuredImage}`
     : null
 
+  // BreadcrumbList 結構化資料（增強搜尋結果顯示）
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+      { '@type': 'ListItem', position: 2, name: 'Articles', item: `${siteConfig.url}/blog` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `${siteConfig.url}/blog/${post.slug}` },
+    ],
+  }
+
   // 生成文章的结构化数据
   const articleStructuredData = generateStructuredData('article', {
     title: post.title,
@@ -121,6 +133,17 @@ export default async function PostPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleStructuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+      />
+
+      <ArticleTracker
+        title={post.title}
+        category={post.category}
+        slug={post.slug}
+        readTime={post.readTime}
       />
 
       <main className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-20">
@@ -184,6 +207,7 @@ export default async function PostPage({
         {/* Article Content */}
         <ArticleContent
           html={processedContent}
+          articleTitle={post.title}
           className="article-content prose prose-base md:prose-lg max-w-none dark:prose-invert
             prose-headings:font-semibold prose-headings:tracking-tight
             prose-h1:text-3xl prose-h1:mt-16 prose-h1:mb-8 prose-h1:leading-tight
