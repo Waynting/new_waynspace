@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import { ExternalLink } from 'lucide-react';
 
-const pageDescription = '個人專案作品集。Guessong 音樂猜歌派對遊戲、UniLink 大學申請諮詢平台。';
+const pageDescription = '個人專案作品集。Capsule 個人記憶管理應用、Guessong 音樂猜歌派對遊戲、UniLink 大學申請諮詢平台。';
 
 export const metadata: Metadata = {
   title: 'Projects - Wei-Ting Liu',
   description: pageDescription,
-  keywords: ['Guessong', 'UniLink', '專案作品集', 'Spotify 猜歌', '大學申請諮詢', 'Wei-Ting Liu'],
+  keywords: ['Capsule', 'Guessong', 'UniLink', '專案作品集', 'memory capsule', 'Spotify 猜歌', '大學申請諮詢', 'Wei-Ting Liu'],
   openGraph: {
     title: 'Projects - Wei-Ting Liu',
     description: pageDescription,
@@ -35,6 +35,20 @@ export const metadata: Metadata = {
 };
 
 const projects = [
+  {
+    title: 'Capsule',
+    subtitle: 'Your memories, the way you actually lived them.',
+    url: 'https://www.usecapsule.app/',
+    tech: 'Next.js · TypeScript · Tailwind CSS · Supabase · OpenAI GPT-4o · Vercel',
+    description:
+      'A personal memory management web app that pairs your photos with your own written reflections to create inseparable "Memory Capsules." Unlike typical journaling apps, AI organizes and responds to your entries — it never writes for you. Browse memories through timeline views (week/month/year), organize them into chapters, and revisit moments with AI-powered reflections and summaries.',
+    features: [
+      'Photo + text memory capsules with calendar-based timeline navigation',
+      'AI reflections that ask thoughtful follow-up questions (never summarize or write for you)',
+      'Chapter-based organization with AI-generated narrative summaries',
+      'Built with privacy-first architecture (row-level security, private storage)',
+    ],
+  },
   {
     title: 'Guessong',
     url: 'https://www.guessong.app/',
@@ -95,17 +109,26 @@ export default function ProjectsPage() {
           <SectionHeading num={String(i).padStart(2, '0')} label={project.title} />
 
           <div className="flex items-start justify-between gap-4 mb-4">
-            <h3 className="text-base font-semibold tracking-tight">{project.title}</h3>
+            <div>
+              <h3 className="text-base font-semibold tracking-tight">{project.title}</h3>
+              {'subtitle' in project && project.subtitle && (
+                <p className="text-xs text-muted-foreground mt-0.5">{project.subtitle}</p>
+              )}
+            </div>
             <a
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
             >
-              {project.url.replace('https://www.', '').replace(/\/$/, '')}
+              {project.url.replace('https://www.', '').replace('https://', '').replace(/\/$/, '')}
               <ExternalLink className="w-3 h-3" />
             </a>
           </div>
+
+          {'tech' in project && project.tech && (
+            <p className="text-xs text-muted-foreground mb-4 tracking-wide">{project.tech}</p>
+          )}
 
           <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-2xl">
             {project.description}
