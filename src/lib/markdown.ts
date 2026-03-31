@@ -5,6 +5,42 @@ import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 import matter from 'gray-matter';
+import { visit } from 'unist-util-visit';
+import type { Root, Element } from 'hast';
+
+function rehypeFigure() {
+  return (tree: Root) => {
+    visit(tree, 'element', (node: Element, index, parent) => {
+      if (node.tagName !== 'p' || !parent || index === undefined) return;
+
+      const images = node.children.filter(
+        (child): child is Element => child.type === 'element' && child.tagName === 'img'
+      );
+      if (images.length === 0) return;
+
+      const figures = images.map((img) => {
+        const alt = (img.properties?.alt as string) || '';
+        const children: Element['children'] = [img];
+        if (alt.trim().length > 0) {
+          children.push({
+            type: 'element',
+            tagName: 'figcaption',
+            properties: {},
+            children: [{ type: 'text', value: alt }],
+          });
+        }
+        return {
+          type: 'element' as const,
+          tagName: 'figure',
+          properties: {},
+          children,
+        };
+      });
+
+      parent.children.splice(index, 1, ...figures);
+    });
+  };
+}
 
 export async function markdownToHtml(markdown: string) {
   // 预处理：将 [![](imageUrl)](linkUrl) 格式直接转换为 HTML <img> 标签
@@ -21,6 +57,7 @@ export async function markdownToHtml(markdown: string) {
     .use(remarkGfm) // GitHub Flavored Markdown（支援 `---` 作為水平分隔線）
     .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 rehype (HTML AST)
     .use(rehypeRaw) // 允许在 Markdown 中使用原始 HTML（保留 <img> 等标签）
+    .use(rehypeFigure) // 將獨立圖片包成 <figure> + <figcaption>（用 alt text 當說明文字）
     .use(rehypeHighlight) // 語法高亮
     .use(rehypeStringify, { allowDangerousHtml: true }) // 转换为 HTML 字符串
     .process(processedMarkdown);

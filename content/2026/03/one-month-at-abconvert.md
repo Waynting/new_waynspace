@@ -33,7 +33,7 @@ That moment stuck with me. Not because it was dramatic, but because it captured 
 
 This is a record of one month as a Software Engineer Intern at ABConvert — what I shipped, how the team works with AI, and what I'm taking away.
 
-![IMG_20260226_153915.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/IMG_20260226_153915.webp)
+![Macintosh in the office](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/IMG_20260226_153915.webp)
 
 ---
 
@@ -57,7 +57,7 @@ This time around, working on the existing internal dashboard felt fundamentally 
 
 Over the course of March, I contributed 17 PRs (5 merged) across five weeks, spanning UI redesign, developer tooling, test infrastructure, and internal product tooling.
 
-![截圖 2026-03-31 下午3.56.47.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.56.47.webp)
+![Merged PRs](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.56.47.webp)
 
 **Week 1–2 — Foundation**
 Redesigned a core admin page from the ground up, introducing 5 new reusable components and unifying the visual system across the entire section. Standardized 7 API endpoints to a consistent response format, reducing error-handling inconsistency across the codebase. Fixed a pagination bug affecting data display and improved database connection stability. Also authored a documentation suite of 10 reference guides and 2 interactive HTML walkthroughs covering setup, architecture, and UX — giving the team a single source of truth for onboarding and review.
@@ -71,7 +71,7 @@ Built a full E2E testing system from scratch across 10 tickets — covering envi
 **Week 5 — Product Tooling (in progress)**
 Currently building 3 internal tools for the product team: a visual diff viewer for tracking changes across versions, an aggregation-based usage analytics panel, and a read-only debug panel integrating two data sources for faster issue diagnosis.
 
-![截圖 2026-03-31 下午3.44.35.PNG](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.44.35.webp)
+![Testing Outcome](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.44.35.webp)
 
 ---
 
@@ -85,7 +85,7 @@ Our AI workflow didn't start where it is now. It evolved in stages:
 
 Each step reduced friction. By the end, the agent wasn't just a personal tool — it became shared infrastructure for the whole team.
 
-![截圖 2026-03-31 下午3.15.06.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.15.06.webp)
+![Just talked to my claw in Slack](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.15.06.webp)
 
 ### What is Openclaw?
 
@@ -118,7 +118,7 @@ In practice, the most important skill isn't prompting the agent in the moment �
 
 This realization changed how I work. I used to think of ticket-writing as overhead — something you do after the real thinking is done. Now I see it as the thinking itself. The clearer the picture you give the agent, the less back-and-forth you need, and the faster things actually ship. In a way, communication became more important than coding.
 
-![截圖 2026-03-31 下午3.14.05.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.14.05.webp)
+![Ticket on Linear](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.14.05.webp)
 
 ### Reflection: The Real Tradeoffs
 
@@ -176,7 +176,7 @@ I'll be continuing the internship, shifting focus toward infrastructure work —
 
 剛好前陣子看到類似的文章，於是決定在一個月的時間點記錄一下。
 
-![IMG_20260226_153915.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/IMG_20260226_153915.webp)
+![公司裡的麥金塔](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/IMG_20260226_153915.webp)
 
 ---
 
@@ -200,7 +200,7 @@ I'll be continuing the internship, shifting focus toward infrastructure work —
 
 三月份送出了 17 個 PR（5 個 merged），橫跨 UI 重設計、開發者工具、測試基礎建設和內部產品工具。
 
-![截圖 2026-03-31 下午3.56.47.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.56.47.webp)
+![Merged PRs](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.56.47.webp)
 
 **Week 1–2 — 基礎建設**
 從零重設計一個核心管理頁面，新增 5 個可複用元件，把整個區塊的視覺系統統一起來。把 7 個 API endpoint 改成一致的 response 格式，減少 codebase 裡錯誤處理不一致的問題。修了一個影響資料顯示的 pagination bug，順手改善了資料庫連線的穩定性。另外寫了一套開發文件——10 份 Markdown 參考文件加上 2 份互動式 HTML 導覽，涵蓋 setup、架構、UX 等等，讓團隊 onboarding 和 review 有個共同的基準。
@@ -214,7 +214,7 @@ I'll be continuing the internship, shifting focus toward infrastructure work —
 **Week 5 — 產品工具（進行中）**
 正在為產品團隊建立 3 個內部工具：跨版本的視覺 diff 檢視器、基於 aggregation 的功能使用統計面板，以及整合兩個資料來源的唯讀 debug 面板。
 
-![截圖 2026-03-31 下午3.44.35.PNG](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.44.35.webp)
+![測試結果](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.44.35.webp)
 
 ---
 
@@ -258,7 +258,7 @@ Slack 的角色不同，處理的是緊急事項和快速協調——tag Opencla
 
 這個認知改變了我對寫 ticket 這件事的看法。以前覺得它是開銷——是思考完之後才做的事。現在覺得那就是思考本身。給 agent 的圖越清楚，來回就越少，東西就越快出來。某種程度上，溝通能力比寫程式更重要。
 
-![截圖 2026-03-31 下午3.14.05.jpg](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.14.05.webp)
+![一張票本人](https://img.waynspace.com/2026/03/One-Month-at-ABConvert-3343ee96893380a58752c593ba615235/截圖_2026-03-31_下午3.14.05.webp)
 
 ### 真實的取捨
 
