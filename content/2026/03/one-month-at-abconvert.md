@@ -22,11 +22,10 @@ seo:
     - Openclaw
     - Claude Code
 summary: >-
-  在 ABConvert 實習一個月的紀錄：17 個 PR、AI 原生工作流的演進、Openclaw agent 的導入，以及專案管理和溝通跟寫 code 一樣重要的體悟。
+  A record of one month as a Software Engineer Intern at ABConvert — 17 PRs shipped, the evolution of an AI-native workflow with Openclaw, and the realization that project management and communication matter as much as code.
 ---
 
-# One Month at ABConvert
-
+Medium Version: [Click me](https://medium.com/@wliu5928/one-month-at-abconvert-96e398cd0c63)
 
 I spent a good chunk of an mid-night staring at a bug that made no sense. The API calls were failing, the error messages were cryptic, and nothing in my codebase had changed. It turned out the main repo had quietly updated its endpoint policy to require an auth key — a change I was never notified about. I only found out after asking around.
 
