@@ -32,15 +32,14 @@ const nextConfig: NextConfig = {
 
         // 1. 根路徑: /文章名 -> /blog/YYYY/MM/文章名
         redirects.push({
-          source: `/${encodeURIComponent(articleSlug)}`,
+          source: `/${articleSlug}`,
           destination: `/blog/${post.slug}`,
-          permanent: true, // 301 永久重定向
+          permanent: true,
         });
 
-        // 2. /posts/ 路徑重定向到 /blog/
-        // /posts/文章名 -> /blog/YYYY/MM/文章名
+        // 2. /posts/文章名 -> /blog/YYYY/MM/文章名
         redirects.push({
-          source: `/posts/${encodeURIComponent(articleSlug)}`,
+          source: `/posts/${articleSlug}`,
           destination: `/blog/${post.slug}`,
           permanent: true,
         });
@@ -54,18 +53,28 @@ const nextConfig: NextConfig = {
       }
     });
 
-    // 添加通用的 /posts 到 /blog 重定向
+    // 通用 /posts -> /blog
     redirects.push({
       source: '/posts',
       destination: '/blog',
       permanent: true,
     });
 
-    // 添加分類頁面的重定向（從舊的 URL 格式重定向到新的格式）
+    // /posts/YYYY 或 /blog/YYYY -> /blog
+    redirects.push({
+      source: '/posts/:year(\\d{4})',
+      destination: '/blog',
+      permanent: true,
+    });
+    redirects.push({
+      source: '/blog/:year(\\d{4})',
+      destination: '/blog',
+      permanent: true,
+    });
+
+    // 分類頁面重定向
     const categories = await getAllCategories();
     categories.forEach(category => {
-      // 如果分類名稱和 slug 不同，添加重定向
-      // 例如：/blog/category/台大資管生活 -> /blog/category/ntu-life
       const categoryNameSlug = category.name.toLowerCase().replace(/\s+/g, '-');
       if (category.slug !== categoryNameSlug && category.slug !== 'uncategorized') {
         redirects.push({
@@ -74,14 +83,56 @@ const nextConfig: NextConfig = {
           permanent: true,
         });
       }
-      
-      // 添加 /posts/category/:slug 到 /blog/category/:slug 的重定向
+
+      // /posts/category/:slug -> /blog/category/:slug
       redirects.push({
         source: `/posts/category/${category.slug}`,
         destination: `/blog/category/${category.slug}`,
         permanent: true,
       });
+
+      // /category/:slug -> /blog/category/:slug (無 /blog 前綴)
+      redirects.push({
+        source: `/category/${category.slug}`,
+        destination: `/blog/category/${category.slug}`,
+        permanent: true,
+      });
     });
+
+    // 舊分類 slug -> 新合併後的分類 slug
+    redirects.push(
+      { source: '/blog/category/city-walk', destination: '/blog/category/travel-notes', permanent: true },
+      { source: '/blog/category/reading-notes', destination: '/blog/category/notes', permanent: true },
+      { source: '/blog/category/film-review', destination: '/blog/category/notes', permanent: true },
+      { source: '/blog/category/uncategorized', destination: '/blog', permanent: true },
+      { source: '/blog/category/Uncategorized', destination: '/blog', permanent: true },
+      { source: '/blog/categories', destination: '/blog', permanent: true },
+    );
+
+    // 已移除頁面 -> 最近的對應頁面
+    redirects.push(
+      { source: '/contact', destination: '/about', permanent: true },
+      { source: '/contact/', destination: '/about', permanent: true },
+      { source: '/search', destination: '/blog', permanent: true },
+      { source: '/photo', destination: '/photos', permanent: true },
+      { source: '/flow-code', destination: '/projects', permanent: true },
+      { source: '/flow-code/', destination: '/projects', permanent: true },
+      { source: '/code-project', destination: '/projects', permanent: true },
+      { source: '/capture-light', destination: '/projects', permanent: true },
+    );
+
+    // Camera drift 舊專案頁面（已不存在）
+    redirects.push(
+      { source: '/camera-drift-ntu/:path*', destination: '/', permanent: false },
+      { source: '/camera-drift-project/:path*', destination: '/', permanent: false },
+    );
+
+    // WordPress 殘留路徑
+    redirects.push(
+      { source: '/feed', destination: '/blog', permanent: true },
+      { source: '/feed/', destination: '/blog', permanent: true },
+      { source: '/author/:path*', destination: '/about', permanent: true },
+    );
 
     return redirects;
   },
