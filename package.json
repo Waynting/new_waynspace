@@ -12,8 +12,8 @@
     "images:update": "node scripts/update-content-images.mjs",
     "images:verify": "node scripts/verify-r2-images.mjs",
     "images:delete-spaces": "node scripts/delete-r2-images.mjs",
-    "photos:process": "node scripts/process-personal-photos.mjs",
-    "photos:recompress": "node scripts/recompress-r2-photos.mjs",
+    "portfolio:upload": "node scripts/portfolio-upload.mjs",
+    "portfolio:migrate": "node scripts/migrate-photos.mjs",
     "test:r2": "node scripts/test-r2-config.mjs",
     "newsletter:send": "node scripts/send-newsletter.mjs"
   },
@@ -28,6 +28,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "execa": "^9.6.0",
+    "exif-reader": "^2.0.3",
     "globby": "^15.0.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",

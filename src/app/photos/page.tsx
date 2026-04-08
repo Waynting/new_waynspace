@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
-import PhotoGallery from '@/components/PhotoGallery';
-import { getPhotos } from '@/lib/photos';
+import PortfolioHeader from '@/components/portfolio/PortfolioHeader';
+import PortfolioClient from '@/components/portfolio/PortfolioClient';
+import { getPortfolioIndex } from '@/lib/portfolio';
+import type { Photo } from '@/types/photos';
 
 export const metadata: Metadata = {
   title: '攝影作品集',
@@ -9,30 +11,47 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
+// Strip heavy fields before sending to client
+function toGridPhoto(p: Photo) {
+  return {
+    id: p.id,
+    title: p.title,
+    dateTaken: p.dateTaken,
+    dateUploaded: p.dateUploaded,
+    tags: p.tags,
+    albumSlugs: p.albumSlugs,
+    featured: p.featured,
+    aspectRatio: p.aspectRatio,
+    urls: p.urls,
+    location: p.location ? { name: p.location.name } : undefined,
+    exif: p.exif,
+  };
+}
+
 export default async function PhotosPage() {
-  const photos = await getPhotos();
+  const { photos, albums } = await getPortfolioIndex();
+
+  const sorted = [...photos].sort(
+    (a, b) =>
+      new Date(b.dateTaken).getTime() - new Date(a.dateTaken).getTime()
+  );
+
+  const featured = photos.filter((p) => p.featured).slice(0, 5);
+  const featuredPhotos =
+    featured.length > 0 ? featured : sorted.slice(0, 5);
 
   return (
     <>
-      <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 py-16 md:py-20">
-        <header>
-          <p className="text-xs text-muted-foreground font-medium tracking-[0.2em] uppercase mb-4">
-            Wei-Ting Liu
-          </p>
-          <div className="flex items-baseline gap-4">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Photos</h1>
-            {photos.length > 0 && (
-              <span className="text-sm text-muted-foreground font-light tabular-nums">
-                {photos.length}
-              </span>
-            )}
-          </div>
-        </header>
-      </div>
-
-      <div className="px-4 sm:px-6 lg:px-8 pb-20">
-        <PhotoGallery initialPhotos={photos} />
-      </div>
+      <PortfolioHeader
+        photoCount={photos.length}
+        albumCount={albums.length}
+      />
+      <PortfolioClient
+        featuredPhotos={featuredPhotos.map(toGridPhoto)}
+        albums={albums}
+        recentPhotos={sorted.slice(0, 12).map(toGridPhoto)}
+        allPhotos={sorted.map(toGridPhoto)}
+      />
     </>
   );
 }
