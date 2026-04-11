@@ -129,8 +129,8 @@ const nextConfig: NextConfig = {
 
     // WordPress 殘留路徑
     redirects.push(
-      { source: '/feed', destination: '/blog', permanent: true },
-      { source: '/feed/', destination: '/blog', permanent: true },
+      { source: '/feed', destination: '/feed.xml', permanent: true },
+      { source: '/feed/', destination: '/feed.xml', permanent: true },
       { source: '/author/:path*', destination: '/about', permanent: true },
     );
 

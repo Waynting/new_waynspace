@@ -29,6 +29,7 @@
     "dotenv": "^17.2.3",
     "execa": "^9.6.0",
     "exif-reader": "^2.0.3",
+    "feed": "^5.2.0",
     "globby": "^15.0.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",

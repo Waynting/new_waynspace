@@ -25,6 +25,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         {/* Web App Manifest */}
         <link rel="manifest" href="/manifest.json" />
+        {/* RSS / Atom auto-discovery */}
+        <link rel="alternate" type="application/rss+xml" title="Waynspace RSS Feed" href="/feed.xml" />
+        <link rel="alternate" type="application/atom+xml" title="Waynspace Atom Feed" href="/atom.xml" />
       </head>
       <body className="font-sans antialiased">
         <ThemeProvider>

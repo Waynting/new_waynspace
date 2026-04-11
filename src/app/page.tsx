@@ -50,6 +50,15 @@ const socials = [
       </svg>
     ),
   },
+  {
+    label: 'RSS',
+    href: '/feed.xml',
+    icon: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.503 20.752A2.25 2.25 0 0 1 4.252 18.5a2.25 2.25 0 0 1 2.251-2.252 2.25 2.25 0 0 1 2.252 2.252 2.25 2.25 0 0 1-2.252 2.252ZM4 11.5a8.5 8.5 0 0 1 8.5 8.5M4 4.5a15.5 15.5 0 0 1 15.5 15.5" />
+      </svg>
+    ),
+  },
 ];
 
 export default async function Home() {
