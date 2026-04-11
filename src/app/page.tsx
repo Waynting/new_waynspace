@@ -67,7 +67,7 @@ export default async function Home() {
       'https://github.com/Waynting',
       'https://www.instagram.com/waiting_941208',
     ],
-    jobTitle: 'Information Management Student',
+    jobTitle: '台大資管學生',
     worksFor: { '@type': 'Organization', name: 'National Taiwan University' },
   });
 
@@ -92,10 +92,10 @@ export default async function Home() {
                 waynspace.com
               </p>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                Wei-Ting Liu
+                劉威廷
               </h1>
               <p className="text-sm text-muted-foreground mt-2">
-                Information Management × Trans-disciplinary at NTU
+                台大資管 × 創新領域學士學位學程
               </p>
             </div>
             <Image
@@ -111,10 +111,9 @@ export default async function Home() {
 
           {/* Bio */}
           <p className="text-sm leading-7 text-muted-foreground max-w-2xl">
-            Information Management student at NTU, building{' '}
-            <span className="text-foreground font-medium">Next.js + TypeScript</span>{' '}
-            applications with a focus on A/B testing, data-driven optimization, and
-            bridging business insights with technical implementation.
+            台大資訊管理學系大二，雙主修創新領域學士學位學程。目前於{' '}
+            <span className="text-foreground font-medium">ABConvert</span>{' '}
+            擔任軟體工程實習生，以 Next.js + TypeScript 開發 A/B testing 產品。關注網頁前端工程、數據驅動的產品開發，以及攝影與寫作。
           </p>
 
           {/* CV link + socials */}
@@ -125,7 +124,7 @@ export default async function Home() {
               rel="noopener noreferrer"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              CV ↗
+              英文履歷 ↗
             </a>
             <span className="text-border select-none">·</span>
             <div className="flex items-center gap-4">

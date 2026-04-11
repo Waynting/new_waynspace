@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const siteConfig = {
   name: 'Waynspace',
   title: 'Waynspace - Wei-Ting Liu 的個人網站',
-  description: '分享生活、攝影、技術與閱讀的個人部落格。記錄台大資管、科學班回憶、行旅隨筆與筆記心得。',
+  description: '台大資管大二學生的個人部落格，記錄大學生活、ABConvert 實習、Next.js 開發筆記、街頭攝影與讀書心得。',
   url: 'https://waynspace.com',
   author: {
     name: 'Wei-Ting Liu',
@@ -23,7 +23,7 @@ export const siteConfig = {
     '筆記與心得',
     '生活隨筆',
     'Wei-Ting Liu',
-    '劉維廷',
+    '劉威廷',
   ],
 }
 

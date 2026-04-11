@@ -19,6 +19,20 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 86400,
   },
 
+  // Camera Float NTU — 代理到獨立子站，本地開發與 production 皆可用
+  async rewrites() {
+    return [
+      {
+        source: '/camera-float-ntu',
+        destination: 'https://camera-float-ntu-web.waynspace.com/camera-float-ntu',
+      },
+      {
+        source: '/camera-float-ntu/:path*',
+        destination: 'https://camera-float-ntu-web.waynspace.com/camera-float-ntu/:path*',
+      },
+    ];
+  },
+
   // 動態生成重定向規則
   async redirects() {
     const posts = await getAllPosts();
@@ -121,10 +135,11 @@ const nextConfig: NextConfig = {
       { source: '/capture-light', destination: '/projects', permanent: true },
     );
 
-    // Camera drift 舊專案頁面（已不存在）
+    // Camera drift 舊名稱 -> camera float 新名稱
     redirects.push(
-      { source: '/camera-drift-ntu/:path*', destination: '/', permanent: false },
-      { source: '/camera-drift-project/:path*', destination: '/', permanent: false },
+      { source: '/camera-drift-ntu', destination: '/camera-float-ntu', permanent: true },
+      { source: '/camera-drift-ntu/:path*', destination: '/camera-float-ntu/:path*', permanent: true },
+      { source: '/camera-drift-project/:path*', destination: '/camera-float-ntu', permanent: true },
     );
 
     // WordPress 殘留路徑

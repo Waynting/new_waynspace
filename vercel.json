@@ -10,15 +10,5 @@
       "destination": "/camera-float-ntu/:path",
       "permanent": true
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/camera-float-ntu",
-      "destination": "https://camera-float-ntu-web.waynspace.com/camera-float-ntu"
-    },
-    {
-      "source": "/camera-float-ntu/:path(.*)",
-      "destination": "https://camera-float-ntu-web.waynspace.com/camera-float-ntu/:path"
-    }
   ]
 }
