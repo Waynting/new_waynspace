@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Noto_Sans_TC } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -8,6 +9,14 @@ import { Analytics } from '@/components/Analytics';
 import { ServiceWorkerCleanup } from '@/components/ServiceWorkerCleanup';
 import { defaultMetadata } from '@/config/seo';
 
+const notoSansTC = Noto_Sans_TC({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-noto-sans-tc',
+  preload: false,
+});
+
 export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
@@ -16,12 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-TW" suppressHydrationWarning>
+    <html lang="zh-TW" className={notoSansTC.variable} suppressHydrationWarning>
       <head>
-        {/* Preconnect to external domains for faster loading */}
-        <link rel="preconnect" href="https://img.waynspace.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         {/* Web App Manifest */}
         <link rel="manifest" href="/manifest.json" />
