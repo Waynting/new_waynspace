@@ -33,15 +33,21 @@ export default function AboutPage() {
           <span className="text-foreground font-medium">ABConvert</span>{' '}
           擔任軟體工程實習生，負責以 Next.js + TypeScript 開發 Shopify A/B testing 產品。致力於銜接商業洞察與技術實作，從原型驗證到產品交付。
         </p>
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
           <a
             href="https://waynting.github.io/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            完整履歷 ↗
+            完整英文履歷
             <ExternalLink className="w-3 h-3" />
+          </a>
+          <a
+            href="mailto:wayntingliu@gmail.com"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            wayntingliu@gmail.com
           </a>
         </div>
       </section>

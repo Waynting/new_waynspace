@@ -3,7 +3,6 @@ import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { formatDate } from '@/lib/markdown'
-import { cn } from '@/lib/utils'
 import ArticleContent from '@/components/ArticleContent'
 import ArticleTracker from '@/components/ArticleTracker'
 import { generatePostMetadata } from './metadata'
@@ -31,21 +30,6 @@ export async function generateMetadata({
   return generatePostMetadata(slug)
 }
 
-// 獲取分類顏色配置
-function getCategoryColor(categoryName: string): string {
-  const colorMap: Record<string, string> = {
-    // 淺色模式使用純黑色文字確保最高對比度，深色模式保持淺色文字
-    '台大資管生活': 'bg-blue-100 text-black dark:bg-blue-900/30 dark:text-blue-300 border-blue-300 dark:border-blue-700',
-    '科學班生活': 'bg-purple-100 text-black dark:bg-purple-900/30 dark:text-purple-300 border-purple-300 dark:border-purple-700',
-    '攝影筆記': 'bg-green-100 text-black dark:bg-green-900/30 dark:text-green-300 border-green-300 dark:border-green-700',
-    '城市漫步': 'bg-yellow-100 text-black dark:bg-yellow-900/30 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700',
-    '生活日誌': 'bg-pink-100 text-black dark:bg-pink-900/30 dark:text-pink-300 border-pink-300 dark:border-pink-700',
-    '讀書筆記與心得': 'bg-indigo-100 text-black dark:bg-indigo-900/30 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700',
-    '技術筆記': 'bg-red-100 text-black dark:bg-red-900/30 dark:text-red-300 border-red-300 dark:border-red-700',
-  };
-  return colorMap[categoryName] || 'bg-gray-100 text-black dark:bg-gray-900/30 dark:text-gray-300 border-gray-300 dark:border-gray-700';
-}
-
 export default async function PostPage({
   params,
 }: {
@@ -62,6 +46,14 @@ export default async function PostPage({
   if (!post) {
     notFound()
   }
+
+  // 計算同分類的 prev / next 文章（按日期排序）
+  const allPosts = await getAllPosts()
+  const sameCategory = allPosts.filter(p => p.category === post.category)
+  const idx = sameCategory.findIndex(p => p.slug === post.slug)
+  // allPosts 已按日期降序，idx-1 = 較新一篇，idx+1 = 較舊一篇
+  const newerPost = idx > 0 ? sameCategory[idx - 1] : null
+  const olderPost = idx >= 0 && idx < sameCategory.length - 1 ? sameCategory[idx + 1] : null
 
   // 从 post.slug 提取年份和月份用于构建图片路径
   // post.slug 現在是完整路徑格式 YYYY/MM/articleSlug
@@ -160,22 +152,14 @@ export default async function PostPage({
         {/* Article Header */}
         <header className="mb-16 space-y-6">
           {/* Category */}
-          <div className="flex items-center gap-3">
-            <span className={cn(
-              "px-3 py-1 text-xs font-medium rounded-md border",
-              getCategoryColor(post.category)
-            )}>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+            <span className="tracking-[0.18em] uppercase text-muted-foreground">
               {post.category}
             </span>
             {post.tags.length > 0 && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 text-muted-foreground/70">
                 {post.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 bg-muted text-muted-foreground text-xs rounded"
-                  >
-                    #{tag}
-                  </span>
+                  <span key={tag}>#{tag}</span>
                 ))}
               </div>
             )}
@@ -239,7 +223,39 @@ export default async function PostPage({
         />
 
         {/* Footer Navigation */}
-        <footer className="mt-16 pt-8 border-t border-border">
+        <footer className="mt-16 pt-8 border-t border-border space-y-10">
+          {(newerPost || olderPost) && (
+            <nav aria-label="Article navigation">
+              <p className="text-xs tracking-[0.18em] uppercase text-muted-foreground/80 mb-4">
+                同分類文章 · {post.category}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                {newerPost ? (
+                  <Link
+                    href={`/blog/${newerPost.slug}`}
+                    className="group block py-3 -mx-3 px-3 rounded-sm hover:bg-muted/30 transition-colors"
+                  >
+                    <span className="text-xs text-muted-foreground/70 block mb-1">← 較新</span>
+                    <span className="text-sm font-medium leading-snug text-foreground/90 group-hover:text-foreground line-clamp-2">
+                      {newerPost.title}
+                    </span>
+                  </Link>
+                ) : <div className="hidden sm:block" />}
+                {olderPost ? (
+                  <Link
+                    href={`/blog/${olderPost.slug}`}
+                    className="group block py-3 -mx-3 px-3 rounded-sm hover:bg-muted/30 transition-colors sm:text-right"
+                  >
+                    <span className="text-xs text-muted-foreground/70 block mb-1">較舊 →</span>
+                    <span className="text-sm font-medium leading-snug text-foreground/90 group-hover:text-foreground line-clamp-2">
+                      {olderPost.title}
+                    </span>
+                  </Link>
+                ) : <div className="hidden sm:block" />}
+              </div>
+            </nav>
+          )}
+
           <Link
             href="/blog"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
