@@ -40,7 +40,6 @@
 │   │   ├── Footer.tsx          # 頁尾
 │   │   ├── BlogClient.tsx      # 文章列表（分類篩選 + 年份分組）
 │   │   ├── PhotoGallery.tsx    # 照片牆（masonry + lightbox）
-│   │   ├── EmailSubscribe.tsx  # 電子報訂閱
 │   │   └── Analytics.tsx       # GA4
 │   ├── lib/
 │   │   ├── posts.ts            # 文章處理（getAllPosts, getPostBySlug）
@@ -111,7 +110,6 @@ npm run build      # 生產環境建置
 | 變數 | 說明 |
 |------|------|
 | `NEXT_PUBLIC_GA_ID` | Google Analytics 4 追蹤 ID |
-| `BUTTONDOWN_API_KEY` | 電子報 API Key |
 
 R2 圖片為公開 URL，顯示不需額外設定。圖片處理相關環境變數見 [SEO & Config](./docs/seo-and-config.md#環境變數)。
 
