@@ -106,7 +106,7 @@ export default async function Home() {
             <div className="flex items-baseline gap-3.5 mt-7 pt-5 border-t border-foreground max-w-[480px]">
               <span className="font-mono text-[11px] tracking-[0.16em] text-foreground shrink-0">EDITOR</span>
               <p className="font-serif-tc italic text-[15px] text-foreground/70 leading-snug">
-                Wei-Ting Liu — 寫字、寫程式、寫光線。
+                Wei-Ting Liu
               </p>
             </div>
           </div>
@@ -239,7 +239,7 @@ export default async function Home() {
               寫了就寄給你.
             </h3>
             <p className="font-sans text-sm text-white/65 leading-relaxed max-w-[460px]">
-              每月一封，整理當月的文章與正在做的事。不發廢話，沒興趣可以隨時退訂。
+              每月一封，整理當月的文章與正在做的事。
             </p>
           </div>
           <div className="flex flex-col w-full md:w-[320px] shrink-0 gap-3">
