@@ -1,13 +1,12 @@
 import Link from 'next/link';
 import { generateStructuredData } from '@/lib/seo';
 import { getAllPosts } from '@/lib/posts';
-import { getPortfolioIndex } from '@/lib/portfolio';
 import { Container } from '@/components/Container';
 import { MastheadStrip } from '@/components/MastheadStrip';
 import { SectionDivider } from '@/components/SectionDivider';
 import { NowStrip } from '@/components/NowStrip';
 import GenerativePhoto from '@/components/GenerativePhotoLazy';
-import { buildPhotoCover, formatDateLabel } from '@/lib/format';
+import { formatDateLabel } from '@/lib/format';
 
 const socials = [
   { label: 'GitHub', href: 'https://github.com/Waynting' },
@@ -38,33 +37,10 @@ export default async function Home() {
   const latestPosts = allPosts.slice(0, 5);
   const totalPosts = allPosts.length;
 
-  let featuredPhotoSrc = '/LIU_0457.jpg';
-  let featuredPhotoMeta = { id: 'LIU_0457.jpg', exif: '35mm · f/2.8 · 1/250' };
-  try {
-    const { photos } = await getPortfolioIndex();
-    const featuredPool = photos.filter((p) => p.featured);
-    const pool =
-      featuredPool.length > 0
-        ? featuredPool
-        : [...photos]
-            .sort(
-              (a, b) =>
-                new Date(b.dateTaken).getTime() - new Date(a.dateTaken).getTime()
-            )
-            .slice(0, 12);
-    if (pool.length > 0) {
-      const now = new Date();
-      const dayOfYear = Math.floor(
-        (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
-      );
-      const pick = pool[dayOfYear % pool.length];
-      const cover = buildPhotoCover(pick);
-      featuredPhotoSrc = cover.src;
-      featuredPhotoMeta = cover.meta;
-    }
-  } catch {
-    // R2 unavailable — fall back to local portrait
-  }
+  // Local portrait — same-origin avoids canvas-tainting CORS issues that
+  // would silently break ASCII rendering on cross-origin (R2) sources.
+  const featuredPhotoSrc = '/LIU_0457.jpg';
+  const featuredPhotoMeta = { id: 'WTL · TAIPEI', exif: '35mm · f/2.8 · 1/250' };
 
   const issueLabel = `VOL. ${String(totalPosts >= 30 ? 2 : 1).padStart(2, '0')} / ISSUE ${String(latestPosts.length).padStart(2, '0')}`;
   const dateLabel = formatDateLabel();
