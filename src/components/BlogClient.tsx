@@ -4,17 +4,18 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Post, Category } from '@/types/blog';
 import { trackCategoryFilter } from '@/lib/analytics';
+import { Container } from '@/components/Container';
 
 interface BlogClientProps {
   posts: Post[];
   categories: (Category & { count: number })[];
 }
 
-function formatDate(dateStr: string): { month: string; day: string } {
+function formatMonthDay(dateStr: string) {
   const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return { month: '--', day: '--' };
+  if (isNaN(d.getTime())) return { mon: '--', day: '--' };
   return {
-    month: String(d.getMonth() + 1).padStart(2, '0'),
+    mon: d.toLocaleString('en-US', { month: 'short' }),
     day: String(d.getDate()).padStart(2, '0'),
   };
 }
@@ -30,15 +31,19 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
   const filteredPosts = useMemo(() => {
     let filtered = posts;
     if (selectedCategory) {
-      const cat = categories.find(c => c.slug === selectedCategory);
-      if (cat) filtered = filtered.filter(p => p.category === cat.name);
+      const cat = categories.find((c) => c.slug === selectedCategory);
+      if (cat) filtered = filtered.filter((p) => p.category === cat.name);
     }
     return [...filtered].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   }, [posts, selectedCategory, categories]);
 
-  // Group by year
+  const total = posts.length;
+  const featured = filteredPosts[0];
+  const editorPicks = filteredPosts.slice(1, 5);
+
+  // Group remaining (everything from index 1 onward) by year
   const byYear = useMemo(() => {
     const map = new Map<number, Post[]>();
     for (const post of filteredPosts) {
@@ -49,115 +54,197 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
     return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
   }, [filteredPosts]);
 
+  const today = new Date();
+  const dateLabel = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+
   return (
-    <main className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 py-16 md:py-24 space-y-12">
-
-      {/* Page Header */}
-      <header>
-        <p className="text-xs text-muted-foreground font-medium tracking-[0.2em] uppercase mb-4">
-          Wei-Ting Liu
-        </p>
-        <div className="flex items-baseline gap-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Articles</h1>
-          <span className="text-sm text-muted-foreground font-light tabular-nums">
-            {filteredPosts.length}
-          </span>
+    <>
+      {/* — Page Masthead — */}
+      <Container className="pt-20 pb-10">
+        <div className="flex items-center justify-between pb-4 border-b border-foreground">
+          <div className="flex items-baseline gap-4">
+            <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-foreground">SECTION 03 / THE ARCHIVE</span>
+            <span className="font-mono text-[11px] tracking-[0.16em] text-foreground/55">文章彙整</span>
+          </div>
+          <span className="font-mono text-[11px] tracking-[0.16em] text-foreground/55 hidden sm:inline">UPDATED {dateLabel}</span>
         </div>
-      </header>
-
-      {/* Category Filter — minimal text tabs */}
-      <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Filter by category">
-        <button
-          onClick={() => { setSelectedCategory(null); trackCategoryFilter('All'); }}
-          className={`text-sm transition-colors pb-0.5 ${
-            selectedCategory === null
-              ? 'text-foreground font-medium border-b border-foreground'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          All
-        </button>
-        {categories.map(cat => (
-          <button
-            key={cat.slug}
-            onClick={() => { setSelectedCategory(cat.slug); trackCategoryFilter(cat.name); }}
-            className={`text-sm transition-colors pb-0.5 ${
-              selectedCategory === cat.slug
-                ? 'text-foreground font-medium border-b border-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {cat.name}
-            <span className="ml-1 text-xs text-muted-foreground/60 font-light tabular-nums">
-              {cat.count}
+        <div className="flex items-end justify-between pt-10 gap-6">
+          <h1 className="font-serif-tc font-bold leading-[0.9] tracking-[-0.05em] text-foreground text-[80px] md:text-[112px] lg:text-[128px]">
+            Articles.
+          </h1>
+          <div className="flex flex-col items-end gap-1.5 pb-4">
+            <span className="font-serif-tc italic text-sm text-foreground/60">collected since</span>
+            <span className="font-serif-tc font-bold text-2xl md:text-[28px] tracking-[-0.02em] text-foreground tabular-nums">
+              {filteredPosts.length} 篇 / 2019
             </span>
-          </button>
-        ))}
-      </nav>
+          </div>
+        </div>
+      </Container>
 
-      {/* Article list grouped by year */}
-      {byYear.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-12 text-center">暫無文章</p>
-      ) : (
-        <div className="space-y-14">
-          {byYear.map(([year, yearPosts]) => (
-            <section key={year}>
-              {/* Year heading */}
-              <div className="flex items-baseline gap-3 mb-6 border-b border-border pb-3">
-                <span className="text-xs font-light tabular-nums text-muted-foreground w-5 shrink-0">
-                  {/* spacer to align with numbered sections on /about */}
+      {/* — This Issue — */}
+      {featured && (
+        <Container className="mt-4">
+          <div className="flex items-baseline gap-3.5 mb-6">
+            <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-foreground">¶ THIS ISSUE</span>
+            <span className="font-serif-tc italic text-sm text-foreground/60">— 本期推薦</span>
+          </div>
+          <div className="flex flex-col md:flex-row gap-12 items-start">
+            <article className="flex flex-col flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="font-mono text-[9px] font-bold tracking-[0.12em] text-white bg-foreground px-1.5 py-0.5">
+                  FEATURE
                 </span>
-                <div className="flex items-baseline gap-3 w-full">
-                  <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
-                    {year}
-                  </h2>
-                  <span className="text-xs text-muted-foreground/50 font-light tabular-nums ml-auto">
-                    {yearPosts.length} 篇
-                  </span>
-                </div>
+                <span className="font-mono text-[11px] tracking-[0.06em] text-foreground/60">
+                  № {String(total).padStart(3, '0')} · {formatMonthDay(featured.date).mon} {formatMonthDay(featured.date).day} · {featured.readTime}
+                </span>
               </div>
+              <Link href={`/blog/${featured.slug}`} className="row-link flex-col group">
+                <h3 className="row-title font-serif-tc font-bold text-3xl md:text-[36px] leading-[1.15] tracking-[-0.025em] text-foreground mb-3">
+                  {featured.title}
+                </h3>
+                {featured.excerpt && (
+                  <p className="font-serif-tc text-base leading-relaxed text-foreground/75">
+                    {featured.excerpt}
+                  </p>
+                )}
+              </Link>
+              <div className="flex items-center gap-3.5 mt-4 pt-4 border-t border-border">
+                <span className="font-mono text-[10px] tracking-[0.16em] text-foreground">FILED IN</span>
+                <span className="font-sans text-xs text-foreground">{featured.category}</span>
+                {featured.tags?.slice(0, 2).map((tag) => (
+                  <span key={tag} className="font-sans text-xs text-foreground/55">#{tag}</span>
+                ))}
+              </div>
+            </article>
 
-              {/* Article rows */}
-              <div className="space-y-0">
-                {yearPosts.map((post, i) => {
-                  const { month, day } = formatDate(post.date);
+            <aside className="flex flex-col w-full md:w-[280px] shrink-0 p-6 bg-[#f4f4f4] border-t-4 border-foreground">
+              <span className="font-mono text-[10px] font-bold tracking-[0.18em] text-foreground mb-5">EDITOR&apos;S PICK</span>
+              <div className="flex flex-col gap-4">
+                {editorPicks.map((p, idx) => {
+                  const md = formatMonthDay(p.date);
+                  const num = total - 1 - idx;
                   return (
                     <Link
-                      key={post.slug}
-                      href={`/blog/${post.slug}`}
-                      className={`group flex items-start gap-5 py-4 transition-colors hover:bg-muted/30 -mx-3 px-3 rounded-sm ${
-                        i < yearPosts.length - 1 ? 'border-b border-border/50' : ''
-                      }`}
+                      key={p.slug}
+                      href={`/blog/${p.slug}`}
+                      className={`row-link flex-col gap-1 ${idx < editorPicks.length - 1 ? 'pb-3.5 border-b border-foreground/15' : ''}`}
                     >
-                      {/* Date */}
-                      <span className="text-xs text-muted-foreground font-light tabular-nums shrink-0 pt-0.5 w-9">
-                        {month}/{day}
-                      </span>
-
-                      {/* Title + excerpt */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium leading-snug group-hover:text-foreground text-foreground/90 line-clamp-2">
-                          {post.title}
-                        </h3>
-                        {post.excerpt && (
-                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-1">
-                            {post.excerpt}
-                          </p>
-                        )}
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-mono text-[9px] tracking-[0.08em] text-foreground/65">№ {String(num).padStart(3, '0')}</span>
+                        <span className="font-mono text-[9px] text-foreground/50">{md.mon} {md.day}</span>
                       </div>
-
-                      {/* Category */}
-                      <span className="text-xs text-muted-foreground/60 font-light shrink-0 hidden sm:block pt-0.5 max-w-[7rem] text-right leading-snug">
-                        {post.category}
-                      </span>
+                      <h4 className="row-title font-serif-tc font-bold text-[15px] leading-[1.3] text-foreground">
+                        {p.title}
+                      </h4>
                     </Link>
                   );
                 })}
               </div>
-            </section>
-          ))}
-        </div>
+            </aside>
+          </div>
+        </Container>
       )}
-    </main>
+
+      {/* — Filter Strip — */}
+      <Container className="mt-20">
+        <div className="flex items-baseline gap-3.5 pb-3.5 border-b border-foreground">
+          <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-foreground shrink-0">¶ FILTER</span>
+          <div className="flex flex-1 flex-wrap items-baseline gap-x-5 gap-y-2.5">
+            <button
+              onClick={() => {
+                setSelectedCategory(null);
+                trackCategoryFilter('All');
+              }}
+              className={`font-serif-tc text-base transition-all pb-1 ${
+                selectedCategory === null
+                  ? 'font-bold text-foreground border-b-2 border-foreground'
+                  : 'text-foreground/65 hover:text-foreground'
+              }`}
+            >
+              All <span className="font-mono text-[10px] ml-0.5 text-foreground/55">{posts.length}</span>
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.slug}
+                onClick={() => {
+                  setSelectedCategory(cat.slug);
+                  trackCategoryFilter(cat.name);
+                }}
+                className={`font-serif-tc text-base transition-all pb-1 ${
+                  selectedCategory === cat.slug
+                    ? 'font-bold text-foreground border-b-2 border-foreground'
+                    : 'text-foreground/65 hover:text-foreground'
+                }`}
+              >
+                {cat.name} <span className="font-mono text-[10px] ml-0.5 text-foreground/55">{cat.count}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </Container>
+
+      {/* — Year Archives — */}
+      {byYear.length === 0 ? (
+        <Container className="mt-16">
+          <p className="font-serif-tc italic text-foreground/60 py-12 text-center">暫無文章</p>
+        </Container>
+      ) : (
+        byYear.map(([year, yearPosts]) => (
+          <Container key={year} className="mt-14">
+            <div className="flex items-end justify-between gap-4 pb-3 border-b-2 border-foreground mb-2">
+              <div className="flex items-baseline gap-4">
+                <h2 className="font-serif-tc font-bold leading-none tracking-[-0.05em] text-foreground text-[64px] md:text-[80px]">
+                  {year}
+                </h2>
+                <span className="font-serif-tc italic text-base text-foreground/60 hidden sm:inline">
+                  {year === new Date().getFullYear() ? '— in progress.' : '— archive.'}
+                </span>
+              </div>
+              <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 pb-3">
+                {yearPosts.length} ENTRIES
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 pt-4">
+              {yearPosts.map((p, i) => {
+                const { mon, day } = formatMonthDay(p.date);
+                const isLastInColumn =
+                  i >= yearPosts.length - 2 ||
+                  (yearPosts.length % 2 === 1 && i === yearPosts.length - 1);
+                return (
+                  <Link
+                    key={p.slug}
+                    href={`/blog/${p.slug}`}
+                    className={`row-link flex-col gap-1.5 py-4 ${
+                      isLastInColumn ? '' : 'border-b border-border'
+                    }`}
+                  >
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-mono text-[10px] tracking-[0.06em] text-foreground/65">
+                        № {String(yearPosts.length - i + (byYear.find(([y]) => y < year)?.[1].length ?? 0)).padStart(3, '0')}
+                      </span>
+                      <span className="font-mono text-[10px] text-foreground/45">{mon} {day}</span>
+                    </div>
+                    <h3 className="row-title font-serif-tc font-bold text-[19px] leading-[1.3] tracking-[-0.015em] text-foreground">
+                      {p.title}
+                    </h3>
+                    {p.excerpt && (
+                      <p className="font-sans text-xs text-foreground/60 leading-relaxed line-clamp-1">
+                        {p.excerpt}
+                      </p>
+                    )}
+                    <div className="flex items-baseline justify-between pt-1.5">
+                      <span className="font-mono text-[9px] tracking-[0.12em] text-foreground/70">{p.category}</span>
+                      <span className="font-mono text-[9px] text-foreground/45">{p.readTime}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </Container>
+        ))
+      )}
+
+      <div className="mt-24" />
+    </>
   );
 }
