@@ -114,7 +114,7 @@ export default async function Home() {
         <div className="max-w-[640px]">
           <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-foreground block mb-4">¶ EDITOR&apos;S NOTE</span>
           <p className="font-serif-tc text-[19px] leading-[1.7] text-foreground mb-4">
-            第 02 期。台大資訊管理學系大二，雙主修創新領域學士學位學程。目前於 <span className="border-b-2 border-foreground font-medium">ABConvert</span> 擔任軟體工程實習生，以 Next.js + TypeScript 開發 A/B testing 產品。
+            第 02 期。台大資訊管理學系大二，雙主修創新領域學士學位學程。目前於 <a href="https://www.abconvert.io/" target="_blank" rel="noopener noreferrer" className="border-b-2 border-foreground font-medium hover:opacity-70 transition-opacity">ABConvert</a> 擔任軟體工程實習生，以 Next.js + TypeScript 開發 A/B testing 產品。
           </p>
           <p className="font-serif-tc text-[19px] leading-[1.7] text-foreground/65">
             這個地方是我用來放雜湊心思、攝影、和當週讀過的東西的小型印刷品。每月一封信，剩下的時候就放在這裡讓人翻閱。
