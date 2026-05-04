@@ -10,13 +10,18 @@ type Props = {
   className?: string;
 };
 
-const RAMP = " .,:;!iIlcvoxOC0XK#@";
+// No leading space — even the brightest pixel renders a faint dot, so the
+// slot is always visibly textured (avoids "empty slot" on bright photos).
+const RAMP = "·.,:;!iIlcvoxOC0XK#@";
+// Compress luma so pure white still maps to the lightest visible char.
+const LUMA_MIN = 0.05;
+const LUMA_MAX = 0.95;
 
 export function GenerativePhoto({
   src,
   alt,
-  cols = 56,
-  rows = 70,
+  cols = 36,
+  rows = 46,
   className,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -63,8 +68,9 @@ export function GenerativePhoto({
         const r = data[i * 4];
         const g = data[i * 4 + 1];
         const b = data[i * 4 + 2];
-        // perceptual luminance, normalized 0..1
-        luma[i] = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        const raw = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        // Compress to [LUMA_MIN, LUMA_MAX] so pure-white photos still show texture
+        luma[i] = LUMA_MIN + raw * (LUMA_MAX - LUMA_MIN);
       }
       lumaRef.current = luma;
       render();
@@ -159,9 +165,10 @@ export function GenerativePhoto({
         className="font-mono"
         style={{
           margin: 0,
-          fontSize: 'clamp(6px, 0.62vw, 9px)',
+          fontSize: 'clamp(9px, 1vw, 12px)',
           lineHeight: 1,
-          letterSpacing: 0,
+          letterSpacing: '-0.04em',
+          fontWeight: 500,
           color: 'hsl(var(--foreground))',
           whiteSpace: 'pre',
           userSelect: 'none',
