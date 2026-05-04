@@ -1,9 +1,9 @@
 type NowItem = { label: string; text: string };
 
 const items: NowItem[] = [
-  { label: 'Working', text: '在 ABConvert 寫 Shopify A/B testing 的 onboarding flow' },
-  { label: 'Reading', text: '《Show Your Work!》Austin Kleon' },
-  { label: 'Shooting', text: '35mm，公館—大稻埕的午後光線' },
+  { label: 'Working', text: 'ABConvert SWE Intern' },
+  { label: 'Reading', text: '《Nexus》哈拉瑞' },
+  { label: 'Shooting', text: 'Nikon F100 + AI 50mm f/1.4' },
 ];
 
 export function NowStrip({ updatedAt = '2026.05.04' }: { updatedAt?: string }) {
