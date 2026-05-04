@@ -10,12 +10,13 @@ type Props = {
   className?: string;
 };
 
-// No leading space — even the brightest pixel renders a faint dot, so the
-// slot is always visibly textured (avoids "empty slot" on bright photos).
-const RAMP = "·.,:;!iIlcvoxOC0XK#@";
-// Compress luma so pure white still maps to the lightest visible char.
-const LUMA_MIN = 0.05;
-const LUMA_MAX = 0.95;
+// No leading space and start with a visible glyph, so even the brightest
+// pixel renders something legible (avoids "empty slot" on bright photos).
+const RAMP = ".,:;!iIlcvoxOC0XK#@";
+// Compress luma so pure white still maps to the lightest visible char,
+// and lift the dark end so darks still pick a heavy glyph.
+const LUMA_MIN = 0.08;
+const LUMA_MAX = 0.92;
 
 export function GenerativePhoto({
   src,
@@ -47,20 +48,26 @@ export function GenerativePhoto({
       const ctx = canvas.getContext('2d', { willReadFrequently: true });
       if (!ctx) return;
 
-      const aspect = img.width / img.height;
-      const cellAspect = cols / rows;
-      let dw = cols;
-      let dh = rows;
-      if (aspect > cellAspect) {
-        dh = cols / aspect;
+      // Cover-fit (crop to fill the slot completely, no letterbox).
+      // Cell aspect compensation: monospace glyphs are roughly 2:1 tall:wide,
+      // so adjust the source crop so the rendered ASCII looks proportional.
+      const cellPxAspect = 0.5; // glyph width / glyph height
+      const targetAspect = (cols * cellPxAspect) / rows;
+      const srcAspect = img.width / img.height;
+      let sx = 0;
+      let sy = 0;
+      let sw = img.width;
+      let sh = img.height;
+      if (srcAspect > targetAspect) {
+        // image is wider than the slot — crop horizontally
+        sw = img.height * targetAspect;
+        sx = (img.width - sw) / 2;
       } else {
-        dw = rows * aspect;
+        // image is taller than the slot — crop vertically
+        sh = img.width / targetAspect;
+        sy = (img.height - sh) / 2;
       }
-      const dx = (cols - dw) / 2;
-      const dy = (rows - dh) / 2;
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, cols, rows);
-      ctx.drawImage(img, dx, dy, dw, dh);
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cols, rows);
 
       const { data } = ctx.getImageData(0, 0, cols, rows);
       const luma = new Float32Array(cols * rows);
