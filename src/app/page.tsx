@@ -36,23 +36,44 @@ export default async function Home() {
   const latestPosts = allPosts.slice(0, 5);
   const totalPosts = allPosts.length;
 
-  // Pick featured photo for the generative slot
+  // Pick a photo for the generative slot — rotate daily across recent/featured photos
   let featuredPhotoSrc = '/LIU_0457.jpg';
   let featuredPhotoMeta = { id: 'LIU_0457.jpg', exif: '35mm · f/2.8 · 1/250' };
   try {
     const { photos } = await getPortfolioIndex();
-    const featured = photos.find((p) => p.featured) ?? photos[0];
-    if (featured) {
-      featuredPhotoSrc = featured.urls.thumb;
-      const e = featured.exif;
+    // Pool: featured photos if any, otherwise the 12 most recent by dateTaken
+    const featuredPool = photos.filter((p) => p.featured);
+    const pool =
+      featuredPool.length > 0
+        ? featuredPool
+        : [...photos]
+            .sort(
+              (a, b) =>
+                new Date(b.dateTaken).getTime() - new Date(a.dateTaken).getTime()
+            )
+            .slice(0, 12);
+    if (pool.length > 0) {
+      // Day-of-year rotation so the photo changes daily but is deterministic per day
+      const now = new Date();
+      const dayOfYear = Math.floor(
+        (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
+      );
+      const pick = pool[dayOfYear % pool.length];
+      featuredPhotoSrc = pick.urls.thumb;
+      const e = pick.exif;
       const exifBits = [e?.focalLength, e?.aperture, e?.shutterSpeed].filter(Boolean);
+      const exifStr = exifBits.join(' · ');
+      const taken = pick.dateTaken
+        ? new Date(pick.dateTaken).toISOString().slice(0, 10).replace(/-/g, '.')
+        : null;
+      const locationOrDate = pick.location?.name || taken || pick.id;
       featuredPhotoMeta = {
-        id: featured.id,
-        exif: exifBits.join(' · ') || '—',
+        id: locationOrDate,
+        exif: exifStr || (taken ?? '—'),
       };
     }
   } catch {
-    // R2 unavailable in dev — fall back to local portrait
+    // R2 unavailable — fall back to local portrait
   }
 
   const issueLabel = `VOL. ${String(totalPosts >= 30 ? 2 : 1).padStart(2, '0')} / ISSUE ${String(latestPosts.length).padStart(2, '0')}`;
