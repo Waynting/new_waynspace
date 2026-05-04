@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
-import { ExternalLink } from 'lucide-react';
+import { Container } from '@/components/Container';
+import { MastheadStrip } from '@/components/MastheadStrip';
+import { SectionDivider } from '@/components/SectionDivider';
+import { formatDateLabel } from '@/lib/format';
 
 const pageDescription = '個人專案作品集。Capsule 個人記憶管理應用、Guessong 音樂猜歌派對遊戲、UniLink 大學申請諮詢平台。';
 
@@ -34,7 +37,16 @@ export const metadata: Metadata = {
   },
 };
 
-const projects = [
+type Project = {
+  title: string;
+  url: string;
+  description: string;
+  features: string[];
+  subtitle?: string;
+  tech?: string;
+};
+
+const projects: Project[] = [
   {
     title: 'Capsule',
     subtitle: 'Your memories, the way you actually lived them.',
@@ -78,72 +90,93 @@ const projects = [
   },
 ];
 
-function SectionHeading({ num, label }: { num: string; label: string }) {
-  return (
-    <div className="flex items-baseline gap-3 mb-8 border-b border-border pb-4">
-      <span className="text-muted-foreground text-xs font-light tabular-nums w-5 shrink-0">{num}</span>
-      <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
-        {label}
-      </h2>
-    </div>
-  );
+function stripUrl(url: string) {
+  return url.replace('https://www.', '').replace('https://', '').replace(/\/$/, '');
 }
 
 export default function ProjectsPage() {
+  const dateLabel = formatDateLabel();
+
   return (
-    <main className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 py-16 md:py-24 space-y-20">
+    <>
+      <Container className="pt-20 pb-12">
+        <MastheadStrip
+          primary="SECTION 04 / THE PORTFOLIO"
+          secondary="專案集"
+          right={`UPDATED ${dateLabel}`}
+        />
 
-      {/* Page Header */}
-      <header>
-        <p className="text-xs text-muted-foreground font-medium tracking-[0.2em] uppercase mb-4">
-          Wei-Ting Liu
-        </p>
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-          Projects
-        </h1>
-      </header>
-
-      {/* Project Sections */}
-      {projects.map((project, i) => (
-        <section key={project.title}>
-          <SectionHeading num={String(i).padStart(2, '0')} label={project.title} />
-
-          <div className="flex items-start justify-between gap-4 mb-4">
-            <div>
-              <h3 className="text-base font-semibold tracking-tight">{project.title}</h3>
-              {'subtitle' in project && project.subtitle && (
-                <p className="text-xs text-muted-foreground mt-0.5">{project.subtitle}</p>
-              )}
-            </div>
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
-            >
-              {project.url.replace('https://www.', '').replace('https://', '').replace(/\/$/, '')}
-              <ExternalLink className="w-3 h-3" />
-            </a>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between pt-10 gap-4 sm:gap-6">
+          <h1 className="font-serif-tc font-bold leading-[0.9] tracking-[-0.05em] text-foreground text-[64px] sm:text-[80px] md:text-[112px] lg:text-[128px]">
+            Projects.
+          </h1>
+          <div className="flex flex-col items-start sm:items-end gap-1.5 sm:pb-4">
+            <span className="font-serif-tc italic text-sm text-foreground/60">— things I&apos;ve built</span>
+            <span className="font-serif-tc font-bold text-2xl md:text-[28px] tracking-[-0.02em] text-foreground tabular-nums">
+              {projects.length} 件 / 2023–
+            </span>
           </div>
+        </div>
+      </Container>
 
-          {'tech' in project && project.tech && (
-            <p className="text-xs text-muted-foreground mb-4 tracking-wide">{project.tech}</p>
-          )}
+      {projects.map((project, i) => {
+        const num = String(i + 1).padStart(2, '0');
+        const slug = project.title.toLowerCase();
 
-          <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-2xl">
-            {project.description}
-          </p>
+        return (
+          <Container key={project.title} className="mt-16 sm:mt-20" >
+            <section id={slug}>
+              <SectionDivider
+                title={`${project.title}.`}
+                tagline={project.subtitle ? `— ${project.subtitle}` : undefined}
+                right={
+                  <div className="flex flex-col items-end gap-1.5">
+                    <span className="font-mono text-[11px] tracking-[0.12em] text-foreground/65">№ {num}</span>
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-sans text-xs text-foreground border-b border-foreground pb-px hover:opacity-70 transition-opacity whitespace-nowrap"
+                    >
+                      <span className="hidden sm:inline">{stripUrl(project.url)} </span>↗
+                    </a>
+                  </div>
+                }
+              />
 
-          <ul className="space-y-2 pl-3 border-l border-border">
-            {project.features.map((feature, j) => (
-              <li key={j} className="text-sm text-muted-foreground leading-relaxed pl-3">
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+              {project.tech && (
+                <p className="font-mono text-[10px] tracking-[0.12em] text-foreground/65 mt-4 leading-relaxed">
+                  STACK · {project.tech}
+                </p>
+              )}
 
-    </main>
+              <p className="font-serif-tc text-[17px] sm:text-[19px] leading-[1.7] text-foreground mt-5 max-w-[640px]">
+                {project.description}
+              </p>
+
+              <div className="flex flex-col mt-8 max-w-[760px]">
+                {project.features.map((feature, j) => (
+                  <div
+                    key={j}
+                    className={`flex items-start gap-4 sm:gap-7 py-4 ${j < project.features.length - 1 ? 'border-b border-border' : ''}`}
+                  >
+                    <div className="flex flex-col shrink-0 w-10 sm:w-16 pt-0.5">
+                      <span className="font-mono text-[11px] tracking-[0.06em] text-foreground/65">
+                        № {String(j + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <p className="font-serif-tc text-[14px] sm:text-[15px] leading-[1.6] text-foreground/85 flex-1 min-w-0">
+                      {feature}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </Container>
+        );
+      })}
+
+      <div className="pb-24" />
+    </>
   );
 }

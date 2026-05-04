@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { generateStructuredData } from '@/lib/seo';
 import { getAllPosts } from '@/lib/posts';
 import { getPortfolioIndex } from '@/lib/portfolio';
-import EmailSubscribe from '@/components/EmailSubscribe';
 import { Container } from '@/components/Container';
+import { MastheadStrip } from '@/components/MastheadStrip';
+import { SectionDivider } from '@/components/SectionDivider';
 import { NowStrip } from '@/components/NowStrip';
 import GenerativePhoto from '@/components/GenerativePhotoLazy';
+import { buildPhotoCover, formatDateLabel } from '@/lib/format';
 
 const socials = [
   { label: 'GitHub', href: 'https://github.com/Waynting' },
@@ -36,12 +38,10 @@ export default async function Home() {
   const latestPosts = allPosts.slice(0, 5);
   const totalPosts = allPosts.length;
 
-  // Pick a photo for the generative slot — rotate daily across recent/featured photos
   let featuredPhotoSrc = '/LIU_0457.jpg';
   let featuredPhotoMeta = { id: 'LIU_0457.jpg', exif: '35mm · f/2.8 · 1/250' };
   try {
     const { photos } = await getPortfolioIndex();
-    // Pool: featured photos if any, otherwise the 12 most recent by dateTaken
     const featuredPool = photos.filter((p) => p.featured);
     const pool =
       featuredPool.length > 0
@@ -53,32 +53,21 @@ export default async function Home() {
             )
             .slice(0, 12);
     if (pool.length > 0) {
-      // Day-of-year rotation so the photo changes daily but is deterministic per day
       const now = new Date();
       const dayOfYear = Math.floor(
         (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
       );
       const pick = pool[dayOfYear % pool.length];
-      featuredPhotoSrc = pick.urls.thumb;
-      const e = pick.exif;
-      const exifBits = [e?.focalLength, e?.aperture, e?.shutterSpeed].filter(Boolean);
-      const exifStr = exifBits.join(' · ');
-      const taken = pick.dateTaken
-        ? new Date(pick.dateTaken).toISOString().slice(0, 10).replace(/-/g, '.')
-        : null;
-      const locationOrDate = pick.location?.name || taken || pick.id;
-      featuredPhotoMeta = {
-        id: locationOrDate,
-        exif: exifStr || (taken ?? '—'),
-      };
+      const cover = buildPhotoCover(pick);
+      featuredPhotoSrc = cover.src;
+      featuredPhotoMeta = cover.meta;
     }
   } catch {
     // R2 unavailable — fall back to local portrait
   }
 
   const issueLabel = `VOL. ${String(totalPosts >= 30 ? 2 : 1).padStart(2, '0')} / ISSUE ${String(latestPosts.length).padStart(2, '0')}`;
-  const today = new Date();
-  const dateLabel = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+  const dateLabel = formatDateLabel();
 
   return (
     <>
@@ -89,13 +78,11 @@ export default async function Home() {
 
       {/* — MASTHEAD — */}
       <Container className="pt-20 pb-12">
-        <div className="flex items-center justify-between pb-4 border-b border-foreground">
-          <div className="flex items-baseline gap-4">
-            <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-foreground">{issueLabel}</span>
-            <span className="font-mono text-[11px] tracking-[0.16em] text-foreground/55">{dateLabel} — 第 二 期</span>
-          </div>
-          <span className="font-mono text-[11px] tracking-[0.16em] text-foreground/55 hidden sm:inline">A PERSONAL PUBLICATION</span>
-        </div>
+        <MastheadStrip
+          primary={issueLabel}
+          secondary={`${dateLabel} — 第 二 期`}
+          right="A PERSONAL PUBLICATION"
+        />
 
         <div className="flex flex-col md:flex-row gap-12 pt-14">
           {/* — Name column — */}
@@ -127,7 +114,6 @@ export default async function Home() {
               <IssueIndexRow num="01" title="Editor's note" />
               <IssueIndexRow num="02" title="/Now — 五月在做的事" />
               <IssueIndexRow num="03" title="Latest five" />
-              <IssueIndexRow num="04" title="Subscribe" />
             </div>
 
             <div className="flex flex-wrap gap-x-3.5 gap-y-1.5 pt-6 mt-6 border-t border-border">
@@ -167,23 +153,21 @@ export default async function Home() {
 
       {/* — Latest Articles — */}
       <Container className="mt-24">
-        <div className="flex items-end justify-between pb-3 border-b-2 border-foreground">
-          <div className="flex items-baseline gap-4">
-            <h2 className="font-serif-tc font-bold leading-none tracking-[-0.04em] text-foreground text-5xl md:text-[56px]">
-              Latest.
-            </h2>
-            <span className="font-serif-tc italic text-sm text-foreground/60">— five most recent</span>
-          </div>
-          <div className="flex items-center gap-4 pb-3">
-            <span className="font-mono text-[11px] tracking-[0.12em] text-foreground/65">{latestPosts.length} / {totalPosts}</span>
-            <Link
-              href="/blog"
-              className="font-sans text-xs text-foreground border-b border-foreground pb-px hover:opacity-70 transition-opacity"
-            >
-              All Articles →
-            </Link>
-          </div>
-        </div>
+        <SectionDivider
+          title="Latest."
+          tagline="— five most recent"
+          right={
+            <div className="flex items-center gap-3 sm:gap-4">
+              <span className="font-mono text-[11px] tracking-[0.12em] text-foreground/65 whitespace-nowrap">{latestPosts.length} / {totalPosts}</span>
+              <Link
+                href="/blog"
+                className="font-sans text-xs text-foreground border-b border-foreground pb-px hover:opacity-70 transition-opacity whitespace-nowrap"
+              >
+                All Articles →
+              </Link>
+            </div>
+          }
+        />
 
         <div className="flex flex-col max-w-[760px]">
           {latestPosts.map((post, i) => {
@@ -227,29 +211,6 @@ export default async function Home() {
         </div>
       </Container>
 
-      {/* — Newsletter — */}
-      <Container className="mt-24">
-        <section className="bg-foreground text-white p-12 md:p-14 flex flex-col md:flex-row gap-12">
-          <div className="flex flex-col flex-1">
-            <div className="flex items-baseline gap-3.5 mb-4">
-              <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-white">SUBSCRIBE</span>
-              <span className="font-mono text-[11px] tracking-[0.12em] text-white/50">月刊一封</span>
-            </div>
-            <h3 className="font-serif-tc font-bold text-[36px] md:text-[44px] leading-[1.1] tracking-[-0.03em] text-white mb-4">
-              寫了就寄給你.
-            </h3>
-            <p className="font-sans text-sm text-white/65 leading-relaxed max-w-[460px]">
-              每月一封，整理當月的文章與正在做的事。
-            </p>
-          </div>
-          <div className="flex flex-col w-full md:w-[320px] shrink-0 gap-3">
-            <EmailSubscribe />
-            <span className="font-mono text-[10px] tracking-[0.08em] text-white/40 mt-1">
-              powered by Buttondown
-            </span>
-          </div>
-        </section>
-      </Container>
     </>
   );
 }

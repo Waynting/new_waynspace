@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { Post, Category } from '@/types/blog';
 import { trackCategoryFilter } from '@/lib/analytics';
 import { Container } from '@/components/Container';
+import { MastheadStrip } from '@/components/MastheadStrip';
+import { SectionDivider } from '@/components/SectionDivider';
+import { formatDateLabel } from '@/lib/format';
 
 interface BlogClientProps {
   posts: Post[];
@@ -54,25 +57,22 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
     return Array.from(map.entries()).sort((a, b) => b[0] - a[0]);
   }, [filteredPosts]);
 
-  const today = new Date();
-  const dateLabel = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+  const dateLabel = formatDateLabel();
 
   return (
     <>
       {/* — Page Masthead — */}
       <Container className="pt-20 pb-10">
-        <div className="flex items-center justify-between pb-4 border-b border-foreground">
-          <div className="flex items-baseline gap-4">
-            <span className="font-mono text-[11px] font-semibold tracking-[0.16em] text-foreground">SECTION 03 / THE ARCHIVE</span>
-            <span className="font-mono text-[11px] tracking-[0.16em] text-foreground/55">文章彙整</span>
-          </div>
-          <span className="font-mono text-[11px] tracking-[0.16em] text-foreground/55 hidden sm:inline">UPDATED {dateLabel}</span>
-        </div>
-        <div className="flex items-end justify-between pt-10 gap-6">
-          <h1 className="font-serif-tc font-bold leading-[0.9] tracking-[-0.05em] text-foreground text-[80px] md:text-[112px] lg:text-[128px]">
+        <MastheadStrip
+          primary="SECTION 03 / THE ARCHIVE"
+          secondary="文章彙整"
+          right={`UPDATED ${dateLabel}`}
+        />
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between pt-10 gap-4 sm:gap-6">
+          <h1 className="font-serif-tc font-bold leading-[0.9] tracking-[-0.05em] text-foreground text-[64px] sm:text-[80px] md:text-[112px] lg:text-[128px]">
             Articles.
           </h1>
-          <div className="flex flex-col items-end gap-1.5 pb-4">
+          <div className="flex flex-col items-start sm:items-end gap-1.5 sm:pb-4">
             <span className="font-serif-tc italic text-sm text-foreground/60">collected since</span>
             <span className="font-serif-tc font-bold text-2xl md:text-[28px] tracking-[-0.02em] text-foreground tabular-nums">
               {filteredPosts.length} 篇 / 2019
@@ -189,21 +189,21 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
           <p className="font-serif-tc italic text-foreground/60 py-12 text-center">暫無文章</p>
         </Container>
       ) : (
-        byYear.map(([year, yearPosts]) => (
+        byYear.map(([year, yearPosts], yIdx) => {
+          const olderTotal = byYear.slice(yIdx + 1).reduce((sum, [, ps]) => sum + ps.length, 0);
+          return (
           <Container key={year} className="mt-14">
-            <div className="flex items-end justify-between gap-4 pb-3 border-b-2 border-foreground mb-2">
-              <div className="flex items-baseline gap-4">
-                <h2 className="font-serif-tc font-bold leading-none tracking-[-0.05em] text-foreground text-[64px] md:text-[80px]">
-                  {year}
-                </h2>
-                <span className="font-serif-tc italic text-base text-foreground/60 hidden sm:inline">
-                  {year === new Date().getFullYear() ? '— in progress.' : '— archive.'}
+            <SectionDivider
+              title={String(year)}
+              tagline={year === new Date().getFullYear() ? '— in progress.' : '— archive.'}
+              titleClassName="font-serif-tc font-bold leading-none tracking-[-0.05em] text-foreground text-[48px] sm:text-[64px] md:text-[80px]"
+              right={
+                <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 whitespace-nowrap">
+                  {yearPosts.length} ENTRIES
                 </span>
-              </div>
-              <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 pb-3">
-                {yearPosts.length} ENTRIES
-              </span>
-            </div>
+              }
+            />
+            <div className="mb-2" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 pt-4">
               {yearPosts.map((p, i) => {
                 const { mon, day } = formatMonthDay(p.date);
@@ -220,7 +220,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
                   >
                     <div className="flex items-baseline gap-2">
                       <span className="font-mono text-[10px] tracking-[0.06em] text-foreground/65">
-                        № {String(yearPosts.length - i + (byYear.find(([y]) => y < year)?.[1].length ?? 0)).padStart(3, '0')}
+                        № {String(yearPosts.length - i + olderTotal).padStart(3, '0')}
                       </span>
                       <span className="font-mono text-[10px] text-foreground/45">{mon} {day}</span>
                     </div>
@@ -241,7 +241,8 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               })}
             </div>
           </Container>
-        ))
+          );
+        })
       )}
 
       <div className="mt-24" />

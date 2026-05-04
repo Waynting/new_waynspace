@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-// Strip heavy fields before sending to client
 function toGridPhoto(p: Photo) {
   return {
     id: p.id,
@@ -37,14 +36,15 @@ export default async function PhotosPage() {
   );
 
   const featured = photos.filter((p) => p.featured).slice(0, 5);
-  const featuredPhotos =
-    featured.length > 0 ? featured : sorted.slice(0, 5);
+  const featuredPhotos = featured.length > 0 ? featured : sorted.slice(0, 5);
+  const coverPhoto = featuredPhotos[0] ?? sorted[0] ?? null;
 
   return (
     <>
       <PortfolioHeader
         photoCount={photos.length}
         albumCount={albums.length}
+        coverPhoto={coverPhoto}
       />
       <PortfolioClient
         featuredPhotos={featuredPhotos.map(toGridPhoto)}
