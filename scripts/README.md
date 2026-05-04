@@ -63,13 +63,3 @@ npm run test:r2
 ```
 
 測試 R2 連線、rclone 配置、環境變數與上傳功能。
-
----
-
-## newsletter:send
-
-```bash
-npm run newsletter:send -- --slug "YYYY/MM/slug"
-```
-
-發送電子報通知。詳細選項（自訂標題、內容、強制重送）請參考 [docs/writing-guide.md](../docs/writing-guide.md#發送電子報)。

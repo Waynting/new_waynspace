@@ -6,6 +6,8 @@ import FeaturedPhotos from './FeaturedPhotos';
 import AlbumGrid from './AlbumGrid';
 import PhotoGrid from './PhotoGrid';
 import PhotoLightbox from './PhotoLightbox';
+import { Container } from '@/components/Container';
+import { SectionDivider } from '@/components/SectionDivider';
 
 interface PortfolioClientProps {
   featuredPhotos: Photo[];
@@ -46,20 +48,20 @@ export default function PortfolioClient({
         onPhotoClick={handlePhotoClick}
       />
 
-      <AlbumGrid albums={albums} sectionNumber="02" />
+      <AlbumGrid albums={albums} />
 
-      {/* All Photos */}
       <section className="mb-16">
-        <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 mb-8">
-          <div className="flex items-center gap-3 border-b border-border pb-3">
-            <span className="text-xs text-muted-foreground font-light tabular-nums">
-              03
-            </span>
-            <h2 className="text-xs text-muted-foreground font-medium tracking-[0.18em] uppercase">
-              All Photos
-            </h2>
-          </div>
-        </div>
+        <Container className="mb-8">
+          <SectionDivider
+            title="All Photos."
+            tagline="— full archive"
+            right={
+              <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 whitespace-nowrap">
+                {allPhotos.length} TOTAL
+              </span>
+            }
+          />
+        </Container>
 
         <div className="px-4 sm:px-6 lg:px-8">
           <PhotoGrid photos={allPhotos} onPhotoClick={handlePhotoClick} />

@@ -82,3 +82,4 @@ docs/
 
 # Newsletter tracking
 .newsletter-sent.json
+.gstack/

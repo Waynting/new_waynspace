@@ -1,32 +1,38 @@
 import type { Album } from '@/types/photos';
 import AlbumCard from './AlbumCard';
+import { Container } from '@/components/Container';
+import { SectionDivider } from '@/components/SectionDivider';
 
 interface AlbumGridProps {
   albums: Album[];
-  sectionNumber?: string;
 }
 
-export default function AlbumGrid({ albums, sectionNumber = '02' }: AlbumGridProps) {
+export default function AlbumGrid({ albums }: AlbumGridProps) {
   if (albums.length === 0) return null;
 
   return (
-    <section className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 mb-16">
-      <div className="flex items-center gap-3 border-b border-border pb-3 mb-8">
-        <span className="text-xs text-muted-foreground font-light tabular-nums">
-          {sectionNumber}
-        </span>
-        <h2 className="text-xs text-muted-foreground font-medium tracking-[0.18em] uppercase">
-          Albums
-        </h2>
-      </div>
+    <section className="mb-16">
+      <Container className="mb-8">
+        <SectionDivider
+          title="Albums."
+          tagline="— collected sets"
+          right={
+            <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 whitespace-nowrap">
+              {albums.length} ALBUMS
+            </span>
+          }
+        />
+      </Container>
 
-      <div className="overflow-x-auto -mx-6 sm:-mx-8 lg:-mx-12 px-6 sm:px-8 lg:px-12">
-        <div className="flex gap-3 pb-4">
-          {albums.map((album) => (
-            <AlbumCard key={album.slug} album={album} />
-          ))}
+      <Container>
+        <div className="overflow-x-auto -mx-6 px-6">
+          <div className="flex gap-3 pb-4">
+            {albums.map((album) => (
+              <AlbumCard key={album.slug} album={album} />
+            ))}
+          </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
