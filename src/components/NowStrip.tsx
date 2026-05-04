@@ -8,7 +8,7 @@ const items: NowItem[] = [
 
 export function NowStrip({ updatedAt = '2026.05.04' }: { updatedAt?: string }) {
   return (
-    <section className="bg-[#f4f4f4] border-l-4 border-foreground p-8 md:p-10">
+    <section className="bg-muted border-l-4 border-foreground p-8 md:p-10">
       <div className="flex items-baseline justify-between mb-6">
         <div className="flex items-baseline gap-3.5">
           <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-foreground">/ NOW</span>

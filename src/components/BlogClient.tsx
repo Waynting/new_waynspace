@@ -117,7 +117,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               </div>
             </article>
 
-            <aside className="flex flex-col w-full md:w-[280px] shrink-0 p-6 bg-[#f4f4f4] border-t-4 border-foreground">
+            <aside className="flex flex-col w-full md:w-[280px] shrink-0 p-6 bg-muted border-t-4 border-foreground">
               <span className="font-mono text-[10px] font-bold tracking-[0.18em] text-foreground mb-5">EDITOR&apos;S PICK</span>
               <div className="flex flex-col gap-4">
                 {editorPicks.map((p, idx) => {

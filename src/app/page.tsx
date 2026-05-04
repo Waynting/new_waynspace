@@ -113,7 +113,7 @@ export default async function Home() {
 
           {/* — Masthead block (right) — */}
           <aside className="flex flex-col w-full md:w-[280px] shrink-0">
-            <div className="border-y border-foreground py-3 flex items-center justify-center bg-white">
+            <div className="border-y border-foreground py-3 flex items-center justify-center bg-background">
               <GenerativePhoto src={featuredPhotoSrc} alt="Generative ASCII portrait" />
             </div>
             <div className="flex items-baseline justify-between pt-2.5">
