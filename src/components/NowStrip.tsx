@@ -2,7 +2,7 @@ type NowItem = { label: string; text: string };
 
 const items: NowItem[] = [
   { label: 'Working', text: 'ABConvert SWE Intern' },
-  { label: 'Reading', text: '《Nexus》哈拉瑞' },
+  { label: 'Reading', text: '《Nexus》Yuval Noah Harari' },
   { label: 'Shooting', text: 'Nikon F100 + AI 50mm f/1.4' },
 ];
 
