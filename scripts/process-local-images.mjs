@@ -368,12 +368,20 @@ async function processMdxFile(mdxPath) {
 
     const localImages = [...markdownImages, ...htmlImages]
 
-    if (localImages.length === 0) {
+    // 檢查 frontmatter 的 coverImage 是否為本地路徑
+    const coverLocalPath = frontmatter.coverImage
+      ? parseLocalPath(frontmatter.coverImage, articleDir)
+      : null
+    const hasLocalCover = coverLocalPath && await exists(coverLocalPath)
+
+    if (localImages.length === 0 && !hasLocalCover) {
       console.log(`  ⏭️  沒有本地圖片，跳過`)
       return
     }
 
-    console.log(`  找到 ${localImages.length} 張本地圖片（${markdownImages.length} 張 Markdown，${htmlImages.length} 張 HTML）`)
+    if (localImages.length > 0) {
+      console.log(`  找到 ${localImages.length} 張本地圖片（${markdownImages.length} 張 Markdown，${htmlImages.length} 張 HTML）`)
+    }
 
     // 處理每張圖片
     let updatedContent = markdownContent
@@ -429,15 +437,12 @@ async function processMdxFile(mdxPath) {
       }
     }
 
-    // 檢查並更新 frontmatter 中的 coverImage
-    if (frontmatter.coverImage) {
-      const coverLocalPath = parseLocalPath(frontmatter.coverImage, articleDir)
-      if (coverLocalPath && await exists(coverLocalPath)) {
-        console.log(`  🖼️  處理封面圖...`)
-        const coverCdnUrl = await processImage(coverLocalPath, year, month, slug)
-        if (coverCdnUrl) {
-          updatedFrontmatter.coverImage = coverCdnUrl
-        }
+    // 處理 frontmatter 的 coverImage
+    if (hasLocalCover) {
+      console.log(`  🖼️  處理封面圖...`)
+      const coverCdnUrl = await processImage(coverLocalPath, year, month, slug)
+      if (coverCdnUrl) {
+        updatedFrontmatter.coverImage = coverCdnUrl
       }
     }
 
