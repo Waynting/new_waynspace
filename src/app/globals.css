@@ -9,8 +9,9 @@
     --foreground-muted: 0 0% 36%;
 
     /* Editorial dual-width container system */
-    --w-display: 1100px;
+    --w-display: 768px;
     --w-reading: 640px;
+    --w-wide: 1216px;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 15%;
     --popover: 0 0% 100%;
@@ -95,6 +96,13 @@ body {
   width: 100%;
   max-width: var(--w-reading);
   /* left-aligned by default; pages compose this inside container-display */
+}
+.container-wide {
+  width: 100%;
+  max-width: var(--w-wide);
+  margin-inline: auto;
+  padding-inline: 24px;
+  box-sizing: border-box;
 }
 
 /* Editorial type families */

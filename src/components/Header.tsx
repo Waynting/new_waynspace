@@ -20,9 +20,9 @@ export default function Header() {
               alt="Waynspace"
               width={20}
               height={20}
-              className="rounded-none"
+              className="rounded-sm"
             />
-            <span className="font-serif-tc font-bold tracking-[-0.01em]">Waynspace.</span>
+            <span className="tracking-[-0.01em]">Waynspace</span>
           </Link>
 
           {/* Navigation */}

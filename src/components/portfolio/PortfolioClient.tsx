@@ -7,7 +7,6 @@ import AlbumGrid from './AlbumGrid';
 import PhotoGrid from './PhotoGrid';
 import PhotoLightbox from './PhotoLightbox';
 import { Container } from '@/components/Container';
-import { SectionDivider } from '@/components/SectionDivider';
 
 interface PortfolioClientProps {
   featuredPhotos: Photo[];
@@ -19,12 +18,10 @@ interface PortfolioClientProps {
 export default function PortfolioClient({
   featuredPhotos,
   albums,
-  recentPhotos,
   allPhotos,
 }: PortfolioClientProps) {
   const [lightboxPhoto, setLightboxPhoto] = useState<Photo | null>(null);
 
-  // Single deduplicated photo list for lightbox navigation
   const lightboxPhotos = useMemo(() => {
     const seen = new Set<string>();
     const result: Photo[] = [];
@@ -51,16 +48,16 @@ export default function PortfolioClient({
       <AlbumGrid albums={albums} />
 
       <section className="mb-16">
-        <Container className="mb-8">
-          <SectionDivider
-            title="All Photos."
-            tagline="— full archive"
-            right={
-              <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 whitespace-nowrap">
-                {allPhotos.length} TOTAL
-              </span>
-            }
-          />
+        <Container className="mb-6">
+          <div className="flex items-baseline pb-3 gap-3 border-b border-border">
+            <span className="text-xs font-light text-muted-foreground/70 tabular-nums">03</span>
+            <span className="tracking-[0.18em] uppercase text-xs font-semibold text-muted-foreground">
+              All Photos
+            </span>
+            <span className="ml-auto text-xs font-light text-muted-foreground/70 tabular-nums">
+              {allPhotos.length}
+            </span>
+          </div>
         </Container>
 
         <div className="px-4 sm:px-6 lg:px-8">

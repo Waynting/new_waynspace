@@ -1,8 +1,5 @@
 import { Metadata } from 'next';
 import { Container } from '@/components/Container';
-import { MastheadStrip } from '@/components/MastheadStrip';
-import { SectionDivider } from '@/components/SectionDivider';
-import { formatDateLabel } from '@/lib/format';
 
 const pageDescription = '個人專案作品集。Capsule 個人記憶管理應用、Guessong 音樂猜歌派對遊戲、UniLink 大學申請諮詢平台。';
 
@@ -95,82 +92,73 @@ function stripUrl(url: string) {
 }
 
 export default function ProjectsPage() {
-  const dateLabel = formatDateLabel();
-
   return (
     <>
-      <Container className="pt-20 pb-12">
-        <MastheadStrip
-          primary="SECTION 04 / THE PORTFOLIO"
-          secondary="專案集"
-          right={`UPDATED ${dateLabel}`}
-        />
-
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between pt-10 gap-4 sm:gap-6">
-          <h1 className="font-serif-tc font-bold leading-[0.9] tracking-[-0.05em] text-foreground text-[64px] sm:text-[80px] md:text-[112px] lg:text-[128px]">
-            Projects.
-          </h1>
-          <div className="flex flex-col items-start sm:items-end gap-1.5 sm:pb-4">
-            <span className="font-serif-tc italic text-sm text-foreground/60">— things I&apos;ve built</span>
-            <span className="font-serif-tc font-bold text-2xl md:text-[28px] tracking-[-0.02em] text-foreground tabular-nums">
-              {projects.length} 件 / 2023–
-            </span>
-          </div>
+      <Container className="pt-16 pb-12">
+        <div className="tracking-[0.2em] uppercase text-xs font-medium text-muted-foreground mb-4">
+          Wei-Ting Liu
         </div>
+        <h1 className="text-[40px] sm:text-[48px] font-bold leading-[1.05] tracking-[-0.025em] text-foreground">
+          Projects
+        </h1>
       </Container>
 
       {projects.map((project, i) => {
-        const num = String(i + 1).padStart(2, '0');
+        const num = String(i).padStart(2, '0');
         const slug = project.title.toLowerCase();
 
         return (
-          <Container key={project.title} className="mt-16 sm:mt-20" >
+          <Container key={project.title} className="pb-12">
             <section id={slug}>
-              <SectionDivider
-                title={`${project.title}.`}
-                tagline={project.subtitle ? `— ${project.subtitle}` : undefined}
-                right={
-                  <div className="flex flex-col items-end gap-1.5">
-                    <span className="font-mono text-[11px] tracking-[0.12em] text-foreground/65">№ {num}</span>
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-sans text-xs text-foreground border-b border-foreground pb-px hover:opacity-70 transition-opacity whitespace-nowrap"
-                    >
-                      <span className="hidden sm:inline">{stripUrl(project.url)} </span>↗
-                    </a>
-                  </div>
-                }
-              />
+              <div className="flex items-baseline mb-6 pb-3 gap-3 border-b border-border">
+                <span className="text-xs font-light text-muted-foreground/70 tabular-nums">
+                  {num}
+                </span>
+                <span className="tracking-[0.18em] uppercase text-xs font-semibold text-muted-foreground">
+                  {project.title}
+                </span>
+              </div>
+
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex flex-col min-w-0">
+                  <h2 className="text-base font-semibold tracking-[-0.01em] text-foreground">
+                    {project.title}
+                  </h2>
+                  {project.subtitle && (
+                    <p className="mt-0.5 text-xs text-muted-foreground">{project.subtitle}</p>
+                  )}
+                </div>
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {stripUrl(project.url)}
+                  <span aria-hidden>↗</span>
+                </a>
+              </div>
 
               {project.tech && (
-                <p className="font-mono text-[10px] tracking-[0.12em] text-foreground/65 mt-4 leading-relaxed">
-                  STACK · {project.tech}
+                <p className="mb-4 text-xs text-muted-foreground tracking-[0.01em]">
+                  {project.tech}
                 </p>
               )}
 
-              <p className="font-serif-tc text-[17px] sm:text-[19px] leading-[1.7] text-foreground mt-5 max-w-[640px]">
+              <p className="text-sm leading-[1.75] text-muted-foreground max-w-[560px] mb-6">
                 {project.description}
               </p>
 
-              <div className="flex flex-col mt-8 max-w-[760px]">
-                {project.features.map((feature, j) => (
-                  <div
-                    key={j}
-                    className={`flex items-start gap-4 sm:gap-7 py-4 ${j < project.features.length - 1 ? 'border-b border-border' : ''}`}
+              <ul className="flex flex-col pl-3 gap-2 border-l border-border list-none">
+                {project.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="pl-3 text-sm leading-[1.7] text-muted-foreground"
                   >
-                    <div className="flex flex-col shrink-0 w-10 sm:w-16 pt-0.5">
-                      <span className="font-mono text-[11px] tracking-[0.06em] text-foreground/65">
-                        № {String(j + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-                    <p className="font-serif-tc text-[14px] sm:text-[15px] leading-[1.6] text-foreground/85 flex-1 min-w-0">
-                      {feature}
-                    </p>
-                  </div>
+                    {feature}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           </Container>
         );

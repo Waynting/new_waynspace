@@ -1,7 +1,6 @@
 import type { Album } from '@/types/photos';
 import AlbumCard from './AlbumCard';
 import { Container } from '@/components/Container';
-import { SectionDivider } from '@/components/SectionDivider';
 
 interface AlbumGridProps {
   albums: Album[];
@@ -11,17 +10,17 @@ export default function AlbumGrid({ albums }: AlbumGridProps) {
   if (albums.length === 0) return null;
 
   return (
-    <section className="mb-16">
-      <Container className="mb-8">
-        <SectionDivider
-          title="Albums."
-          tagline="— collected sets"
-          right={
-            <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-foreground/65 whitespace-nowrap">
-              {albums.length} ALBUMS
-            </span>
-          }
-        />
+    <section className="mb-12">
+      <Container className="mb-6">
+        <div className="flex items-baseline pb-3 gap-3 border-b border-border">
+          <span className="text-xs font-light text-muted-foreground/70 tabular-nums">02</span>
+          <span className="tracking-[0.18em] uppercase text-xs font-semibold text-muted-foreground">
+            Albums
+          </span>
+          <span className="ml-auto text-xs font-light text-muted-foreground/70 tabular-nums">
+            {albums.length}
+          </span>
+        </div>
       </Container>
 
       <Container>
