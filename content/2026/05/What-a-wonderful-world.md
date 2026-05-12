@@ -7,7 +7,7 @@ tags:
 categories:
   - personal-journal
 slug: what-a-wonderful-world
-coverImage: 'https://img.waynspace.com/2026/05/what-a-wonderful-world/553052970_24821027217493319_8616083747217919897_n.webp'
+coverImage: 'https://img.waynspace.com/2026/05/what-a-wonderful-world/childhood-portrait.webp'
 author:
   name: Wei-Ting Liu
   email: wayntingliu@gmail.com
@@ -73,4 +73,4 @@ summary: >-
 
 註一：現在想起來覺得一個國一的人和小一搶一個陀螺覺得蠻有趣的，但說實話我如果有個弟弟，我也不能保證我不會和他搶玩具，那是 2012 年誒。
 
-![放張小時候的我](https://img.waynspace.com/2026/05/what-a-wonderful-world/553052970_24821027217493319_8616083747217919897_n.webp)
+![放張小時候的我](https://img.waynspace.com/2026/05/what-a-wonderful-world/childhood-portrait.webp)

@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 import { getAllPosts, getAllCategories } from './src/lib/posts';
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.join(__dirname),
+  },
+
   images: {
     remotePatterns: [
       {
