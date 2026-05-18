@@ -129,8 +129,6 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
           </Container>
         ))
       )}
-
-      <div className="pb-12" />
     </>
   );
 }

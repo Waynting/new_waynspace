@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { generateStructuredData } from '@/lib/seo';
 import { getAllPosts } from '@/lib/posts';
 import { Container } from '@/components/Container';
+import { EmailSubscribe } from '@/components/EmailSubscribe';
 
 const socials: { label: string; href: string; icon: 'github' | 'linkedin' | 'instagram' | 'medium' | 'email' | 'rss' }[] = [
   { label: 'GitHub', href: 'https://github.com/Waynting', icon: 'github' },
@@ -147,7 +148,7 @@ export default async function Home() {
       </Container>
 
       {/* Latest Articles */}
-      <Container className="mt-4 pb-20">
+      <Container className="mt-4 pb-12">
         <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-border">
           <span className="tracking-[0.18em] uppercase text-xs font-semibold text-muted-foreground">
             Latest Articles
@@ -191,6 +192,16 @@ export default async function Home() {
             </Link>
           ))}
         </div>
+      </Container>
+
+      {/* Newsletter */}
+      <Container className="pb-20">
+        <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-border">
+          <span className="tracking-[0.18em] uppercase text-xs font-semibold text-muted-foreground">
+            Newsletter
+          </span>
+        </div>
+        <EmailSubscribe location="home" />
       </Container>
     </>
   );

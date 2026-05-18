@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { formatDate } from '@/lib/markdown'
 import ArticleContent from '@/components/ArticleContent'
 import ArticleTracker from '@/components/ArticleTracker'
+import { EmailSubscribe } from '@/components/EmailSubscribe'
 import { generatePostMetadata } from './metadata'
 import { generateStructuredData } from '@/lib/seo'
 import { siteConfig } from '@/config/seo'
@@ -221,6 +222,14 @@ export default async function PostPage({
             prose-hr:my-14 prose-hr:border-border prose-hr:border-t-2
             [&>p+p]:mt-6 [&_br+br]:block [&_br+br]:content-[''] [&_br+br]:mt-6"
         />
+
+        {/* Newsletter */}
+        <section className="mt-16 pt-8 border-t border-border">
+          <p className="text-xs tracking-[0.18em] uppercase text-muted-foreground/80 mb-4">
+            Newsletter
+          </p>
+          <EmailSubscribe location="article" />
+        </section>
 
         {/* Footer Navigation */}
         <footer className="mt-16 pt-8 border-t border-border space-y-10">
