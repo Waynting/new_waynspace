@@ -21,13 +21,9 @@ Resend + Vercel Postgres 自架電子報。**所有程式碼已寫好**，這份
    vercel env pull .env.local
    ```
 
-5. 跑 migration 建 schema：
+5. 建立 schema（`subscribers`、`sent_articles` 兩張表）：
 
-   ```bash
-   npm run db:migrate
-   ```
-
-   會建立 `subscribers` 和 `sent_articles` 兩張表。
+   現行專案的 schema 已經建好。若要在全新的 Postgres 上重建，從 git history 找 `migrations/001_init.sql`（commit `1eaa117` 之前）裡的 `CREATE TABLE` 直接執行即可。
 
 ---
 
@@ -87,7 +83,7 @@ git push   # 觸發 Vercel deploy
         -H "Authorization: Bearer $NEWSLETTER_SECRET"
    ```
    會回傳哪些文章會被寄、有多少收件人。
-4. **真正寄一篇文章**：拿掉 `?dryRun=1`。或者直接等 cron 跑（每小時整點）。
+4. **真正寄一篇文章**：拿掉 `?dryRun=1`。或者直接等 cron 跑（每日 01:00 UTC，台北 09:00）。
 
 ---
 
@@ -95,7 +91,7 @@ git push   # 觸發 Vercel deploy
 
 寫完新文章 commit + push 後：
 
-- **Vercel Cron 每小時自動檢查一次**，看到 `/content/` 有沒有「沒寄過」的文章，自動寄給所有確認訂閱者
+- **Vercel Cron 每天 01:00 UTC（台北 09:00）自動檢查一次**，看到 `/content/` 有沒有「沒寄過」的文章，自動寄給所有確認訂閱者。Hobby plan 限制每天最多一次，要更密就升 Pro。
 - 寄過的會記在 `sent_articles`，**保證不會重複寄**
 - 想立刻寄而不等 cron：手動 POST 上面那個 curl（拿掉 dryRun）
 

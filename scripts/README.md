@@ -66,18 +66,6 @@ npm run test:r2
 
 ---
 
-## db:migrate
-
-```bash
-npm run db:migrate
-```
-
-依序執行 `migrations/*.sql`（單一 transaction）。建立 `subscribers` 與 `sent_articles` 兩張表。每個 migration 都用 `IF NOT EXISTS`，可重複跑。
-
-需要環境變數：`POSTGRES_URL`（執行 `vercel env pull .env.local` 取得）
-
----
-
 ## subscribers
 
 ```bash
@@ -118,6 +106,6 @@ npm run portfolio:migrate
 ## 新增腳本時的慣例
 
 1. 檔案放在 `scripts/`，副檔名 `.mjs`，shebang `#!/usr/bin/env node`。
-2. dotenv 載入順序：`.env.local` → `.env`（見 `scripts/migrate.mjs`）。
+2. dotenv 載入順序：`.env.local` → `.env`（見 `scripts/list-subscribers.mjs`）。
 3. `package.json` 加入對應 `scripts` 入口。
 4. **這份 README 加上一個區塊**：用法、說明、需要的環境變數。

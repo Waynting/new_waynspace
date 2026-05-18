@@ -15,7 +15,6 @@
     "portfolio:upload": "node scripts/portfolio-upload.mjs",
     "portfolio:migrate": "node scripts/migrate-photos.mjs",
     "test:r2": "node scripts/test-r2-config.mjs",
-    "db:migrate": "node scripts/migrate.mjs",
     "subscribers": "node scripts/list-subscribers.mjs",
     "email:preview": "email dev --dir src/emails --port 3001"
   },

@@ -16,11 +16,18 @@
 
 ## 2026-05-19
 
+### Fixed
+- **Vercel auto-deploy 卡住**：cron 排程 `0 * * * *`（每小時）在 Hobby plan 違規，導致 deploy 失敗、auto-deploy 不會觸發。改為 `0 1 * * *`（每天 01:00 UTC，台北 09:00）。
+
+### Removed
+- `scripts/migrate.mjs` 與 `migrations/001_init.sql`（schema 已建好；要重建可從 git history 找回）
+- `db:migrate` npm 入口
+
 ### Changed
 - **Newsletter**：把訂閱系統從 Buttondown 換成 Resend + Vercel Postgres 自架方案。
   - 訂閱者寫進 `subscribers` 表，不再依賴 Buttondown API
   - 確認信、新文章通知由 Resend 寄出（React Email 模板）
-  - `/api/notify-new-articles` 配 Vercel Cron 每小時跑，靠 `sent_articles` PK 確保不重寄
+  - `/api/notify-new-articles` 配 Vercel Cron 每天 01:00 UTC（台北 09:00）跑，靠 `sent_articles` PK 確保不重寄
   - 新增 `/api/confirm`、`/api/unsubscribe`、`/unsubscribed` 落地頁
   - EmailSubscribe 元件加 honeypot
 

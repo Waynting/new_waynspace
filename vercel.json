@@ -14,7 +14,7 @@
   "crons": [
     {
       "path": "/api/notify-new-articles",
-      "schedule": "0 * * * *"
+      "schedule": "0 1 * * *"
     }
   ]
 }
