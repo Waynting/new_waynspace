@@ -10,5 +10,11 @@
       "destination": "/camera-float-ntu/:path",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/notify-new-articles",
+      "schedule": "0 * * * *"
+    }
   ]
 }

@@ -9,6 +9,7 @@ type Status = 'idle' | 'loading' | 'already' | 'error';
 export function EmailSubscribe({ location = 'home' }: { location?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [website, setWebsite] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
 
@@ -22,7 +23,7 @@ export function EmailSubscribe({ location = 'home' }: { location?: string }) {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, source: location, website }),
       });
       const data = await res.json();
 
@@ -52,7 +53,7 @@ export function EmailSubscribe({ location = 'home' }: { location?: string }) {
   return (
     <div>
       <p className="text-sm leading-[1.85] text-muted-foreground mb-4 max-w-[560px]">
-        偶爾寄信，分享新文章、近況與一些還沒寫成文章的想法。
+        不想錯過新文章？那就留下你的 EMAIL 吧。
       </p>
       <form onSubmit={onSubmit} className="flex items-stretch gap-0 max-w-[420px]">
         <input
@@ -64,6 +65,17 @@ export function EmailSubscribe({ location = 'home' }: { location?: string }) {
           disabled={isDisabled}
           aria-label="Email address"
           className="flex-1 min-w-0 border-b border-border bg-transparent px-1 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-foreground transition-colors disabled:opacity-60"
+        />
+        {/* Honeypot — hidden from humans, bots fill it */}
+        <input
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          aria-hidden="true"
+          style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
         />
         <button
           type="submit"

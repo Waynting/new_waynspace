@@ -80,6 +80,4 @@ docs/
 .cursor
 .vscode
 
-# Newsletter tracking
-.newsletter-sent.json
 .gstack/
