@@ -16,7 +16,6 @@
     "portfolio:migrate": "node scripts/migrate-photos.mjs",
     "test:r2": "node scripts/test-r2-config.mjs",
     "db:migrate": "node scripts/migrate.mjs",
-    "db:import-buttondown": "node scripts/migrate-buttondown.mjs",
     "subscribers": "node scripts/list-subscribers.mjs",
     "email:preview": "email dev --dir src/emails --port 3001"
   },

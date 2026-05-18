@@ -13,7 +13,7 @@
 - 內容：Markdown（`.md`）搭配 YAML frontmatter
 - 圖片：Cloudflare R2 CDN（`img.waynspace.com`）
 - 分析：Google Analytics 4
-- 電子報：Buttondown
+- 電子報：Resend + Vercel Postgres（自架）
 
 ---
 
@@ -97,7 +97,9 @@ npm run build      # 生產環境建置
 
 - [Writing & Publishing Guide](./docs/writing-guide.md) — 撰寫文章、圖片處理、發布、電子報
 - [SEO & Configuration](./docs/seo-and-config.md) — Favicon、SEO、環境變數、部署
+- [Newsletter Setup](./docs/setup-newsletter.md) — Resend + Vercel Postgres 自架電子報設定
 - [Scripts Reference](./scripts/README.md) — 圖片處理與工具腳本
+- [CHANGELOG](./CHANGELOG.md) — 版本與重大改動記錄
 
 ---
 

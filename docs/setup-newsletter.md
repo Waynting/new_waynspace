@@ -1,6 +1,6 @@
 # Newsletter Setup Checklist
 
-從 Buttondown 切換到 Resend + Vercel Postgres 自架方案。**所有程式碼已寫好**，這份是 dashboard / DNS / env 那邊要你親手完成的步驟。
+Resend + Vercel Postgres 自架電子報。**所有程式碼已寫好**，這份是 dashboard / DNS / env 那邊要你親手完成的步驟。
 
 依序做完即可上線。
 
@@ -67,19 +67,7 @@ NEWSLETTER_SECRET=<openssl rand -hex 32>        # 手動觸發 notify 用
 
 ---
 
-## 4. 把現有 Buttondown 訂閱者搬過來
-
-```bash
-npm run db:import-buttondown
-```
-
-會從 Buttondown API 撈所有訂閱者，標記為已確認後寫進 Postgres。重複跑也安全（`ON CONFLICT DO NOTHING`）。
-
-完成後可以保留 `BUTTONDOWN_API_KEY` 一陣子當 fallback；確定都沒問題後再從 Vercel env 移除。
-
----
-
-## 5. 部署 + 驗證
+## 4. 部署 + 驗證
 
 ```bash
 git push   # 觸發 Vercel deploy
@@ -103,7 +91,7 @@ git push   # 觸發 Vercel deploy
 
 ---
 
-## 6. 平常運作
+## 5. 平常運作
 
 寫完新文章 commit + push 後：
 
@@ -115,7 +103,7 @@ git push   # 觸發 Vercel deploy
 
 ---
 
-## 7. 出問題的 debug 入口
+## 6. 出問題的 debug 入口
 
 | 症狀 | 看哪裡 |
 |---|---|
@@ -127,7 +115,7 @@ git push   # 觸發 Vercel deploy
 
 ---
 
-## 8. 環境變數總覽
+## 7. 環境變數總覽
 
 ```bash
 # Postgres（Vercel 自動生成）
@@ -147,9 +135,6 @@ SITE_URL=https://waynspace.com
 # Cron + admin auth
 NEWSLETTER_SECRET=                # 你自己生成
 CRON_SECRET=                      # Vercel 自動產生（cron 用）
-
-# Migration（之後可移除）
-BUTTONDOWN_API_KEY=
 
 # Debug（平時不設）
 NEWSLETTER_DRY_RUN=1              # 設這個，notify 不會真的寄信，只印 log

@@ -63,3 +63,61 @@ npm run test:r2
 ```
 
 測試 R2 連線、rclone 配置、環境變數與上傳功能。
+
+---
+
+## db:migrate
+
+```bash
+npm run db:migrate
+```
+
+依序執行 `migrations/*.sql`（單一 transaction）。建立 `subscribers` 與 `sent_articles` 兩張表。每個 migration 都用 `IF NOT EXISTS`，可重複跑。
+
+需要環境變數：`POSTGRES_URL`（執行 `vercel env pull .env.local` 取得）
+
+---
+
+## subscribers
+
+```bash
+npm run subscribers              # 預設：已確認訂閱者
+npm run subscribers -- --all     # 全部（含待確認 / 退訂）
+npm run subscribers -- --pending # 只看尚未確認
+npm run subscribers -- --csv     # 輸出 CSV
+```
+
+從 Vercel Postgres 列出電子報訂閱者，並顯示 已確認 / 待確認 / 退訂 / 總計 統計。`--all` 與 `--pending` 互斥，若同時指定 `--all` 優先。
+
+需要環境變數：`POSTGRES_URL`
+
+---
+
+## portfolio:upload
+
+```bash
+npm run portfolio:upload
+```
+
+上傳 `public/portfolio/` 內的照片到 R2 的 `personal-photos/` 路徑，供 `/photos` 頁面使用。會讀取 EXIF metadata。
+
+需要環境變數：`CF_ACCOUNT_ID`、`R2_ACCESS_KEY_ID`、`R2_SECRET_ACCESS_KEY`、`R2_BUCKET`
+
+---
+
+## portfolio:migrate
+
+```bash
+npm run portfolio:migrate
+```
+
+一次性把舊的照片 metadata 結構搬到新格式（按 albums 分組）。
+
+---
+
+## 新增腳本時的慣例
+
+1. 檔案放在 `scripts/`，副檔名 `.mjs`，shebang `#!/usr/bin/env node`。
+2. dotenv 載入順序：`.env.local` → `.env`（見 `scripts/migrate.mjs`）。
+3. `package.json` 加入對應 `scripts` 入口。
+4. **這份 README 加上一個區塊**：用法、說明、需要的環境變數。

@@ -28,6 +28,11 @@ function fmtDate(d) {
   return new Date(d).toISOString().slice(0, 16).replace('T', ' ');
 }
 
+function csvCell(v) {
+  const s = v == null ? '' : String(v);
+  return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
 function statusOf(row) {
   if (row.unsubscribed_at) return 'unsubscribed';
   if (row.confirmed_at) return 'confirmed';
@@ -66,7 +71,9 @@ async function run() {
             fmtDate(r.created_at),
             fmtDate(r.confirmed_at),
             fmtDate(r.unsubscribed_at),
-          ].join(',')
+          ]
+            .map(csvCell)
+            .join(',')
         );
       }
       return;
