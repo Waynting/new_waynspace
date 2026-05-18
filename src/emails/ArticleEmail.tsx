@@ -1,4 +1,4 @@
-import { Button, Img, Link, Section, Text } from '@react-email/components';
+import { Button, Img, Link, Section, Text } from 'react-email';
 import * as React from 'react';
 import { Layout } from './Layout';
 

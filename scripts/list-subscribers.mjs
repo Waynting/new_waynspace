@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// List newsletter subscribers from Vercel Postgres.
+// List newsletter subscribers from Neon Postgres.
 //
 // Usage:
 //   npm run subscribers              # 已確認訂閱者
@@ -12,7 +12,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config as dotenv } from 'dotenv';
-import { createClient } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv({ path: path.join(__dirname, '..', '.env.local') });
@@ -45,90 +45,93 @@ async function run() {
     process.exit(1);
   }
 
-  const client = createClient();
-  await client.connect();
+  const sql = neon(process.env.POSTGRES_URL);
 
-  try {
-    let where = 'confirmed_at IS NOT NULL AND unsubscribed_at IS NULL';
-    if (showAll) where = 'TRUE';
-    else if (onlyPending) where = 'confirmed_at IS NULL AND unsubscribed_at IS NULL';
+  const rows = showAll
+    ? await sql`
+        SELECT email, confirmed_at, unsubscribed_at, source, created_at
+        FROM subscribers
+        ORDER BY created_at DESC
+      `
+    : onlyPending
+      ? await sql`
+          SELECT email, confirmed_at, unsubscribed_at, source, created_at
+          FROM subscribers
+          WHERE confirmed_at IS NULL AND unsubscribed_at IS NULL
+          ORDER BY created_at DESC
+        `
+      : await sql`
+          SELECT email, confirmed_at, unsubscribed_at, source, created_at
+          FROM subscribers
+          WHERE confirmed_at IS NOT NULL AND unsubscribed_at IS NULL
+          ORDER BY created_at DESC
+        `;
 
-    const { rows } = await client.query(
-      `SELECT email, confirmed_at, unsubscribed_at, source, created_at
-       FROM subscribers
-       WHERE ${where}
-       ORDER BY created_at DESC`
-    );
-
-    if (asCsv) {
-      console.log('email,status,source,created_at,confirmed_at,unsubscribed_at');
-      for (const r of rows) {
-        console.log(
-          [
-            r.email,
-            statusOf(r),
-            r.source ?? '',
-            fmtDate(r.created_at),
-            fmtDate(r.confirmed_at),
-            fmtDate(r.unsubscribed_at),
-          ]
-            .map(csvCell)
-            .join(',')
-        );
-      }
-      return;
-    }
-
-    // 統計
-    const totals = await client.query(`
-      SELECT
-        COUNT(*) FILTER (WHERE confirmed_at IS NOT NULL AND unsubscribed_at IS NULL) AS confirmed,
-        COUNT(*) FILTER (WHERE confirmed_at IS NULL AND unsubscribed_at IS NULL) AS pending,
-        COUNT(*) FILTER (WHERE unsubscribed_at IS NOT NULL) AS unsubscribed,
-        COUNT(*) AS total
-      FROM subscribers
-    `);
-    const t = totals.rows[0];
-
-    console.log('');
-    console.log(`已確認：${t.confirmed}    待確認：${t.pending}    退訂：${t.unsubscribed}    總計：${t.total}`);
-    console.log('');
-
-    const label = showAll ? '全部' : onlyPending ? '待確認' : '已確認';
-    console.log(`— ${label}訂閱者（${rows.length}）—`);
-    if (rows.length === 0) {
-      console.log('（無）');
-      return;
-    }
-
-    const emailW = Math.max(...rows.map((r) => r.email.length), 5);
-    const statusW = 12;
-    const sourceW = Math.max(...rows.map((r) => (r.source ?? '').length), 6);
-
-    const pad = (s, n) => String(s).padEnd(n);
-    console.log(
-      pad('email', emailW) +
-        '  ' +
-        pad('status', statusW) +
-        '  ' +
-        pad('source', sourceW) +
-        '  ' +
-        'created_at'
-    );
-    console.log('-'.repeat(emailW + statusW + sourceW + 16 + 6));
+  if (asCsv) {
+    console.log('email,status,source,created_at,confirmed_at,unsubscribed_at');
     for (const r of rows) {
       console.log(
-        pad(r.email, emailW) +
-          '  ' +
-          pad(statusOf(r), statusW) +
-          '  ' +
-          pad(r.source ?? '—', sourceW) +
-          '  ' +
-          fmtDate(r.created_at)
+        [
+          r.email,
+          statusOf(r),
+          r.source ?? '',
+          fmtDate(r.created_at),
+          fmtDate(r.confirmed_at),
+          fmtDate(r.unsubscribed_at),
+        ]
+          .map(csvCell)
+          .join(',')
       );
     }
-  } finally {
-    await client.end();
+    return;
+  }
+
+  const totals = await sql`
+    SELECT
+      COUNT(*) FILTER (WHERE confirmed_at IS NOT NULL AND unsubscribed_at IS NULL) AS confirmed,
+      COUNT(*) FILTER (WHERE confirmed_at IS NULL AND unsubscribed_at IS NULL) AS pending,
+      COUNT(*) FILTER (WHERE unsubscribed_at IS NOT NULL) AS unsubscribed,
+      COUNT(*) AS total
+    FROM subscribers
+  `;
+  const t = totals[0];
+
+  console.log('');
+  console.log(`已確認：${t.confirmed}    待確認：${t.pending}    退訂：${t.unsubscribed}    總計：${t.total}`);
+  console.log('');
+
+  const label = showAll ? '全部' : onlyPending ? '待確認' : '已確認';
+  console.log(`— ${label}訂閱者（${rows.length}）—`);
+  if (rows.length === 0) {
+    console.log('（無）');
+    return;
+  }
+
+  const emailW = Math.max(...rows.map((r) => r.email.length), 5);
+  const statusW = 12;
+  const sourceW = Math.max(...rows.map((r) => (r.source ?? '').length), 6);
+
+  const pad = (s, n) => String(s).padEnd(n);
+  console.log(
+    pad('email', emailW) +
+      '  ' +
+      pad('status', statusW) +
+      '  ' +
+      pad('source', sourceW) +
+      '  ' +
+      'created_at'
+  );
+  console.log('-'.repeat(emailW + statusW + sourceW + 22));
+  for (const r of rows) {
+    console.log(
+      pad(r.email, emailW) +
+        '  ' +
+        pad(statusOf(r), statusW) +
+        '  ' +
+        pad(r.source ?? '—', sourceW) +
+        '  ' +
+        fmtDate(r.created_at)
+    );
   }
 }
 

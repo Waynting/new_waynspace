@@ -1,4 +1,4 @@
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 import { createToken } from './tokens';
 
 export type Subscriber = {
@@ -17,6 +17,11 @@ export type SubscribeResult =
   | { status: 'pending'; subscriber: Subscriber } // re-issued token for unconfirmed
   | { status: 'already_confirmed' };
 
+const connectionString =
+  process.env.POSTGRES_URL ?? process.env.DATABASE_URL ?? '';
+
+const sql = neon(connectionString);
+
 /**
  * Insert a new subscriber, or re-issue a confirmation token if they already
  * exist but never confirmed. If they're already confirmed, do nothing.
@@ -28,15 +33,15 @@ export async function upsertSubscriber(
   const confirmation_token = createToken();
   const unsubscribe_token = createToken();
 
-  const existing = await sql<Subscriber>`
+  const existing = (await sql`
     SELECT * FROM subscribers WHERE email = ${email} LIMIT 1
-  `;
+  `) as Subscriber[];
 
-  if (existing.rows.length > 0) {
-    const row = existing.rows[0];
+  if (existing.length > 0) {
+    const row = existing[0];
     if (row.unsubscribed_at) {
       // Re-opt-in: clear unsubscribed_at, reset confirmation flow
-      const updated = await sql<Subscriber>`
+      const updated = (await sql`
         UPDATE subscribers
         SET confirmation_token = ${confirmation_token},
             confirmed_at = NULL,
@@ -44,65 +49,64 @@ export async function upsertSubscriber(
             source = ${source}
         WHERE id = ${row.id}
         RETURNING *
-      `;
-      return { status: 'pending', subscriber: updated.rows[0] };
+      `) as Subscriber[];
+      return { status: 'pending', subscriber: updated[0] };
     }
     if (row.confirmed_at) {
       return { status: 'already_confirmed' };
     }
     // Unconfirmed — re-issue token
-    const updated = await sql<Subscriber>`
+    const updated = (await sql`
       UPDATE subscribers
       SET confirmation_token = ${confirmation_token},
           source = ${source}
       WHERE id = ${row.id}
       RETURNING *
-    `;
-    return { status: 'pending', subscriber: updated.rows[0] };
+    `) as Subscriber[];
+    return { status: 'pending', subscriber: updated[0] };
   }
 
-  const inserted = await sql<Subscriber>`
+  const inserted = (await sql`
     INSERT INTO subscribers
       (email, confirmation_token, unsubscribe_token, source)
     VALUES
       (${email}, ${confirmation_token}, ${unsubscribe_token}, ${source})
     RETURNING *
-  `;
-  return { status: 'created', subscriber: inserted.rows[0] };
+  `) as Subscriber[];
+  return { status: 'created', subscriber: inserted[0] };
 }
 
 export async function confirmSubscriberByToken(
   token: string
 ): Promise<Subscriber | null> {
-  const res = await sql<Subscriber>`
+  const rows = (await sql`
     UPDATE subscribers
     SET confirmed_at = COALESCE(confirmed_at, now()),
         confirmation_token = NULL
     WHERE confirmation_token = ${token}
     RETURNING *
-  `;
-  return res.rows[0] ?? null;
+  `) as Subscriber[];
+  return rows[0] ?? null;
 }
 
 export async function unsubscribeByToken(
   token: string
 ): Promise<Subscriber | null> {
-  const res = await sql<Subscriber>`
+  const rows = (await sql`
     UPDATE subscribers
     SET unsubscribed_at = COALESCE(unsubscribed_at, now())
     WHERE unsubscribe_token = ${token}
     RETURNING *
-  `;
-  return res.rows[0] ?? null;
+  `) as Subscriber[];
+  return rows[0] ?? null;
 }
 
 export async function getConfirmedSubscribers(): Promise<Subscriber[]> {
-  const res = await sql<Subscriber>`
+  return (await sql`
     SELECT * FROM subscribers
     WHERE confirmed_at IS NOT NULL
       AND unsubscribed_at IS NULL
-  `;
-  return res.rows;
+  `) as Subscriber[];
 }
 
 /**
@@ -115,13 +119,13 @@ export async function reserveArticleSend(
   subject: string,
   recipient_count: number
 ): Promise<boolean> {
-  const res = await sql`
+  const rows = (await sql`
     INSERT INTO sent_articles (slug, subject, recipient_count)
     VALUES (${slug}, ${subject}, ${recipient_count})
     ON CONFLICT (slug) DO NOTHING
     RETURNING slug
-  `;
-  return res.rows.length > 0;
+  `) as { slug: string }[];
+  return rows.length > 0;
 }
 
 export async function updateArticleResendBatchId(

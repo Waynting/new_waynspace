@@ -16,6 +16,12 @@
 
 ## 2026-05-19
 
+### Changed
+- 升級到 react-email v6：所有元件改從 `react-email` 套件 import（原本 `@react-email/components` 在 react-email v6 被標 deprecated）
+- DB driver 從 `@vercel/postgres` 換成 `@neondatabase/serverless`（`@vercel/postgres` 已 deprecated；Vercel Postgres 底層本來就是 Neon，背後 DB 不變）
+  - `src/lib/db.ts` 與 `scripts/list-subscribers.mjs` 全部改用 `neon()` HTTP driver
+  - 同樣讀 `POSTGRES_URL`，不需要遷移資料
+
 ### Fixed
 - **Vercel auto-deploy 卡住**：cron 排程 `0 * * * *`（每小時）在 Hobby plan 違規，導致 deploy 失敗、auto-deploy 不會觸發。改為 `0 1 * * *`（每天 01:00 UTC，台北 09:00）。
 
