@@ -9,7 +9,7 @@ categories:
   - personal-journal
 slug: nb-990v6-one-year-review
 coverImage: >-
-  https://img.waynspace.com/2026/03/nb-990v6-one-year-review/IMG_20260314_225133.webp
+  https://img.waynspace.com/2026/03/%E7%A9%BF%E4%BA%86%E4%B8%80%E5%B9%B4%E7%9A%84-New-Balance-990v6-%E5%BE%9E%E7%BE%8E%E5%9C%8B%E5%B8%B6%E5%9B%9E%E5%8F%B0%E7%81%A3-%E5%80%BC%E5%BE%97%E5%97%8E/IMG_20260314_225133.webp
 author:
   name: Wei-Ting Liu
   email: wayntingliu@gmail.com
