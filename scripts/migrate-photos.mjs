@@ -26,7 +26,7 @@ import {
 import dotenv from 'dotenv'
 import path from 'path'
 
-dotenv.config()
+dotenv.config({ quiet: true })
 
 const args = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')

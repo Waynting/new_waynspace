@@ -15,8 +15,8 @@ import { config as dotenv } from 'dotenv';
 import { neon } from '@neondatabase/serverless';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv({ path: path.join(__dirname, '..', '.env.local') });
-dotenv({ path: path.join(__dirname, '..', '.env') });
+dotenv({ path: path.join(__dirname, '..', '.env.local'), quiet: true });
+dotenv({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const args = new Set(process.argv.slice(2));
 const showAll = args.has('--all');
