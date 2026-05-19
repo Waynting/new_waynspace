@@ -13,6 +13,7 @@ export interface Post {
   featuredImage?: string;
   coverImage?: string;
   filePath?: string;
+  draft?: boolean;
 }
 
 export interface Author {

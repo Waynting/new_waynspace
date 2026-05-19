@@ -122,12 +122,14 @@ export async function getAllCategories(): Promise<Category[]> {
 
 export async function getAllPosts(): Promise<Post[]> {
   const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
-  
+
   const posts = await Promise.all(
     files.map(async (file) => {
       const filePath = path.join(postsDirectory, file)
       const fileContents = await fs.readFile(filePath, 'utf8')
       const { data, content } = matter(fileContents)
+
+      if (data.draft === true) return null
       
       // 从路径提取年份和月份 YYYY/MM/slug.mdx
       const pathParts = file.split(path.sep)
@@ -179,9 +181,9 @@ export async function getAllPosts(): Promise<Post[]> {
     })
   )
 
-  return posts.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime()
-  })
+  return posts
+    .filter(<T>(p: T | null): p is T => p !== null)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
@@ -376,7 +378,9 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
       const filePath = path.join(postsDirectory, file)
       const fileContents = await fs.readFile(filePath, 'utf8')
       const { data, content } = matter(fileContents)
-      
+
+      if (data.draft === true) return null
+
       const rawCategory = Array.isArray(data.categories) && data.categories.length > 0
         ? data.categories[0]
         : 'Uncategorized'
@@ -421,7 +425,7 @@ export async function getPostsByYearMonth(year: string, month: string): Promise<
     })
   )
 
-  return posts.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime()
-  })
+  return posts
+    .filter(<T>(p: T | null): p is T => p !== null)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
