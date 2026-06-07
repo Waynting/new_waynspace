@@ -186,66 +186,63 @@ export async function getAllPosts(): Promise<Post[]> {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  // slug 格式可能是 "YYYY/MM/articleSlug" 或 "articleSlug"
-  // 先尝试完整路径（向后兼容）
-  // 先尝试 .md，再尝试 .mdx
-  let filePath = path.join(postsDirectory, `${slug}.md`)
-  
-  try {
-    await fs.access(filePath)
-  } catch {
-    // 尝试 .mdx
-    filePath = path.join(postsDirectory, `${slug}.mdx`)
+// 解析 slug 對應的檔案路徑（支援完整路徑、檔名、frontmatter slug 多種匹配，向後兼容）
+async function resolvePostFilePath(slug: string): Promise<string | null> {
+  // 先尝试完整路径：.md，再尝试 .mdx
+  for (const ext of ['.md', '.mdx']) {
+    const direct = path.join(postsDirectory, `${slug}${ext}`)
     try {
-      await fs.access(filePath)
+      await fs.access(direct)
+      return direct
     } catch {
-      // 如果完整路径不存在，尝试在所有子目录中搜索
-      const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
-      
-      // 首先尝试通过文件路径匹配
-      let matchingFile = files.find(f => {
-        const fileSlug = f.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
-        const fileName = path.basename(f, path.extname(f))
-        return fileSlug === slug || fileName === slug
-      })
-      
-      // 如果还没找到，尝试通过 frontmatter 中的 slug 匹配
-      if (!matchingFile) {
-        for (const file of files) {
-          const filePathToCheck = path.join(postsDirectory, file)
-          try {
-            const fileContents = await fs.readFile(filePathToCheck, 'utf8')
-            const { data } = matter(fileContents)
-            
-            // 从路径提取年份和月份
-            const pathParts = file.split(path.sep)
-            const year = pathParts[0]
-            const month = pathParts[1]
-            
-            // 构建完整路径格式的 slug
-            const articleSlug = data.slug || path.basename(file, path.extname(file))
-            const fullSlug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
-            
-            // 检查是否匹配（支持完整路径或只匹配 articleSlug，向后兼容）
-            if (fullSlug === slug || articleSlug === slug) {
-              matchingFile = file
-              break
-            }
-          } catch {
-            // 忽略读取错误，继续搜索
-            continue
-          }
-        }
-      }
-      
-      if (!matchingFile) {
-        return null
-      }
-      
-      filePath = path.join(postsDirectory, matchingFile)
+      // 不存在就試下一個副檔名；都沒有再改在所有子目录中搜索
     }
   }
+
+  const files = await globby(['**/*.{md,mdx}'], { cwd: postsDirectory })
+
+  // 首先尝试通过文件路径匹配
+  let matchingFile = files.find(f => {
+    const fileSlug = f.replace(/\.(md|mdx)$/, '').replace(/\\/g, '/')
+    const fileName = path.basename(f, path.extname(f))
+    return fileSlug === slug || fileName === slug
+  })
+
+  // 如果还没找到，尝试通过 frontmatter 中的 slug 匹配
+  if (!matchingFile) {
+    for (const file of files) {
+      const filePathToCheck = path.join(postsDirectory, file)
+      try {
+        const fileContents = await fs.readFile(filePathToCheck, 'utf8')
+        const { data } = matter(fileContents)
+
+        // 从路径提取年份和月份
+        const pathParts = file.split(path.sep)
+        const year = pathParts[0]
+        const month = pathParts[1]
+
+        // 构建完整路径格式的 slug
+        const articleSlug = data.slug || path.basename(file, path.extname(file))
+        const fullSlug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
+
+        // 检查是否匹配（支持完整路径或只匹配 articleSlug，向后兼容）
+        if (fullSlug === slug || articleSlug === slug) {
+          matchingFile = file
+          break
+        }
+      } catch {
+        // 忽略读取错误，继续搜索
+        continue
+      }
+    }
+  }
+
+  return matchingFile ? path.join(postsDirectory, matchingFile) : null
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const filePath = await resolvePostFilePath(slug)
+  if (!filePath) return null
 
   try {
     const fileContents = await fs.readFile(filePath, 'utf8')
@@ -301,6 +298,44 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       },
       featuredImage: coverImage,
       coverImage,
+    }
+  } catch {
+    return null
+  }
+}
+
+// 單篇文章的原始 markdown 與衍生欄位（給需要重新轉換的情境，如 Medium 乾淨匯入）
+export interface PostSource {
+  /** 文章本文（未轉 HTML 的 markdown） */
+  content: string
+  /** 完整路徑格式 slug：YYYY/MM/articleSlug */
+  slug: string
+  /** 文章標題 */
+  title: string
+  /** 摘要（summary > seo.metaDescription > 內文擷取，與列表頁一致） */
+  excerpt: string
+}
+
+export async function getPostSourceBySlug(slug: string): Promise<PostSource | null> {
+  const filePath = await resolvePostFilePath(slug)
+  if (!filePath) return null
+
+  try {
+    const fileContents = await fs.readFile(filePath, 'utf8')
+    const { data, content } = matter(fileContents)
+
+    const relativePath = path.relative(postsDirectory, filePath).replace(/\.(md|mdx)$/, '')
+    const pathParts = relativePath.split(path.sep)
+    const year = pathParts[0]
+    const month = pathParts[1]
+    const articleSlug = data.slug || path.basename(relativePath, path.extname(relativePath))
+    const fullSlug = year && month ? `${year}/${month}/${articleSlug}` : articleSlug
+
+    return {
+      content,
+      slug: fullSlug,
+      title: data.title || '',
+      excerpt: getExcerpt(data, content),
     }
   } catch {
     return null

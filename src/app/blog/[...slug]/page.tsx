@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { formatDate } from '@/lib/markdown'
+import { formatDate, absolutizePostImages, stripDuplicateTitleH1, parseSlugParts } from '@/lib/markdown'
 import ArticleContent from '@/components/ArticleContent'
 import ArticleTracker from '@/components/ArticleTracker'
 import { EmailSubscribe } from '@/components/EmailSubscribe'
@@ -57,37 +57,12 @@ export default async function PostPage({
   const olderPost = idx >= 0 && idx < sameCategory.length - 1 ? sameCategory[idx + 1] : null
 
   // 从 post.slug 提取年份和月份用于构建图片路径
-  // post.slug 現在是完整路徑格式 YYYY/MM/articleSlug
-  const slugParts = post.slug.split('/')
-  const year = slugParts[0] || ''
-  const month = slugParts[1] || ''
-  const yearMonth = year && month ? `${year}/${month}` : ''
-  const articleSlug = slugParts.length >= 3 ? slugParts.slice(2).join('/') : post.slug
+  // post.slug 現在是完整路徑格式 YYYY/MM/articleSlug（yearMonth/articleSlug 用於構建封面圖 URL）
+  const { yearMonth, articleSlug } = parseSlugParts(post.slug)
 
-  // 處理圖片路徑（因為 content 已經是 HTML）
-  let processedContent = post.content || ''
-
-  // 替換相對路徑的圖片連結
-  processedContent = processedContent.replace(
-    /src=["']images\/([^"']+)["']/g,
-    (_match, imgPath) => {
-      const imageUrl = yearMonth
-        ? `https://img.waynspace.com/${yearMonth}/${articleSlug}/${imgPath}`
-        : `https://img.waynspace.com/${post.slug}/${imgPath}`
-      return `src="${imageUrl}"`
-    }
-  )
-
-  // 替換舊 WordPress 連結
-  processedContent = processedContent.replace(
-    /https:\/\/waynspace\.com\/wp-content\/uploads\/[^"'\s)]+/g,
-    (match) => {
-      const filename = match.split('/').pop()?.split('?')[0] || ''
-      return yearMonth
-        ? `https://img.waynspace.com/${yearMonth}/${articleSlug}/${filename}`
-        : `https://img.waynspace.com/${post.slug}/${filename}`
-    }
-  )
+  // 處理圖片路徑（content 已是 HTML）並移除與標題重複的內文 h1（避免頁面雙標題）
+  let processedContent = absolutizePostImages(post.content || '', post.slug)
+  processedContent = stripDuplicateTitleH1(processedContent, post.title)
 
   // 構建封面圖片 URL（用於其他用途，如 metadata）
   // 注意：封面圖片會保留在文章內容中顯示，不會被移除
