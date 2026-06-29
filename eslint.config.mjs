@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Independent sub-app — has its own toolchain (React 18 / Tailwind v3).
+    "Camera_float_ntu_web/**",
   ]),
 ]);
 
