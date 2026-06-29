@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-03-23T13:24:28.843Z",
+  "mode": "manifest",
+  "totalPhotos": 1694,
+  "photosWithSize": 1694,
+  "totalSizeBytes": 16446628146,
+  "avgSizeBytes": 9708753.332939787,
+  "maxSizeBytes": 18451594,
+  "minSizeBytes": 799704,
+  "estimatedCompressedTotalBytes": 1315730251.68,
+  "sizeDistribution": {
+    "lt500KB": 0,
+    "500KB-1MB": 2,
+    "1MB-5MB": 192,
+    "5MB-10MB": 755,
+    "gt10MB": 745
+  },
+  "formats": {
+    "webp": 1694
+  }
+}

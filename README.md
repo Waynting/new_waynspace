@@ -48,6 +48,7 @@
 │   │   └── seo.ts              # SEO 配置
 │   └── config/
 │       └── navigation.ts       # 導覽設定
+├── Camera_float_ntu_web/       # 獨立子網站：Camera Float（自帶 toolchain、獨立部署）
 ├── scripts/                    # 圖片處理與工具腳本
 ├── docs/                       # 文件
 ├── public/                     # 靜態資源
@@ -75,7 +76,24 @@ npm run build      # 生產環境建置
 | `/blog` | 文章列表：分類篩選 + 年份分組 |
 | `/blog/[...slug]` | 文章內容頁 |
 | `/photos` | 照片牆 |
-| `/camera-float-ntu` | Camera Float 專案 |
+| `/camera-float-ntu` | Camera Float 專案（代理至子網站，見下） |
+
+---
+
+## 子網站：Camera Float（`Camera_float_ntu_web/`）
+
+NTU 相機流浪計畫的照片牆，是一個**獨立**的 Next.js 網站，放在本 repo 內以便一起維護，但**刻意不**併入主站的 build、路由或 `/photos` 照片系統。
+
+- **自帶 toolchain**（請勿為了對齊主站而升級）：Next.js 16 / React 18 / Tailwind v3 / shadcn-ui，`@/*` 對應它自己的根目錄。
+- **獨立安裝與啟動**（自帶 `node_modules`，非 workspace）：
+
+  ```bash
+  cd Camera_float_ntu_web && npm install && npm run dev
+  ```
+
+- 已從主站 toolchain 排除（根目錄 `tsconfig.json` 的 `exclude` 與 `eslint.config.mjs` 的 `globalIgnores`），所以在 repo 根目錄跑 `build`／`lint` 不會碰到它。
+- **部署與路由不變**：以獨立 Vercel 專案部署到 `camera-float-ntu-web.waynspace.com`（`basePath=/camera-float-ntu`），主站 `next.config.ts` 的 `rewrites()` 透明代理 `/camera-float-ntu/*`。併入 repo 後，請把該 Vercel 專案的 **Root Directory** 指到 `Camera_float_ntu_web`。
+- 詳細開發說明見 `Camera_float_ntu_web/README.md` 與 `Camera_float_ntu_web/CLAUDE.md`。合併前的歷史保留於 `github.com/Waynting/Camera_float_ntu_web`。
 
 ---
 
