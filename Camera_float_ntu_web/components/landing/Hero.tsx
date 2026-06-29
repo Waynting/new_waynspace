@@ -11,14 +11,14 @@ export function Hero() {
       </div>
 
       {/* Title */}
-      <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-8">
+      <h1 className="text-[40px] sm:text-[48px] font-bold leading-[1.05] tracking-[-0.025em] mb-8">
         相機漂流計劃
         <br />
         <span className="font-light text-muted-foreground">台大 Ver.</span>
       </h1>
 
       {/* Description */}
-      <div className="space-y-4 text-sm leading-relaxed text-muted-foreground border-b border-border pb-10">
+      <div className="space-y-4 text-sm leading-[1.85] text-muted-foreground border-b border-border pb-10">
         <p>相機漂流計劃是一個創新的相機共享計劃，旨在讓相機在校園中流傳，記錄下每個瞬間的美好。</p>
         <p>我們相信每一張照片都承載著獨特的視角和故事。透過相機的流傳，捕捉校園生活的多元面貌。</p>
         <div className="pt-4">

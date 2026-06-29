@@ -185,7 +185,7 @@ export default async function PostPage({
             prose-pre:p-5 prose-pre:my-8 prose-pre:overflow-x-auto prose-pre:text-[14px] prose-pre:leading-relaxed
             prose-blockquote:border-l-4 prose-blockquote:border-muted-foreground/30 prose-blockquote:pl-6 prose-blockquote:pr-4
             prose-blockquote:not-italic prose-blockquote:text-muted-foreground prose-blockquote:mt-2 prose-blockquote:mb-6 prose-blockquote:py-4
-            prose-img:rounded-lg prose-img:my-10 prose-img:shadow-sm prose-img:w-full
+            prose-img:rounded-none prose-img:my-10 prose-img:shadow-none prose-img:w-full
             prose-ul:my-6 prose-ul:list-disc prose-ul:pl-7
             prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-7
             prose-li:leading-[1.75] prose-li:my-0

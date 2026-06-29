@@ -14,8 +14,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-border mt-20">
       <Container>
-        <div className="py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <span className="text-xs font-light text-muted-foreground">
+        <div className="py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs tracking-[0.1em] uppercase text-muted-foreground">
+          <span>
             © {year} Wei-Ting Liu
           </span>
           <div className="flex items-center gap-4">
@@ -25,7 +25,7 @@ export default function Footer() {
                 href={s.href}
                 target={s.href.startsWith('mailto') ? undefined : '_blank'}
                 rel={s.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="hover:opacity-60 transition-opacity"
               >
                 {s.label}
               </a>

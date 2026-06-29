@@ -13,16 +13,16 @@ export default function Header() {
           {/* Logo — favicon + text */}
           <Link
             href={navigationConfig.pages.home}
-            className="flex items-center gap-2 text-sm font-medium text-foreground hover:opacity-70 transition-opacity tracking-tight"
+            className="flex items-center gap-2.5 text-sm font-medium text-foreground hover:opacity-60 transition-opacity"
           >
             <Image
               src="/blog-image.jpg"
               alt="Waynspace"
               width={20}
               height={20}
-              className="rounded-sm"
+              className="rounded-none"
             />
-            <span className="tracking-[-0.01em]">Waynspace</span>
+            <span className="tracking-[0.15em] uppercase">Waynspace</span>
           </Link>
 
           {/* Navigation */}

@@ -98,26 +98,39 @@ function getExcerpt(data: any, content: string): string {
 // 獲取所有分類
 export async function getAllCategories(): Promise<Category[]> {
   const posts = await getAllPosts()
-  const categoryMap = new Map<string, number>()
-  
+  const countByName = new Map<string, number>()
+
   posts.forEach(post => {
     // 标准化分类名称：如果分类名是英文，映射到中文显示名
     const rawCategory = post.category || 'Uncategorized'
     const normalizedCategory = categoryNameMap[rawCategory] || rawCategory
-    categoryMap.set(normalizedCategory, (categoryMap.get(normalizedCategory) || 0) + 1)
+    countByName.set(normalizedCategory, (countByName.get(normalizedCategory) || 0) + 1)
   })
-  
-  return Array.from(categoryMap.entries()).map(([name, count], index) => {
-    // 优先使用映射表中的slug，如果没有则使用默认生成规则
+
+  // 多個顯示名稱可能對應到同一個 slug（例如「筆記與心得」與「讀書筆記與心得」都是 notes）。
+  // 以 slug 為單位合併，避免在以 slug 為 key 的清單（分類 tabs、sitemap、靜態路由）中產生重複 key。
+  const bySlug = new Map<string, { name: string; count: number; topCount: number }>()
+  for (const [name, count] of countByName) {
     const slug = categorySlugMap[name] || name.toLowerCase().replace(/\s+/g, '-')
-    
-    return {
-      id: index + 1,
-      name,
-      slug,
-      count,
+    const existing = bySlug.get(slug)
+    if (!existing) {
+      bySlug.set(slug, { name, count, topCount: count })
+    } else {
+      existing.count += count
+      // 保留使用次數較多的顯示名稱作為標準名稱
+      if (count > existing.topCount) {
+        existing.name = name
+        existing.topCount = count
+      }
     }
-  })
+  }
+
+  return Array.from(bySlug.entries()).map(([slug, { name, count }], index) => ({
+    id: index + 1,
+    name,
+    slug,
+    count,
+  }))
 }
 
 export async function getAllPosts(): Promise<Post[]> {

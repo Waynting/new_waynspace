@@ -46,16 +46,16 @@ export default function Navigation() {
   return (
     <nav className="flex items-center gap-1">
       {/* Desktop links */}
-      <div className="hidden sm:flex items-center gap-5">
+      <div className="hidden sm:flex items-center gap-6">
         {nav.map(item => (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              'text-sm transition-colors pb-0.5',
+              'text-xs tracking-[0.1em] uppercase transition-opacity pb-0.5 hover:opacity-60',
               isActive(item.href)
-                ? 'text-foreground font-medium border-b border-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'text-foreground border-b border-foreground'
+                : 'text-muted-foreground'
             )}
           >
             {item.name}
@@ -113,10 +113,10 @@ export default function Navigation() {
                   href={item.href}
                   onClick={close}
                   className={cn(
-                    'block py-2.5 text-sm transition-colors border-b border-border/40 last:border-0',
+                    'block py-3 text-xs tracking-[0.1em] uppercase transition-opacity border-b border-border/40 last:border-0 hover:opacity-60',
                     isActive(item.href)
-                      ? 'text-foreground font-medium'
-                      : 'text-muted-foreground hover:text-foreground'
+                      ? 'text-foreground'
+                      : 'text-muted-foreground'
                   )}
                 >
                   {item.name}

@@ -33,7 +33,7 @@ export default function BackToTop() {
       onClick={scrollToTop}
       size="icon"
       className={cn(
-        "fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full shadow-lg transition-all duration-300 bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white hover:scale-110",
+        "fixed bottom-6 right-6 z-50 h-11 w-11 rounded-none border border-border bg-background text-foreground shadow-none transition-opacity duration-300 hover:opacity-60",
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0 pointer-events-none'
       )}
       aria-label="回到頂部"

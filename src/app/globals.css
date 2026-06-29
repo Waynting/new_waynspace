@@ -1,11 +1,24 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Sharp-cornered editorial system — every rounded-* utility resolves to 0,
+   matching the Camera Float sub-app's pure-minimal language. */
+@theme {
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+}
+
 @layer base {
   :root {
     /* Minimal Color Palette - Light Theme */
     --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    --foreground: 0 0% 15%;
     --foreground-muted: 0 0% 36%;
 
     /* Editorial dual-width container system */
@@ -26,10 +39,10 @@
     --accent-foreground: 0 0% 15%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
     --ring: 0 0% 15%;
-    --radius: 0.5rem;
+    --radius: 0;
     
     /* Custom gradient colors for light theme */
     --abc-blue-1: 210 100% 60%;
@@ -58,8 +71,8 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
     --ring: 0 0% 98%;
     
     /* Custom gradient colors for dark theme */
@@ -258,8 +271,8 @@ body {
 .article-content .wp-block-image img {
   max-width: 100%;
   height: auto;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /* 圖片說明 */
@@ -365,7 +378,7 @@ body {
   margin: 1.5rem 0;
   font-style: italic;
   background-color: hsl(var(--secondary));
-  border-radius: 0.25rem;
+  border-radius: 0;
   font-size: 1rem;
   line-height: 1.7;
 }
@@ -394,7 +407,7 @@ body {
 .article-content code {
   background-color: hsl(var(--secondary));
   padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
+  border-radius: 0;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.875rem;
   color: hsl(var(--foreground));
@@ -406,7 +419,7 @@ body {
   border: 1px solid hsl(var(--border));
   color: hsl(var(--foreground));
   padding: 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   overflow-x: auto;
   margin: 2rem 0;
 }
@@ -424,9 +437,9 @@ body {
   border-collapse: collapse;
   margin: 2rem 0;
   background-color: hsl(var(--card));
-  border-radius: 0.5rem;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .article-content th,
@@ -503,7 +516,7 @@ body {
 }
 
 .modula-gallery-item {
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   overflow: hidden !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
@@ -572,8 +585,8 @@ body {
 .gallery-image img {
   width: 100%;
   height: auto;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  border-radius: 0;
+  box-shadow: none;
   transition: transform 0.3s ease;
 }
 
@@ -608,8 +621,8 @@ body {
   display: block;
   max-width: 100%;
   height: auto;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .article-content figure {
@@ -652,7 +665,7 @@ body {
 }
 
 .modula-item {
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   overflow: hidden !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
@@ -711,7 +724,7 @@ body {
   right: 0.5rem;
   padding: 0.375rem;
   border: 1px solid hsl(var(--border));
-  border-radius: 0.375rem;
+  border-radius: 0;
   background-color: hsl(var(--background));
   color: hsl(var(--muted-foreground));
   cursor: pointer;
